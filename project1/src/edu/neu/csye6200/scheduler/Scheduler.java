@@ -7,8 +7,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-
-import edu.neu.csye6200.Student;
+import edu.neu.csye6200.SendEmail;
 
 
 public final class Scheduler{
@@ -28,10 +27,8 @@ public final class Scheduler{
 //		//TODO calculate future date 
 //		//Date futureDate = ;// 
 //		//long startTime = futureDate.getTime() - System.currentTimeMillis();
-//		ScheduleSomething task = new ScheduleSomething(3, 1, 20);
+//		Scheduler task = new Scheduler(3, 86400, 20);
 //		task.activateSchduler();
-//
-//	
 //		System.out.println("Scheduler ended.");
 //	}
 
@@ -44,27 +41,35 @@ public final class Scheduler{
 
 	void activateSchduler() {
 		Runnable startTask = new ScheduleTask();
-		ScheduledFuture<?> soundAlarmFuture = scheduler.scheduleWithFixedDelay(startTask, initialDelay,
-				delayBetweenRuns, TimeUnit.DAYS);
-		Runnable stopTask = new StopScheduledTask(soundAlarmFuture);
-		scheduler.schedule(stopTask, shutdownAfter, TimeUnit.DAYS);
+		ScheduledFuture<?> runTask = scheduler.scheduleWithFixedDelay(startTask, initialDelay,
+				delayBetweenRuns, TimeUnit.SECONDS);
+		Runnable stopTask = new StopScheduledTask(runTask);
+		scheduler.schedule(stopTask, shutdownAfter, TimeUnit.SECONDS);
+		
 	}
 
 	private static final class ScheduleTask implements Runnable {
-		private int count;
+		//private int count;
 
 		@Override
 		public void run() {
 			//TODO get list of students whose registration needs to be renewed 
-			
-			List<Student> students = new ArrayList<>();
+			SendEmail mail = new SendEmail();
+
+			List<String> emailIds = new ArrayList<>();
 			//TODO send them email
-			++count;
-			System.out.println("Counting " + count);
+			emailIds.add("erarica.mehra@gmail.com");
+			emailIds.add("irarikamehra@gmail.com");
+			if(!emailIds.isEmpty()) {
+			mail.send(emailIds);
+			}
+			//++count;
+			//System.out.println("Counting " + count);
 		}
 
 	}
-
+	
+	
 	private final class StopScheduledTask implements Runnable {
 		private ScheduledFuture<?> schedFuture;
 
@@ -76,9 +81,10 @@ public final class Scheduler{
 		public void run() {
 			System.out.println("Stopping.");
 			schedFuture.cancel(DONT_INTERRUPT_IF_RUNNING);
-			//for cleanup
 			scheduler.shutdown();
 		}
 
 	}
+
+	
 }

@@ -10,6 +10,9 @@ import java.util.List;
  * @author pnakave
  *
  */
+
+
+
 public class Group {
 
 	private Teacher teacher;
@@ -44,6 +47,16 @@ public class Group {
 	}
 	public void setGroupSize(int groupSize) {
 		this.groupSize = groupSize;
+	}
+	
+	
+	//Added later
+	public void addStudents(Student s) {
+		students.add(s);
+	}
+	
+	public void assignTeacher(Teacher t) {
+		teacher = t;
 	}
 	
 }
