@@ -10,6 +10,8 @@ package edu.neu.csye6200.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -38,6 +40,12 @@ public class ConversionUtil {
 			e.printStackTrace();
 		}
 		return d;
+	}
+
+	public static LocalDate StringToLocalDate(String dateString) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+		LocalDate localDate = LocalDate.parse(dateString, formatter);
+		return localDate;
 	}
 
 	public static int DateToAge(Date d) {

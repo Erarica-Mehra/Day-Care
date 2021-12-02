@@ -3,6 +3,7 @@
  */
 package edu.neu.csye6200;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -17,7 +18,7 @@ import edu.neu.csye6200.util.ConversionUtil;
 public class Student extends Person {
 
 	private int studentId;
-	private Date registrationDate;
+	private LocalDate registrationDate;
 	private String address;
 	private String phoneNumber;
 	private int age;
@@ -32,7 +33,7 @@ public class Student extends Person {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Student(int studentId, Date registrationDate, String address, String phoneNumber, Parent parent) {
+	public Student(int studentId, LocalDate registrationDate, String address, String phoneNumber, Parent parent) {
 		super();
 		this.studentId = studentId;
 		this.registrationDate = registrationDate;
@@ -55,34 +56,34 @@ public class Student extends Person {
 		this.lastName = field[1];
 		this.dob = ConversionUtil.StringToDate(field[2]);
 		this.studentId = ConversionUtil.StringToInt(field[3]);
-		this.registrationDate = ConversionUtil.StringToDate(field[4]);
+		this.registrationDate = ConversionUtil.StringToLocalDate(field[4]);
 		this.address = field[5];
 		this.phoneNumber = field[6];
 //		this.parent = field[7];
 		//TODO figure out parent object from csv
 		this.age = ConversionUtil.DateToAge(this.dob);
-		Calendar c = Calendar.getInstance();
-		c.setTime(this.registrationDate);
-		c.add(c.YEAR, 1);
+//		Calendar c = Calendar.getInstance();
+//		c.setTime(this.registrationDate);
+//		c.add(c.YEAR, 1);
 		//this.annualRegistrationDate = c.getTime();
 		//int flag = 0;
-		List<Date> hepatitisB = new ArrayList<>();
-		List<Date> DTaP = new ArrayList<>();
-		
-		for (int i = 9; i < 23; i++) {
-			System.out.println(field[i]);
-			if (field[i].contentEquals("0")) {
-
-			} else {
-				if (i >= 9 && i < 12) {
-					hepatitisB.add(ConversionUtil.StringToDate(field[i]));
-				}
-				if (i >= 12 && i < 16) {
-					DTaP.add(ConversionUtil.StringToDate(field[i]));
-				}
-			}
-
-		}
+//		List<Date> hepatitisB = new ArrayList<>();
+//		List<Date> DTaP = new ArrayList<>();
+//		
+//		for (int i = 9; i < 23; i++) {
+//			System.out.println(field[i]);
+//			if (field[i].contentEquals("0")) {
+//
+//			} else {
+//				if (i >= 9 && i < 12) {
+//					hepatitisB.add(ConversionUtil.StringToDate(field[i]));
+//				}
+//				if (i >= 12 && i < 16) {
+//					DTaP.add(ConversionUtil.StringToDate(field[i]));
+//				}
+//			}
+//
+//		}
 
 	}
 	
@@ -94,11 +95,11 @@ public class Student extends Person {
 		this.studentId = studentId;
 	}
 
-	public Date getRegistrationDate() {
+	public LocalDate getRegistrationDate() {
 		return registrationDate;
 	}
 
-	public void setRegistrationDate(Date registrationDate) {
+	public void setRegistrationDate(LocalDate registrationDate) {
 		this.registrationDate = registrationDate;
 	}
 

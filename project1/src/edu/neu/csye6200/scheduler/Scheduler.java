@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 import edu.neu.csye6200.SendEmail;
 
 
-public final class Scheduler{
+public final class Scheduler {
 
 	private final ScheduledExecutorService scheduler;
 	private final long initialDelay;
