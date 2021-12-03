@@ -3,10 +3,9 @@
  */
 package edu.neu.csye6200;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import edu.neu.csye6200.util.ConversionUtil;
@@ -20,13 +19,10 @@ public class Student extends Person {
 	private int studentId;
 	private LocalDate registrationDate;
 	private String address;
-	private String phoneNumber;
 	private int age;
-	// private List<AbstractImmunization> immunisations = new ArrayList<>(); - by
-	// factory impl
+	private LocalDate dob;
 	private Parent parent;
-//	private List<LocalDate> immunisationDates = new ArrayList<>();
-//	private LocalDate annualRegistrationDate;
+	//private Immunization immunization;
 
 	public Student() {
 		super();
@@ -38,52 +34,29 @@ public class Student extends Person {
 		this.studentId = studentId;
 		this.registrationDate = registrationDate;
 		this.address = address;
-		this.phoneNumber = phoneNumber;
-		this.age = ConversionUtil.DateToAge(this.dob);
+		this.age = ConversionUtil.getAgeFromDOB(this.dob);
 		this.parent = parent;
-
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(this.registrationDate);
-//		c.add(c.WEEK_OF_YEAR, 51);
-//		this.annualRegistrationDate = c.;
-
 	}
 
 	public Student(String csvData) {
 		super();
 		String[] field = csvData.split(",");
-		this.firstName = field[0];
-		this.lastName = field[1];
-		this.dob = ConversionUtil.StringToDate(field[2]);
-		this.studentId = ConversionUtil.StringToInt(field[3]);
+		this.studentId = Integer.parseInt(field[0]);
+		this.firstName = field[1];
+		this.lastName = field[2];
+		this.dob = ConversionUtil.StringToLocalDate(field[3]);
 		this.registrationDate = ConversionUtil.StringToLocalDate(field[4]);
 		this.address = field[5];
-		this.phoneNumber = field[6];
-//		this.parent = field[7];
-		//TODO figure out parent object from csv
-		this.age = ConversionUtil.DateToAge(this.dob);
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(this.registrationDate);
-//		c.add(c.YEAR, 1);
-		//this.annualRegistrationDate = c.getTime();
-		//int flag = 0;
-//		List<Date> hepatitisB = new ArrayList<>();
-//		List<Date> DTaP = new ArrayList<>();
-//		
-//		for (int i = 9; i < 23; i++) {
-//			System.out.println(field[i]);
-//			if (field[i].contentEquals("0")) {
-//
-//			} else {
-//				if (i >= 9 && i < 12) {
-//					hepatitisB.add(ConversionUtil.StringToDate(field[i]));
-//				}
-//				if (i >= 12 && i < 16) {
-//					DTaP.add(ConversionUtil.StringToDate(field[i]));
-//				}
-//			}
-//
-//		}
+		this.parent = new Parent(field[6], field[7], field[8], new BigInteger(field[9]));
+		this.age = ConversionUtil.getAgeFromDOB(this.dob);
+		
+		List<String> vaccinesString = new ArrayList<>();
+		vaccinesString.add(field[10]);
+		vaccinesString.add(field[11]);
+		//TODO add remaining vaccines
+		//TODO get immunization object
+		//this.immunization = getVaccinationList(vaccinesString);
+		
 
 	}
 	
@@ -111,14 +84,6 @@ public class Student extends Person {
 		this.address = address;
 	}
 
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
 	public void setAge(int age) {
 		this.age = age;
 	}
@@ -136,22 +101,6 @@ public class Student extends Person {
 		this.parent = parent;
 	}
 
-//	public List<Date> getImmunisationDates() {
-//		return immunisationDates;
-//	}
-//
-//	public void setImmunisationDates(List<Date> immunisationDates) {
-//		this.immunisationDates = immunisationDates;
-//	}
-//
-//	public Date getAnnualRegistrationDate() {
-//		return annualRegistrationDate;
-//	}
-//
-//	public void setAnnualRegistrationDate(Date annualRegistrationDate) {
-//		this.annualRegistrationDate = annualRegistrationDate;
-//	}
-	
 	@Override
 	public String toString() {
 		return this.firstName + " " + this.lastName;

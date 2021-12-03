@@ -12,6 +12,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -57,6 +58,11 @@ public class ConversionUtil {
 		int ageInMonths = yearsInBetween * 12 + monthsDiff;
 
 		return ageInMonths;
+	}
+	
+	public static int getAgeFromDOB(LocalDate dob) {
+		LocalDate currentDate = LocalDate.now();
+		return (int) ChronoUnit.YEARS.between(dob, currentDate);
 	}
 
 	public static String DateToString(Date d) {

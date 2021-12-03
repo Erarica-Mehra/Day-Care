@@ -3,9 +3,7 @@
  */
 package edu.neu.csye6200;
 
-import java.util.Calendar;
-import java.util.Date;
-
+import java.time.LocalDate;
 import edu.neu.csye6200.util.ConversionUtil;
 
 /**
@@ -15,38 +13,30 @@ import edu.neu.csye6200.util.ConversionUtil;
 public class Teacher extends Person {
 
 	private int employeeId;
-	private Date joiningDate;
-	private Date annualReviewDate;
 	private String emailID;
+	private LocalDate joiningDate;
+	private LocalDate annualReviewDate;
 
 	public Teacher() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public Teacher(int employeeId, Date joiningDate) {
+	public Teacher(int employeeId, LocalDate joiningDate) {
 		super();
 		this.employeeId = employeeId;
 		this.joiningDate = joiningDate;
-		Calendar c = Calendar.getInstance();
-		c.setTime(this.joiningDate);
-		c.add(c.WEEK_OF_YEAR, 51);
-		this.annualReviewDate = c.getTime();
+		this.annualReviewDate  = joiningDate.plusYears(1);
 	}
 
 	public Teacher(String csvData) {
 		super();
 		String[] field = csvData.split(",");
-		this.firstName = field[0];
-		this.lastName = field[1];
-		this.dob = ConversionUtil.StringToDate(field[2]);
-		this.employeeId = ConversionUtil.StringToInt(field[3]);
-		this.joiningDate = ConversionUtil.StringToDate(field[4]);
-		this.emailID = field[5];
-		Calendar c = Calendar.getInstance();
-		c.setTime(this.joiningDate);
-		c.add(c.YEAR, 1);
-		this.annualReviewDate = c.getTime();
+		this.employeeId = Integer.parseInt(field[0]);
+		this.firstName = field[1];
+		this.lastName = field[2];
+		this.joiningDate =ConversionUtil.StringToLocalDate(field[3]);
+		this.emailID = field[4];
+		this.annualReviewDate  = joiningDate.plusYears(1);
 	}
 
 	public int getEmployeeId() {
@@ -57,11 +47,11 @@ public class Teacher extends Person {
 		this.employeeId = employeeId;
 	}
 
-	public Date getJoiningDate() {
+	public LocalDate getJoiningDate() {
 		return joiningDate;
 	}
 
-	public void setJoiningDate(Date joiningDate) {
+	public void setJoiningDate(LocalDate joiningDate) {
 		this.joiningDate = joiningDate;
 	}
 
@@ -73,11 +63,11 @@ public class Teacher extends Person {
 		this.emailID = emailID;
 	}
 
-	public Date getAnnualReviewDate() {
+	public LocalDate getAnnualReviewDate() {
 		return annualReviewDate;
 	}
 
-	public void setAnnualReviewDate(Date annualReviewDate) {
+	public void setAnnualReviewDate(LocalDate annualReviewDate) {
 		this.annualReviewDate = annualReviewDate;
 	}
 

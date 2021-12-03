@@ -14,12 +14,17 @@ public abstract class Person {
 	public static int id;
 	public String firstName;
 	public String lastName;
-	public Date dob;
 	
 	public Person() {
 		
 	}
 	
+	public Person(String firstName, String lastName) {
+		super();
+		this.firstName = firstName;
+		this.lastName = lastName;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -31,11 +36,5 @@ public abstract class Person {
 	}
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
-	}
-	public Date getDob() {
-		return dob;
-	}
-	public void setDob(Date dob) {
-		this.dob = dob;
 	}
 }
