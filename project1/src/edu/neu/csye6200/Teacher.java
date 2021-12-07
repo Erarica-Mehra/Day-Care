@@ -21,11 +21,12 @@ public class Teacher extends Person {
 		super();
 	}
 
-	public Teacher(int employeeId, LocalDate joiningDate) {
-		super();
+	public Teacher(int employeeId, String firstName, String lastName, String emailID, LocalDate joiningDate) {
+		super(firstName, lastName);
 		this.employeeId = employeeId;
 		this.joiningDate = joiningDate;
 		this.annualReviewDate  = joiningDate.plusYears(1);
+		this.emailID = emailID;
 	}
 
 	public Teacher(String csvData) {

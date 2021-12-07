@@ -25,7 +25,6 @@ public class ConversionUtil {
 		try {
 			i = Integer.valueOf(s);
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -37,7 +36,6 @@ public class ConversionUtil {
 		try {
 			d = new SimpleDateFormat("dd/MM/yyyy").parse(s);
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return d;
@@ -66,8 +64,8 @@ public class ConversionUtil {
 	}
 
 	public static String DateToString(Date d) {
-		String datef = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(d);
-		return datef;
+		String date = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH).format(d);
+		return date;
 	}
 
 }
