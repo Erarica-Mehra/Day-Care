@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import edu.neu.csye6200.dao.StudentDaoImpl;
 import edu.neu.csye6200.dao.TeacherDaoImpl;
 import edu.neu.csye6200.util.FileUtil;
 
@@ -18,14 +19,21 @@ public class StudentService {
 	}
 
 	// register using csv
-	public Student enrollStudentsFromCSV() {
+	public Student enrollStudentsFromCSV() throws Exception {
 		List<String> studentCSVData = FileUtil.readTextFile("resources/students.txt");
+		StudentDaoImpl impl = new StudentDaoImpl();
 		Student student = null;
 		for (String csvString : studentCSVData) {
 			student = new Student(csvString);
 			DayCare.getStudentsList().add(student);
+			Parent parent = student.getParent();
+			impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+					parent.getPhone()));
+			student.setParentId(parent.getParentId());
+			impl.addStudent(student);
+			
 		}
-		// TODO save
+
 		return student;
 	}
 
@@ -46,19 +54,15 @@ public class StudentService {
 		impl.addTeacher(teacher);
 		return teacher;
 	}
-	
-	//enroll Student
-	
-	
-	//update Immunization Record
-	
-	
-	//get Student Record
-	
-	
-	//add ratio rules from csv
-	
-	
-	//get ratio rules
+
+	// enroll Student
+
+	// update Immunization Record
+
+	// get Student Record
+
+	// add ratio rules from csv
+
+	// get ratio rules
 
 }

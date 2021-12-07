@@ -22,20 +22,48 @@ public class Student extends Person {
 	private int age;
 	private LocalDate dob;
 	private Parent parent;
-	//private Immunization immunization;
+	private int parentId;
+
+	
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
+	private Teacher teacher_assigned;
+	// private Immunization immunization;
 
 	public Student() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Student(int studentId, LocalDate registrationDate, String address, String phoneNumber, Parent parent) {
+	public Student(int studentId, LocalDate registrationDate, String address, int age, LocalDate dob, Parent parent,
+			Teacher teacher_assigned) {
 		super();
 		this.studentId = studentId;
 		this.registrationDate = registrationDate;
 		this.address = address;
-		this.age = ConversionUtil.getAgeFromDOB(this.dob);
+		this.age = age;
+		this.dob = dob;
 		this.parent = parent;
+		this.teacher_assigned = teacher_assigned;
+	}
+
+	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, int age,
+			String address, int parentId) {
+		super(firstName, lastName);
+		this.studentId = studentId;
+		this.registrationDate = registrationDate;
+		this.address = address;
+		this.age = ConversionUtil.getAgeFromDOB(this.dob);
+		this.parentId = parentId;
+		this.dob = dob;
+		this.age = age;
 	}
 
 	public Student(String csvData) {
@@ -47,19 +75,18 @@ public class Student extends Person {
 		this.dob = ConversionUtil.StringToLocalDate(field[3]);
 		this.registrationDate = ConversionUtil.StringToLocalDate(field[4]);
 		this.address = field[5];
-		this.parent = new Parent(field[6], field[7], field[8], new BigInteger(field[9]));
+		this.parent = new Parent(Integer.parseInt(field[6]), field[7], field[8], field[9], new BigInteger(field[10]));
 		this.age = ConversionUtil.getAgeFromDOB(this.dob);
-		
+
 		List<String> vaccinesString = new ArrayList<>();
 		vaccinesString.add(field[10]);
 		vaccinesString.add(field[11]);
-		//TODO add remaining vaccines
-		//TODO get immunization object
-		//this.immunization = getVaccinationList(vaccinesString);
-		
+		// TODO add remaining vaccines
+		// TODO get immunization object
+		// this.immunization = getVaccinationList(vaccinesString);
 
 	}
-	
+
 	public int getStudentId() {
 		return studentId;
 	}
@@ -92,13 +119,28 @@ public class Student extends Person {
 		return age;
 	}
 
-
 	public Parent getParent() {
 		return parent;
 	}
 
 	public void setParent(Parent parent) {
 		this.parent = parent;
+	}
+
+	public LocalDate getDob() {
+		return dob;
+	}
+
+	public void setDob(LocalDate dob) {
+		this.dob = dob;
+	}
+
+	public Teacher getTeacher_assigned() {
+		return teacher_assigned;
+	}
+
+	public void setTeacher_assigned(Teacher teacher_assigned) {
+		this.teacher_assigned = teacher_assigned;
 	}
 
 	@Override

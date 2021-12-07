@@ -12,8 +12,9 @@ public class Parent  extends Person {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public Parent(String firstName, String lastName,String email, BigInteger phone) {
+	public Parent(int parentId, String firstName, String lastName,String email, BigInteger phone) {
 		super(firstName, lastName);
+		this.parentId = parentId;
 		this.email = email;
 		this.phone = phone;
 	}
