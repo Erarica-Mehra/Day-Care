@@ -118,15 +118,16 @@ public class StudentDaoImpl {
 	public void updateVaccineByStudentIdAndVaccineId(Vaccine vaccine) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"update  daycare.vaccine set doses_taken = doses_taken + 1 and last_shot_date = ? and "
-				+ " upcoming_shot_date = ? and  is_vaccinated = ? and doses_taken_dates = ?"
+				"update  daycare.vaccine set last_shot_date = ?, "
+				+ " upcoming_shot_date = ?,  is_vaccinated = ?, doses_taken_dates = ?, doses_taken = ? "
 				+ " where student_id = ? and vaccine_id = ?");
 		preparedStatement.setDate(1, Date.valueOf(vaccine.getLastShotDate()));
 		preparedStatement.setDate(2, Date.valueOf(vaccine.getNextShotDate()));
 		preparedStatement.setBoolean(3, vaccine.isVaccinated());
 		preparedStatement.setString(4, null); // TODO change this later
-		preparedStatement.setInt(5, vaccine.getStudentId());
-		preparedStatement.setInt(6, vaccine.getId());
+		preparedStatement.setInt(5, vaccine.getDosestaken() + 1); // TODO change this later
+		preparedStatement.setInt(6, vaccine.getStudentId());
+		preparedStatement.setInt(7, vaccine.getId());
 		int result = preparedStatement.executeUpdate();
 		System.out.println(result + "  vaccine updated");
 	}
