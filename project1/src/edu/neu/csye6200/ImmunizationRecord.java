@@ -15,16 +15,7 @@ public class ImmunizationRecord {
 		this.immunizationRecord = immunizationRecord;
 	}
 	
-	public List<Vaccine> getStudentImmunizationRecord(List<String> data){
-		
-		for(String vaccineDetails : data) {
-			if(vaccineDetails != null) {
-				immunizationRecord.add(new Vaccine(vaccineDetails));
-			}
-		}
-		
-		return immunizationRecord;
-	}
+	
 
 	
 }

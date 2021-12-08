@@ -12,7 +12,7 @@ import java.util.List;
 
 import edu.neu.csye6200.Parent;
 import edu.neu.csye6200.Student;
-import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.Vaccine;
 
 public class StudentDaoImpl {
 
@@ -49,9 +49,6 @@ public class StudentDaoImpl {
 
 	public void addStudent(Student student) throws Exception {
 		connection = getConnection();
-//		Parent parent = student.getParent();
-//		addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
-//				parent.getPhone()));
 		preparedStatement = connection.prepareStatement(
 				" insert into daycare.Student(student_id, first_name, last_name, address, dob, age, registration_date,teacher_assigned, parent_id) values (?,?,?,?,?,?,?,?,?)");
 		preparedStatement.setInt(1, student.getStudentId());
@@ -66,6 +63,15 @@ public class StudentDaoImpl {
 
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Student : " + updated);
+		
+		List<Vaccine> vaccines = student.getImmunizationRecord();
+		vaccines.stream().forEach(vaccine -> {
+			try {
+				addStudentVaccinationRecord(vaccine);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	public Student getStudentById(int studentId) throws Exception {
@@ -74,6 +80,24 @@ public class StudentDaoImpl {
 		preparedStatement.setInt(1, studentId);
 		resultSet = preparedStatement.executeQuery();
 		return writeResultSet(resultSet).get(0);
+	}
+
+	public void addStudentVaccinationRecord(Vaccine vaccine) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" insert into daycare.Vaccine (vaccine_id, name, doses_taken, total_doses,  doses_taken_dates, last_shot_date, upcoming_shot_date, student_id, is_vaccinated) "
+						+ "    values (default, ?, ?,?,?,?,?,?,?)");
+		preparedStatement.setString(1, vaccine.getName());
+		preparedStatement.setInt(2, vaccine.getDosestaken());
+		preparedStatement.setInt(3, vaccine.getTotalDoses());
+		preparedStatement.setString(4, vaccine.getVaccinationRecord().toString());
+		preparedStatement.setDate(5, Date.valueOf(vaccine.getLastShotDate()));
+		preparedStatement.setDate(6, Date.valueOf(vaccine.getNextShotDate()));
+		preparedStatement.setInt(7, vaccine.getStudentId());
+		preparedStatement.setBoolean(8, vaccine.isVaccinated());
+
+		int updated = preparedStatement.executeUpdate();
+		System.out.println("Vaccine : " + updated);
 	}
 
 	private List<Student> writeResultSet(ResultSet resultSet) throws SQLException {

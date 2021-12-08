@@ -23,19 +23,8 @@ public class Student extends Person {
 	private LocalDate dob;
 	private Parent parent;
 	private int parentId;
-
-	
-
-	public int getParentId() {
-		return parentId;
-	}
-
-	public void setParentId(int parentId) {
-		this.parentId = parentId;
-	}
-
+	private List<Vaccine> immunizationRecord= new ArrayList<>();
 	private Teacher teacher_assigned;
-	// private Immunization immunization;
 
 	public Student() {
 		super();
@@ -78,12 +67,12 @@ public class Student extends Person {
 		this.parent = new Parent(Integer.parseInt(field[6]), field[7], field[8], field[9], new BigInteger(field[10]));
 		this.age = ConversionUtil.getAgeFromDOB(this.dob);
 
-		List<String> vaccinesString = new ArrayList<>();
-		vaccinesString.add(field[10]);
-		vaccinesString.add(field[11]);
+		List<String> vaccinesList = new ArrayList<>();
+		vaccinesList.add(field[11]);
+		vaccinesList.add(field[12]);
+		this.immunizationRecord = getStudentImmunizationRecord(vaccinesList, studentId);
 		// TODO add remaining vaccines
-		// TODO get immunization object
-		// this.immunization = getVaccinationList(vaccinesString);
+
 
 	}
 
@@ -143,9 +132,36 @@ public class Student extends Person {
 		this.teacher_assigned = teacher_assigned;
 	}
 
+	public List<Vaccine> getImmunizationRecord() {
+		return immunizationRecord;
+	}
+
+	public void setImmunizationRecord(List<Vaccine> immunizationRecord) {
+		this.immunizationRecord = immunizationRecord;
+	}
+
+	public int getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(int parentId) {
+		this.parentId = parentId;
+	}
+
 	@Override
 	public String toString() {
 		return this.firstName + " " + this.lastName;
+	}
+
+	public List<Vaccine> getStudentImmunizationRecord(List<String> vaccinesList, int studentId) {
+
+		for (String vaccineDetails : vaccinesList) {
+			if (vaccineDetails != null) {
+				immunizationRecord.add(new Vaccine(vaccineDetails, studentId));
+			}
+		}
+
+		return immunizationRecord;
 	}
 
 }
