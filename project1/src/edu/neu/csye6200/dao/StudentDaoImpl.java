@@ -63,7 +63,7 @@ public class StudentDaoImpl {
 
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Student : " + updated);
-		
+
 		List<Vaccine> vaccines = student.getImmunizationRecord();
 		vaccines.stream().forEach(vaccine -> {
 			try {
@@ -81,7 +81,7 @@ public class StudentDaoImpl {
 		resultSet = preparedStatement.executeQuery();
 		return writeStudentResultSet(resultSet).get(0);
 	}
-	
+
 	public List<Student> getAllStudents() throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement("select * from daycare.student");
@@ -106,8 +106,6 @@ public class StudentDaoImpl {
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Vaccine : " + updated);
 	}
-	
-	
 
 	public List<Vaccine> getVaccinesByStudentId(int studentId) throws Exception {
 		connection = getConnection();
@@ -116,7 +114,23 @@ public class StudentDaoImpl {
 		resultSet = preparedStatement.executeQuery();
 		return writeVaccineResultSet(resultSet);
 	}
-	
+
+	public void updateVaccineByStudentIdAndVaccineId(Vaccine vaccine) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				"update  daycare.vaccine set doses_taken = doses_taken + 1 and last_shot_date = ? and "
+				+ " upcoming_shot_date = ? and  is_vaccinated = ? and doses_taken_dates = ?"
+				+ " where student_id = ? and vaccine_id = ?");
+		preparedStatement.setDate(1, Date.valueOf(vaccine.getLastShotDate()));
+		preparedStatement.setDate(2, Date.valueOf(vaccine.getNextShotDate()));
+		preparedStatement.setBoolean(3, vaccine.isVaccinated());
+		preparedStatement.setString(4, null); // TODO change this later
+		preparedStatement.setInt(5, vaccine.getStudentId());
+		preparedStatement.setInt(6, vaccine.getId());
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  vaccine updated");
+	}
+
 	private List<Student> writeStudentResultSet(ResultSet resultSet) throws SQLException {
 		Student student = null;
 		List<Student> students = new ArrayList<>();
@@ -130,7 +144,7 @@ public class StudentDaoImpl {
 		}
 		return students;
 	}
-	
+
 	private List<Vaccine> writeVaccineResultSet(ResultSet resultSet) throws SQLException {
 		Vaccine vaccine = null;
 		List<Vaccine> vaccines = new ArrayList<>();
@@ -139,14 +153,18 @@ public class StudentDaoImpl {
 			Date upcomingShotDate = resultSet.getDate("upcoming_shot_date");
 			// TODO change this to List<LocalDate>
 			String dates = resultSet.getString("doses_taken_dates");
-			vaccine = new Vaccine(resultSet.getInt("vaccine_id"), resultSet.getString("name"), resultSet.getInt("doses_taken"),
-					resultSet.getInt("total_doses"), lastShotDate.toLocalDate(), upcomingShotDate.toLocalDate(),
-					resultSet.getInt("student_id"), resultSet.getBoolean("is_vaccinated"), null);
+			vaccine = new Vaccine(resultSet.getInt("vaccine_id"), resultSet.getString("name"),
+					resultSet.getInt("doses_taken"), resultSet.getInt("total_doses"), lastShotDate.toLocalDate(),
+					upcomingShotDate.toLocalDate(), resultSet.getInt("student_id"),
+					resultSet.getBoolean("is_vaccinated"), null);
 			vaccines.add(vaccine);
 		}
 		return vaccines;
 
 	}
 
+	// update vaccine set doses_taken = doses_taken + 1 and last_shot_date =
+	// '2021-01-12' and upcoming_shot_date = '2021-01-12' and is_vaccinated =
+	// 'true'and doses_taken_dates = null where student_id = 100 and vaccine_id = 1;
 
 }

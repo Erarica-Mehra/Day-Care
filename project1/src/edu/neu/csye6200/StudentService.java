@@ -31,9 +31,7 @@ public class StudentService {
 					parent.getPhone()));
 			student.setParentId(parent.getParentId());
 			impl.addStudent(student);
-			
 		}
-
 		return student;
 	}
 
@@ -56,8 +54,23 @@ public class StudentService {
 	}
 
 	// enroll Student
+	public Student registerStudent(Student newStudent)  throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		Parent parent = newStudent.getParent();
+		impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+				parent.getPhone()));
+		newStudent.setParentId(parent.getParentId());
+		impl.addStudent(newStudent);
+		return newStudent;
+	}
 
 	// update Immunization Record
+	//get these value from UI
+	//update dosesTaken by dosesTaken + 1, lastShotDate, nextShotDate, set IsVaccinated to true if all doses given
+	public void updateStudentImmunizationRecord(Vaccine vaccine) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.updateVaccineByStudentIdAndVaccineId(vaccine);
+	}
 
 	// get Student Record
 
@@ -83,10 +96,6 @@ public class StudentService {
 		return student;
 	}
 	
-	//TODO
-	public List<Vaccine> updateStudentImmunizationRecord(int studentId) throws Exception {
-		return null;
-	}
 	
 
 }
