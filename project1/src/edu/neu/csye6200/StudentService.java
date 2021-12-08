@@ -64,5 +64,29 @@ public class StudentService {
 	// add ratio rules from csv
 
 	// get ratio rules
+	
+	public List<Vaccine> getStudentImmunizationRecord(int studentId) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		List<Vaccine> vaccines = impl.getVaccinesByStudentId(studentId);
+		return vaccines;
+	}
+	
+	public List<Student> getAllStudents() throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		List<Student> students = impl.getAllStudents();
+		return students;
+	}
+	
+	public Student getStudentById(int studentId) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		Student student = impl.getStudentById(studentId);
+		return student;
+	}
+	
+	//TODO
+	public List<Vaccine> updateStudentImmunizationRecord(int studentId) throws Exception {
+		return null;
+	}
+	
 
 }

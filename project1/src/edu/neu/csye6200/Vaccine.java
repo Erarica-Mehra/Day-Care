@@ -19,13 +19,20 @@ public class Vaccine {
 	private List<LocalDate> vaccinationRecord = new ArrayList<>();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-	public Vaccine(String name, List<LocalDate> vaccinationRecord, int studentId, boolean isVaccinated) {
+	
+
+public Vaccine(int id, String name, int dosestaken, int totalDoses, LocalDate lastShotDate, LocalDate nextShotDate,
+			int studentId, boolean isVaccinated, List<LocalDate> vaccinationRecord) {
 		super();
+		this.id = id;
 		this.name = name;
-		this.vaccinationRecord = vaccinationRecord;
+		this.dosestaken = dosestaken;
+		this.totalDoses = totalDoses;
+		this.lastShotDate = lastShotDate;
+		this.nextShotDate = nextShotDate;
 		this.studentId = studentId;
 		this.isVaccinated = isVaccinated;
-		this.dosestaken = vaccinationRecord.size();
+		this.vaccinationRecord = vaccinationRecord;
 	}
 
 //constructor to parse from CSV
@@ -39,10 +46,12 @@ public class Vaccine {
 			this.vaccinationRecord.add(LocalDate.parse(value, formatter));
 		}
 		this.studentId = studentId;
+		this.dosestaken = vaccinationRecord.size();
 		this.lastShotDate = vaccinationRecord.get(vaccinationRecord.size() - 1);
 		// TODO for now next shot date is one month from now
 		// TODO fix this
 		this.nextShotDate = vaccinationRecord.get(vaccinationRecord.size() - 1).plus(1, ChronoUnit.MONTHS);
+		
 	}
 
 	public boolean isVaccinationCompleted() {
