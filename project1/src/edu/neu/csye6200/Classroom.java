@@ -12,7 +12,10 @@ import java.util.List;
  */
 public class Classroom {
 
+	private int classId;
 	private List<Group> groups = new ArrayList<>();
+	private int groupsAllowed;
+	private int groupsEnrolled;
 	static int id = 0;
 	private int idC = 0;
 	
@@ -21,6 +24,59 @@ public class Classroom {
 		idC = id;
 	}
 	
+	public Classroom(int classId, List<Group> groups, int groupsAllowed, int groupsEnrolled, int idC) {
+		super();
+		this.classId = classId;
+		this.groups = groups;
+		this.groupsAllowed = groupsAllowed;
+		this.groupsEnrolled = groupsEnrolled;
+	}
+	
+	public Classroom(int groupsAllowed, int groupsEnrolled) {
+		this.groupsAllowed = groupsAllowed;
+		this.groupsEnrolled = groupsEnrolled;
+	}
+
+	public int getClassId() {
+		return classId;
+	}
+
+	public void setClassId(int classId) {
+		this.classId = classId;
+	}
+
+	public int getGroupsAllowed() {
+		return groupsAllowed;
+	}
+
+	public void setGroupsAllowed(int groupsAllowed) {
+		this.groupsAllowed = groupsAllowed;
+	}
+
+	public int getGroupsEnrolled() {
+		return groupsEnrolled;
+	}
+
+	public void setGroupsEnrolled(int groupsEnrolled) {
+		this.groupsEnrolled = groupsEnrolled;
+	}
+
+	public int getIdC() {
+		return idC;
+	}
+
+	public void setIdC(int idC) {
+		this.idC = idC;
+	}
+
+	public void setGroups(List<Group> groups) {
+		this.groups = groups;
+	}
+
+	public static void setId(int id) {
+		Classroom.id = id;
+	}
+
 	public Classroom(List<Group> groups, int idC) {
 		super();
 		this.groups = groups;

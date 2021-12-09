@@ -29,7 +29,6 @@ public class FeedbackDaoImpl {
 		}
 	}
 	
-	
 	public void addFeedback(Feedback feedback) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(" insert into daycare.Feedback(feedback_id, employee_id, rating, review, last_feedback_date, next_feedback_date) values "
@@ -49,7 +48,7 @@ public class FeedbackDaoImpl {
 		preparedStatement = connection.prepareStatement(" select * from daycare.Feedback where employee_id = ?");
 		preparedStatement.setInt(1, teacherId);
 		resultSet = preparedStatement.executeQuery();
-		return writeStudentResultSet(resultSet);
+		return writeResultSet(resultSet);
 	}
 	
 	public LocalDate trackNextReviewdate(int teacherId) throws Exception {
@@ -58,17 +57,16 @@ public class FeedbackDaoImpl {
 				" select * from daycare.feedback where employee_id = ? order by last_feedback_date desc limit 1");
 		preparedStatement.setInt(1, teacherId);
 		resultSet = preparedStatement.executeQuery();
-		Feedback feedback = writeStudentResultSet(resultSet).get(0);
+		Feedback feedback = writeResultSet(resultSet).get(0);
 		return feedback.getNextFeedbackDate();
 	}
 	
-	private List<Feedback> writeStudentResultSet(ResultSet resultSet) throws SQLException {
+	private List<Feedback> writeResultSet(ResultSet resultSet) throws SQLException {
 		Feedback feedback = null;
 		List<Feedback> feedbackList = new ArrayList<>();
 		while (resultSet.next()) {
 			Date lastFeedbackdate = resultSet.getDate("last_feedback_date");
 			Date nextFeedbackdate = resultSet.getDate("next_feedback_date");
-
 			feedback = new Feedback(resultSet.getInt("employee_id"), resultSet.getString("review"),
 					resultSet.getDouble("rating"), lastFeedbackdate.toLocalDate(), nextFeedbackdate.toLocalDate());
 			feedbackList.add(feedback);
