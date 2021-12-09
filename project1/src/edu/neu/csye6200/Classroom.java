@@ -32,7 +32,9 @@ public class Classroom {
 		this.groupsEnrolled = groupsEnrolled;
 	}
 	
-	public Classroom(int groupsAllowed, int groupsEnrolled) {
+	public Classroom(int classId, int groupsAllowed, int groupsEnrolled) {
+		super();
+		this.classId = classId;
 		this.groupsAllowed = groupsAllowed;
 		this.groupsEnrolled = groupsEnrolled;
 	}
