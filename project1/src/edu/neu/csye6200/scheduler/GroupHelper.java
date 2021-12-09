@@ -15,7 +15,9 @@ import edu.neu.csye6200.DayCare;
 import edu.neu.csye6200.Group;
 import edu.neu.csye6200.GroupFactory;
 import edu.neu.csye6200.Student;
+import edu.neu.csye6200.StudentFactory;
 import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.TeacherFactory;
 import edu.neu.csye6200.util.FileUtil;
 
 /**
@@ -35,10 +37,12 @@ public class GroupHelper {
 		students.clear();
 		teachers.clear();
 		List<String> tempStudents = FileUtil.readTextFile(studentfile);
-		tempStudents.forEach(student -> students.add(new Student(student)));
-
+		//tempStudents.forEach(student -> students.add(new Student(student)));
+		tempStudents.forEach(student-> students.add(StudentFactory.getInstance().getObject(student)));
+		
 		List<String> tempTeachers = FileUtil.readTextFile(teachersfile);
-		tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
+		//tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
+		tempTeachers.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 
 		List<Student> sixToTwelve = students.stream().filter(student -> student.getAge() >= 6 && student.getAge() <= 12)
 				.collect(Collectors.toList());

@@ -43,13 +43,23 @@ public class Student extends Person {
 		this.teacher_assigned = teacher_assigned;
 	}
 
-	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, int age,
+	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, 
 			String address, int parentId) {
 		super(firstName, lastName);
 		this.studentId = studentId;
 		this.registrationDate = registrationDate;
 		this.address = address;
 		this.age = ConversionUtil.getAgeFromDOB(this.dob);
+		this.parentId = parentId;
+		this.dob = dob;
+	}
+	
+	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, int age,
+			String address, int parentId) {
+		super(firstName, lastName);
+		this.studentId = studentId;
+		this.registrationDate = registrationDate;
+		this.address = address;
 		this.parentId = parentId;
 		this.dob = dob;
 		this.age = age;
