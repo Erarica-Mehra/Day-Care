@@ -27,47 +27,45 @@ public class LMDLandingPage extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenu1 = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
-        jPanel1 = new javax.swing.JPanel();
+        jTopPanel1 = new javax.swing.JPanel();
         jLabelMenu = new javax.swing.JLabel();
         jXTextFieldSearch = new org.jdesktop.swingx.JXTextField();
         jLabelSearchIcon = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
+        jSplitPanel = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanelLeftPane = new javax.swing.JPanel();
         jXTaskPaneContainer1 = new org.jdesktop.swingx.JXTaskPaneContainer();
         jXTaskPaneUsers = new org.jdesktop.swingx.JXTaskPane();
         jLabelTeachers = new javax.swing.JLabel();
         jLabelStudents = new javax.swing.JLabel();
-        Parents = new javax.swing.JLabel();
+        JLabelParents = new javax.swing.JLabel();
         jXTaskPaneNotifications = new org.jdesktop.swingx.JXTaskPane();
-        jLabel1 = new javax.swing.JLabel();
+        jReminderLabel = new javax.swing.JLabel();
         jXTaskPaneInfrastructure = new org.jdesktop.swingx.JXTaskPane();
         jLabelClassrooms = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
+        jLabelStudentGroups = new javax.swing.JLabel();
         jXTaskPaneImmunization = new org.jdesktop.swingx.JXTaskPane();
-        jLabel2 = new javax.swing.JLabel();
-
-        jMenu1.setText("jMenu1");
-
-        jMenuItem1.setText("jMenuItem1");
-        jMenu1.add(jMenuItem1);
+        jLabelVaccination = new javax.swing.JLabel();
+        jRightPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addContainerListener(new java.awt.event.ContainerAdapter() {
+            public void componentAdded(java.awt.event.ContainerEvent evt) {
+                formComponentAdded(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(178, 255, 176));
-        jPanel1.setMaximumSize(new java.awt.Dimension(200, 80));
-        jPanel1.setMinimumSize(new java.awt.Dimension(200, 80));
-        jPanel1.setPreferredSize(new java.awt.Dimension(200, 80));
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jTopPanel1.setBackground(new java.awt.Color(178, 255, 176));
+        jTopPanel1.setMaximumSize(new java.awt.Dimension(200, 80));
+        jTopPanel1.setMinimumSize(new java.awt.Dimension(200, 80));
+        jTopPanel1.setPreferredSize(new java.awt.Dimension(200, 80));
+        jTopPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_menu_48px_1.png"))); // NOI18N
-        jPanel1.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 0, 46, -1));
+        jTopPanel1.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 0, 46, -1));
 
         jXTextFieldSearch.setBackground(new java.awt.Color(178, 255, 176));
         jXTextFieldSearch.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
@@ -81,26 +79,23 @@ public class LMDLandingPage extends javax.swing.JFrame {
                 jXTextFieldSearchActionPerformed(evt);
             }
         });
-        jPanel1.add(jXTextFieldSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(279, 0, 281, 52));
+        jTopPanel1.add(jXTextFieldSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(279, 0, 281, 52));
 
         jLabelSearchIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/search_26px.png"))); // NOI18N
-        jPanel1.add(jLabelSearchIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 0, 36, 52));
+        jTopPanel1.add(jLabelSearchIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(565, 0, 36, 52));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/male_user_50px.png"))); // NOI18N
         jLabel4.setText("Hello, Admin");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1151, 0, 151, -1));
-
-        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/bell_26px.png"))); // NOI18N
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(1110, 0, 34, 52));
+        jTopPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1151, 0, 151, -1));
 
         jLabel3.setBackground(new java.awt.Color(51, 51, 51));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmdic1.PNG"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, -1, 52));
+        jTopPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, -1, 52));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 60));
+        getContentPane().add(jTopPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 60));
 
-        jPanel2.setLayout(new java.awt.BorderLayout());
+        jSplitPanel.setLayout(new java.awt.BorderLayout());
 
         jPanelLeftPane.setMaximumSize(new java.awt.Dimension(300, 495));
         jPanelLeftPane.setMinimumSize(new java.awt.Dimension(300, 495));
@@ -121,11 +116,16 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
         jLabelStudents.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabelStudents.setText("Students");
+        jLabelStudents.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelStudentsMouseClicked(evt);
+            }
+        });
         jXTaskPaneUsers.getContentPane().add(jLabelStudents);
 
-        Parents.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        Parents.setText("Parents");
-        jXTaskPaneUsers.getContentPane().add(Parents);
+        JLabelParents.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        JLabelParents.setText("Parents");
+        jXTaskPaneUsers.getContentPane().add(JLabelParents);
 
         jXTaskPaneContainer1.add(jXTaskPaneUsers);
 
@@ -134,29 +134,32 @@ public class LMDLandingPage extends javax.swing.JFrame {
         jXTaskPaneNotifications.setScrollOnExpand(true);
         jXTaskPaneNotifications.setTitle("Notifications");
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(51, 51, 51));
-        jLabel1.setText("Reminder");
-        jXTaskPaneNotifications.getContentPane().add(jLabel1);
+        jReminderLabel.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jReminderLabel.setForeground(new java.awt.Color(51, 51, 51));
+        jReminderLabel.setText("Reminder");
+        jXTaskPaneNotifications.getContentPane().add(jReminderLabel);
 
         jXTaskPaneContainer1.add(jXTaskPaneNotifications);
 
         jXTaskPaneInfrastructure.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/infra1.jpg"))); // NOI18N
         jXTaskPaneInfrastructure.setTitle("Infrastructure");
 
+        jLabelClassrooms.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         jLabelClassrooms.setText("Classrooms");
         jXTaskPaneInfrastructure.getContentPane().add(jLabelClassrooms);
 
-        jLabel6.setText("Student Groups");
-        jXTaskPaneInfrastructure.getContentPane().add(jLabel6);
+        jLabelStudentGroups.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabelStudentGroups.setText("Student Groups");
+        jXTaskPaneInfrastructure.getContentPane().add(jLabelStudentGroups);
 
         jXTaskPaneContainer1.add(jXTaskPaneInfrastructure);
 
         jXTaskPaneImmunization.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
         jXTaskPaneImmunization.setTitle("Vaccination Track");
 
-        jLabel2.setText("Vaccination");
-        jXTaskPaneImmunization.getContentPane().add(jLabel2);
+        jLabelVaccination.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        jLabelVaccination.setText("Vaccination");
+        jXTaskPaneImmunization.getContentPane().add(jLabelVaccination);
 
         jXTaskPaneContainer1.add(jXTaskPaneImmunization);
 
@@ -164,9 +167,12 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(jPanelLeftPane);
 
-        jPanel2.add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        jRightPanel.setLayout(new java.awt.BorderLayout());
+        jSplitPane1.setRightComponent(jRightPanel);
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1320, 990));
+        jSplitPanel.add(jSplitPane1, java.awt.BorderLayout.CENTER);
+
+        getContentPane().add(jSplitPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1320, 990));
 
         pack();
         setLocationRelativeTo(null);
@@ -175,6 +181,17 @@ public class LMDLandingPage extends javax.swing.JFrame {
     private void jXTextFieldSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jXTextFieldSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jXTextFieldSearchActionPerformed
+
+    private void jLabelStudentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelStudentsMouseClicked
+        // TODO add your handling code here:
+       StudentUI student= new StudentUI();
+       student.setVisible(true);
+       
+    }//GEN-LAST:event_jLabelStudentsMouseClicked
+
+    private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_formComponentAdded
 
     /**
      * @param args the command line arguments
@@ -213,24 +230,22 @@ public class LMDLandingPage extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Parents;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel JLabelParents;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabelClassrooms;
     private javax.swing.JLabel jLabelMenu;
     private javax.swing.JLabel jLabelSearchIcon;
+    private javax.swing.JLabel jLabelStudentGroups;
     private javax.swing.JLabel jLabelStudents;
     private javax.swing.JLabel jLabelTeachers;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel jLabelVaccination;
     private javax.swing.JPanel jPanelLeftPane;
+    private javax.swing.JLabel jReminderLabel;
+    private javax.swing.JPanel jRightPanel;
     private javax.swing.JSplitPane jSplitPane1;
+    private javax.swing.JPanel jSplitPanel;
+    private javax.swing.JPanel jTopPanel1;
     private org.jdesktop.swingx.JXTaskPaneContainer jXTaskPaneContainer1;
     private org.jdesktop.swingx.JXTaskPane jXTaskPaneImmunization;
     private org.jdesktop.swingx.JXTaskPane jXTaskPaneInfrastructure;

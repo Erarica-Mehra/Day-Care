@@ -13,12 +13,12 @@ import javax.swing.JTextField;
  *
  * @author erruc
  */
-public class Auth extends javax.swing.JFrame {
+public class LoginPage extends javax.swing.JFrame {
 
     /**
      * Creates new form Auth
      */
-    public Auth() {
+    public LoginPage() {
         initComponents();
     }
 
@@ -63,6 +63,11 @@ public class Auth extends javax.swing.JFrame {
         jButton1_Submit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1_SubmitActionPerformed(evt);
+            }
+        });
+        jButton1_Submit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jButton1_SubmitKeyPressed(evt);
             }
         });
 
@@ -160,11 +165,17 @@ public class Auth extends javax.swing.JFrame {
     private void jButton1_SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_SubmitActionPerformed
         // TODO add your handling code here:
       jLabel1Response.setText("Welcome "+jTextField1EmailAddress.getText()+"!"+" Login Successfull");
+       LMDLandingPage lmd= new LMDLandingPage();
+       lmd.setVisible(true);
     }//GEN-LAST:event_jButton1_SubmitActionPerformed
 
     private void jTextField1EmailAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1EmailAddressActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField1EmailAddressActionPerformed
+
+    private void jButton1_SubmitKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1_SubmitKeyPressed
+      
+    }//GEN-LAST:event_jButton1_SubmitKeyPressed
 
     /**
      * @param args the command line arguments
@@ -183,20 +194,23 @@ public class Auth extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Auth.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Auth.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Auth.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Auth.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(LoginPage.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Auth().setVisible(true);
+                new LoginPage().setVisible(true);
             }
         });
     }
