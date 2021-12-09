@@ -49,3 +49,14 @@
         PRIMARY KEY (vaccine_id),
         FOREIGN KEY (student_id) REFERENCES Student(student_id)
     );
+    
+    
+       CREATE TABLE Feedback (
+        feedback_id INT NOT NULL AUTO_INCREMENT,
+        employee_id INT NOT NULL,
+        rating float NOT NULL,
+        review varchar(500) ,
+        PRIMARY KEY (feedback_id),
+        FOREIGN KEY (employee_id) REFERENCES Teacher(employee_id)
+    );
+    
