@@ -14,7 +14,8 @@ import java.util.List;
 
 
 public class Group {
-
+	
+    private int groupId;
 	private Teacher teacher;
 	private List<Student> students = new ArrayList<>();
 	private int groupSize;
@@ -70,6 +71,13 @@ public class Group {
 	
 	public void assignTeacher(Teacher t) {
 		teacher = t;
+	}
+	
+	public int getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 	
 }
