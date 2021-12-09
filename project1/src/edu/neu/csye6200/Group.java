@@ -20,7 +20,9 @@ public class Group {
 	private int groupSize;
 	private int studentsEnrolled;
 
-
+    public Group() {
+    	
+    }
 	public Group(int groupSize, int studentsEnrolled) {
 		this.groupSize = groupSize;
 		this.studentsEnrolled = studentsEnrolled;
