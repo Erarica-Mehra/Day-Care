@@ -5,6 +5,10 @@ import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.neu.csye6200.Feedback;
 
@@ -38,6 +42,38 @@ public class FeedbackDaoImpl {
 		preparedStatement.executeUpdate();
 		System.out.println("Feedback Given");
 		
+	}
+	
+	public List<Feedback> getAllReviewsOfTeacher(int teacherId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(" select * from daycare.Feedback where employee_id = ?");
+		preparedStatement.setInt(1, teacherId);
+		resultSet = preparedStatement.executeQuery();
+		return writeStudentResultSet(resultSet);
+	}
+	
+	public LocalDate trackNextReviewdate(int teacherId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" select * from daycare.feedback where employee_id = ? order by last_feedback_date desc limit 1");
+		preparedStatement.setInt(1, teacherId);
+		resultSet = preparedStatement.executeQuery();
+		Feedback feedback = writeStudentResultSet(resultSet).get(0);
+		return feedback.getNextFeedbackDate();
+	}
+	
+	private List<Feedback> writeStudentResultSet(ResultSet resultSet) throws SQLException {
+		Feedback feedback = null;
+		List<Feedback> feedbackList = new ArrayList<>();
+		while (resultSet.next()) {
+			Date lastFeedbackdate = resultSet.getDate("last_feedback_date");
+			Date nextFeedbackdate = resultSet.getDate("next_feedback_date");
+
+			feedback = new Feedback(resultSet.getInt("employee_id"), resultSet.getString("review"),
+					resultSet.getDouble("rating"), lastFeedbackdate.toLocalDate(), nextFeedbackdate.toLocalDate());
+			feedbackList.add(feedback);
+		}
+		return feedbackList;
 	}
 
 }
