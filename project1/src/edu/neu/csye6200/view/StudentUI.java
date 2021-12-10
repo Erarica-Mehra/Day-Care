@@ -5,13 +5,15 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.*;
-import edu.neu.csye6200.dao.StudentDaoImpl;
+import edu.neu.csye6200.Parent;
+import edu.neu.csye6200.Student;
+import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.ValidationUtil;
 import java.io.File;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -389,14 +391,14 @@ public class StudentUI extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         //StudentDaoImpl impl = new StudentDaoImpl();
-        edu.neu.csye6200.StudentService studentService = new StudentService();
+        StudentService studentService = new StudentService();
   	//TODO add db integration by importing package/class from backend
      //   System.out.println("Date:  "+jXDatePicker1.toString());
   	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
         Student s = new Student();
         Parent p= new Parent();
-        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-               && !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && !ValidationUtil.verifyName(jTextFieldParentLastName.getName()))
+        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
+               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
         {
                 s.setFirstName(jTextFieldStudentFirstName.getText());
                 s.setLastName(jTextFieldStudentLastName.getText());
@@ -405,11 +407,17 @@ public class StudentUI extends javax.swing.JFrame {
 
         }
         s.setAddress(jTextFieldAddress.getText());
-        if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
             p.setEmail(jTextFieldEmail.getText());
         }
-        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+  	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+  	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter);  	
+  	    s.setDob(dob);
+  	    s.setRegistrationDate(regDate);
+  	    p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
         s.setParent(p);
+        s.setAge(ConversionUtil.getAgeFromDOB(dob));
       //  if(ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText())){
           //  p.setPhone(jTextFieldPhoneNumber.getText());
        // }
