@@ -27,9 +27,9 @@ public class StudentService {
 			student = new Student(csvString);
 			DayCare.getStudentsList().add(student);
 			Parent parent = student.getParent();
-			impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+			int parentId = impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
 					parent.getPhone()));
-			student.setParentId(parent.getParentId());
+			student.setParentId(parentId);
 			impl.addStudent(student);
 		}
 		return student;

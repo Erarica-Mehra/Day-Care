@@ -1,12 +1,13 @@
 package edu.neu.csye6200.dao;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,23 @@ public class StudentDaoImpl {
 		}
 	}
 
-	public void addParent(Parent parent) throws Exception {
+	public int addParent(Parent parent) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (?, ?, ?, ?, ?)");
+				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setInt(1, parent.getParentId());
 		preparedStatement.setString(2, parent.getFirstName());
 		preparedStatement.setString(3, parent.getLastName());
 		preparedStatement.setString(4, parent.getEmail());
-		preparedStatement.setInt(5, (parent.getPhone().intValue()));
-
+		preparedStatement.setInt(5, (parent.getPhone()== BigInteger.ZERO)? (parent.getPhone().intValue()) : BigInteger.ZERO.intValue());
 		int updated = preparedStatement.executeUpdate();
+		resultSet = preparedStatement.getGeneratedKeys();
+		int parentId =0;
+		while (resultSet.next()) {
+			 parentId = resultSet.getInt(1); ;
+		}
 		System.out.println("Parent : " + updated);
+		return parentId;
 	}
 
 	public void addStudent(Student student) throws Exception {
@@ -59,7 +65,7 @@ public class StudentDaoImpl {
 		preparedStatement.setInt(6, student.getAge());
 		preparedStatement.setDate(7, Date.valueOf(student.getRegistrationDate()));
 		preparedStatement.setInt(8, 0);
-		preparedStatement.setInt(9, student.getParentId());
+		preparedStatement.setInt(9, 1);
 
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Student : " + updated);
@@ -81,6 +87,15 @@ public class StudentDaoImpl {
 		resultSet = preparedStatement.executeQuery();
 		return writeStudentResultSet(resultSet).get(0);
 	}
+	
+	public Student getParentById(int studentId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement("select * from daycare.student where student_id= ?");
+		preparedStatement.setInt(1, studentId);
+		resultSet = preparedStatement.executeQuery();
+		return writeStudentResultSet(resultSet).get(0);
+	}
+	
 
 	public List<Student> getAllStudents() throws Exception {
 		connection = getConnection();
