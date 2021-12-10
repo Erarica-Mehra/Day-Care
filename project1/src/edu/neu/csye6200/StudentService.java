@@ -35,24 +35,6 @@ public class StudentService {
 		return student;
 	}
 
-	public void registerTeacherFromCSV() throws Exception {
-		List<String> teacherCSVData = FileUtil.readTextFile("resources/teachers.txt");
-		Teacher teacher = null;
-		TeacherDaoImpl impl = new TeacherDaoImpl();
-		for (String csvString : teacherCSVData) {
-			teacher = new Teacher(csvString);
-			DayCare.getTeachersList().add(teacher);
-			impl.addTeacher(teacher);
-		}
-	}
-
-	public Teacher registerTeacher(Teacher teacher) throws Exception {
-		TeacherDaoImpl impl = new TeacherDaoImpl();
-		DayCare.getTeachersList().add(teacher);
-		impl.addTeacher(teacher);
-		return teacher;
-	}
-
 	// enroll Student
 	public Student registerStudent(Student newStudent)  throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
