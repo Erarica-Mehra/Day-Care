@@ -11,7 +11,12 @@ import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.ValidationUtil;
 import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Vector;
@@ -480,13 +485,22 @@ public class StudentUI extends javax.swing.JFrame {
     };
     
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
-            	System.out.println("Downloading CSV file.");
         
         JFileChooser chooser = new JFileChooser();
 		chooser.setSelectedFile(new File("student.txt")); // user will see this name during download
 		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
 			String home = System.getProperty("user.home");
-			File file = new File(home+"/Downloads/students.txt"); 			
+			File file = new File(home+"/Downloads/students.txt");
+			
+			Path originalPath = Paths.get("resources/students.txt");
+		    Path copied = Paths.get(home+"/Downloads/students.txt");
+		    try {
+		    	System.out.println("Downloading CSV file to " + copied.toString());
+				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}			
 		}        // TODO add your handling code here:
     }//GEN-LAST:event_jButtonDownloadMouseClicked
 

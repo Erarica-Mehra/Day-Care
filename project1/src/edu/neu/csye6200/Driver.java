@@ -21,17 +21,7 @@ public class Driver {
 	 */
 	public static void main(String[] args) {
 
-		String home = System.getProperty("user.home");
-		//File file = new File(home+"/Downloads/students.txt");
 		
-		Path originalPath = Paths.get("resources/students.txt");
-	    Path copied = Paths.get(home+"/Downloads/students.txt");
-	    try {
-			Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 }
