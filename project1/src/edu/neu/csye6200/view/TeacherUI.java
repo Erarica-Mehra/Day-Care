@@ -5,9 +5,8 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.*;
-import edu.neu.csye6200.util.ValidationUtil;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,13 +14,22 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
+import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
+import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.TeacherService;
+import edu.neu.csye6200.util.FileUtil;
+import edu.neu.csye6200.util.ValidationUtil;
 /**
  *
  * @author erruc
@@ -29,6 +37,7 @@ import javax.swing.table.DefaultTableModel;
 public class TeacherUI extends javax.swing.JFrame {
 
     private long initialId=0;
+    //static List<Teacher> teachers = new ArrayList<>();
     /**
      * Creates new form Teacher
      */
@@ -315,15 +324,7 @@ public class TeacherUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFieldSearchKeyReleased
 
     private void jButtonUploadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonUploadMouseClicked
-        System.out.println("Uploading CSV file.");
-        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-    		int returnValue = jfc.showOpenDialog(null);
-    		// int returnValue = jfc.showSaveDialog(null);
-    		if (returnValue == JFileChooser.APPROVE_OPTION) {
-    			File selectedFile = jfc.getSelectedFile();
-    			System.out.println(selectedFile.getAbsolutePath());
-    			//edu.neu.csye6200.backend.FileUtil.readTextFile(selectedFile.getName());
-    		}        // TODO add your handling code here:
+        
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
@@ -334,8 +335,8 @@ public class TeacherUI extends javax.swing.JFrame {
  
         if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) && ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
         {
-                teacher.setFirstName(jTextFieldTeacherFirstName.getText());
-                teacher.setLastName(jTextFieldTeacherLastName.getText());
+            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
+            teacher.setLastName(jTextFieldTeacherLastName.getText());
              
         }
    
@@ -343,7 +344,7 @@ public class TeacherUI extends javax.swing.JFrame {
             teacher.setEmailID(jTextFieldEmail.getText());
         }
         
-         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
   	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
   	    LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
             teacher.setJoiningDate(doj);
@@ -361,60 +362,94 @@ public class TeacherUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
-                 // TODO add your handling code here:
-                   	System.out.println("Uploading CSV file.");
-        
-        JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
-
+    
+    	JFileChooser jfc = new JFileChooser(FileSystemView.getFileSystemView().getHomeDirectory());
 		int returnValue = jfc.showOpenDialog(null);
+		javax.swing.table.DefaultTableModel modelTable = (javax.swing.table.DefaultTableModel)jTable1.getModel();
 		// int returnValue = jfc.showSaveDialog(null);
-
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
-			String home = System.getProperty("user.home");
-			File file = new File(home+"/Downloads/teachers.txt");
+			File selectedFile = jfc.getSelectedFile();
+			System.out.println("Uploading CSV file from: " + selectedFile.getPath());
 			
-			Path originalPath = Paths.get("resources/teachers.txt");
-		    Path copied = Paths.get(home+"/Downloads/teachers.txt");
-		    try {
-		    	System.out.println("Downloading CSV file to " + copied.toString());
-				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			if(modelTable.getRowCount() > 0) {
+				System.out.println("Recreating Teacher Info table by overriding data");
+				modelTable.setRowCount(0);
 			}
+			
+			List<String> teacherRecords = FileUtil.readTextFile(selectedFile.getPath());
+			//teacherRecords.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
+			teacherRecords.forEach(teacher->{modelTable.addRow(fillTableFromCSV(teacher));});
+		
 		}
+		
     }//GEN-LAST:event_jButtonUploadActionPerformed
     
+    //Search in table
     public void searchTableContents(String searchString) {
         DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
-        System.out.println("Started seearching...");
-        //To empty the table before search
-        Vector originalTableModel = (Vector) ((DefaultTableModel) jTable1.getModel()).getDataVector().clone();
-        currtableModel.setRowCount(0);
-        //To search for contents from original table content
-        for (Object rows : originalTableModel) {
-            Vector rowVector = (Vector) rows;
-            for (Object column : rowVector) {
-                if (column.toString().contains(searchString)) {
-                    //content found so adding to table
-                    currtableModel.addRow(rowVector);
-                    System.out.println("String Found...");
-                    break;
-                }
-            }
-
-        }
+        
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(currtableModel);
+        jTable1.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(searchString.toLowerCase()));
+        
     };
     
+    //Used when csv is uploaded and table is loaded
+    public Object[] fillTableFromCSV(String csvRecord) {
+    	String[] array = csvRecord.split(",");
+    	Object[] data = new Object[array.length];
+        for (int i = 0; i < array.length; i++)
+            data[i] = array[i];
+    	
+        return data;
+    }
+    
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
-            	System.out.println("Downloading CSV file.");
         
-        JFileChooser chooser = new JFileChooser();
-		chooser.setSelectedFile(new File("teacher.txt")); // user will see this name during download
-		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
-			String home = System.getProperty("user.home");
-			File file = new File(home+"/Downloads/teacher.txt"); 			
-		}        // TODO add your handling code here:
+//        JFileChooser chooser = new JFileChooser();
+//		chooser.setSelectedFile(new File("teacher.txt")); // user will see this name during download
+//		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
+//			String home = System.getProperty("user.home");
+//			File file = new File(home+"/Downloads/teachers.txt");
+//			
+//			Path originalPath = Paths.get("resources/teachers.txt");
+//		    Path copied = Paths.get(home+"/Downloads/teachers.txt");
+//		    try {
+//		    	System.out.println("Downloading CSV file to " + copied.toString());
+//				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
+//		}
+    	
+    	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    	String pathToDownloads = System.getProperty("user.home");
+        FileWriter csv;
+		try {
+			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachers.txt"));
+			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachers.txt");
+			for (int i = 0; i < model.getRowCount(); i++) {
+	            for (int j = 0; j < model.getColumnCount(); j++) {
+	            	if(j == model.getColumnCount()-1) {
+	            		csv.write(model.getValueAt(i, j).toString());
+	            	}
+	            	else {
+	            		csv.write(model.getValueAt(i, j).toString() + ",");
+	            	}
+	            }
+	            csv.write("\n");
+	        }
+			csv.close();
+			
+			//TODO add info_dialog to show success
+			
+			System.out.println("Successfully downloaded teachers.txt CSV file");
+		} catch (IOException e) {
+			System.out.println("Error in downloading teachers.txt CSV file");
+			e.printStackTrace();
+		}
+		
     }//GEN-LAST:event_jButtonDownloadMouseClicked
 
     private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
