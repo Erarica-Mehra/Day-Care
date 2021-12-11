@@ -334,6 +334,10 @@ public class StudentUI extends javax.swing.JFrame {
                 "Student Id", "FirstName", "LastName", "Address", "Reg. Date", "Student Dob", "Parent FName", "Parent LName", "PhoneNumber", "Email Id"
             }
         ));
+        
+        //Sorting every column
+        jTable1.setAutoCreateRowSorter(true);
+        
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setHeaderValue("Student Id");
