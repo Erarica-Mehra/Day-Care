@@ -565,10 +565,12 @@ public class StudentUI extends javax.swing.JFrame {
 
     private void jAddStudentButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddStudentButtonMouseClicked
         // TODO add your handling code here:
-        initialId+=1;
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
+        initialId = model.getRowCount()+1;
         model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
         jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+        
+        //initialId = initialId+1;
         
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
 

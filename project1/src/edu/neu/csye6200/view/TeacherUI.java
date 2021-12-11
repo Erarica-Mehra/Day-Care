@@ -470,8 +470,8 @@ public class TeacherUI extends javax.swing.JFrame {
 
     private void jAddTeacherButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddTeacherButtonMouseClicked
         // TODO add your handling code here:
-        initialId+=1;
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
+        initialId = model.getRowCount()+1;
         model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
             jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
 

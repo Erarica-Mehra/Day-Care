@@ -28,8 +28,8 @@ import edu.neu.csye6200.util.FileUtil;
 public class GroupHelper {
 
 	static int currentTeacherIndexFlag = 0;
-	static String studentfile = "students.csv";
-	static String teachersfile = "teachers.csv";
+	static String studentfile = "students.txt";
+	static String teachersfile = "teachers.txt";
 	static List<Student> students = new ArrayList<>();
 	static List<Teacher> teachers = new ArrayList<>();
 
