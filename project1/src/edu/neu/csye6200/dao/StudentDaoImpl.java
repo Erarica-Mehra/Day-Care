@@ -42,7 +42,7 @@ public class StudentDaoImpl {
 		preparedStatement.setString(2, parent.getFirstName());
 		preparedStatement.setString(3, parent.getLastName());
 		preparedStatement.setString(4, parent.getEmail());
-		preparedStatement.setInt(5, (parent.getPhone()== BigInteger.ZERO)? (parent.getPhone().intValue()) : BigInteger.ZERO.intValue());
+		preparedStatement.setLong(5,parent.getPhone().longValue());
 		int updated = preparedStatement.executeUpdate();
 		resultSet = preparedStatement.getGeneratedKeys();
 		int parentId =0;
@@ -65,7 +65,7 @@ public class StudentDaoImpl {
 		preparedStatement.setInt(6, student.getAge());
 		preparedStatement.setDate(7, Date.valueOf(student.getRegistrationDate()));
 		preparedStatement.setInt(8, 0);
-		preparedStatement.setInt(9, 1);
+		preparedStatement.setInt(9, student.getParentId());
 
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Student : " + updated);

@@ -16,6 +16,7 @@ import edu.neu.csye6200.Group;
 import edu.neu.csye6200.GroupFactory;
 import edu.neu.csye6200.Student;
 import edu.neu.csye6200.StudentFactory;
+import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.Teacher;
 import edu.neu.csye6200.TeacherFactory;
 import edu.neu.csye6200.dao.ClassGroupDaoImpl;
@@ -37,9 +38,19 @@ public class GroupHelper {
 
 		students.clear();
 		teachers.clear();
+		StudentService service = new StudentService();
+		
 		List<String> tempStudents = FileUtil.readTextFile(studentfile);
 		//tempStudents.forEach(student -> students.add(new Student(student)));
 		tempStudents.forEach(student-> students.add(StudentFactory.getInstance().getObject(student)));
+		
+		students.forEach(student -> {
+			try {
+				service.registerStudent(student);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 		
 		List<String> tempTeachers = FileUtil.readTextFile(teachersfile);
 		//tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));

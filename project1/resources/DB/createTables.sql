@@ -86,3 +86,7 @@
         FOREIGN KEY (teacher_id) REFERENCES Teacher(employee_id)
     );
     
+    
+        alter table parent modify column phone bigint;
+    
+    
