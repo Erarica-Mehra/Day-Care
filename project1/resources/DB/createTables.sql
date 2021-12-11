@@ -22,7 +22,7 @@
         teacher_assigned INT,
         PRIMARY KEY (student_id),
         FOREIGN KEY (parent_id) REFERENCES Parent(parent_id),
-        FOREIGN KEY (teacher_assigned) REFERENCES Teacher(teacher_id)
+        FOREIGN KEY (teacher_assigned) REFERENCES Teacher(employee_id)
     );
     
     
