@@ -1,12 +1,13 @@
 package edu.neu.csye6200.dao;
 
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,18 +34,23 @@ public class StudentDaoImpl {
 		}
 	}
 
-	public void addParent(Parent parent) throws Exception {
+	public int addParent(Parent parent) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (?, ?, ?, ?, ?)");
+				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setInt(1, parent.getParentId());
 		preparedStatement.setString(2, parent.getFirstName());
 		preparedStatement.setString(3, parent.getLastName());
 		preparedStatement.setString(4, parent.getEmail());
-		preparedStatement.setInt(5, (parent.getPhone().intValue()));
-
+		preparedStatement.setInt(5, (parent.getPhone()== BigInteger.ZERO)? (parent.getPhone().intValue()) : BigInteger.ZERO.intValue());
 		int updated = preparedStatement.executeUpdate();
+		resultSet = preparedStatement.getGeneratedKeys();
+		int parentId =0;
+		while (resultSet.next()) {
+			 parentId = resultSet.getInt(1); ;
+		}
 		System.out.println("Parent : " + updated);
+		return parentId;
 	}
 
 	public void addStudent(Student student) throws Exception {
@@ -59,11 +65,11 @@ public class StudentDaoImpl {
 		preparedStatement.setInt(6, student.getAge());
 		preparedStatement.setDate(7, Date.valueOf(student.getRegistrationDate()));
 		preparedStatement.setInt(8, 0);
-		preparedStatement.setInt(9, student.getParentId());
+		preparedStatement.setInt(9, 1);
 
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Student : " + updated);
-		
+
 		List<Vaccine> vaccines = student.getImmunizationRecord();
 		vaccines.stream().forEach(vaccine -> {
 			try {
@@ -82,6 +88,15 @@ public class StudentDaoImpl {
 		return writeStudentResultSet(resultSet).get(0);
 	}
 	
+	public Student getParentById(int studentId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement("select * from daycare.student where student_id= ?");
+		preparedStatement.setInt(1, studentId);
+		resultSet = preparedStatement.executeQuery();
+		return writeStudentResultSet(resultSet).get(0);
+	}
+	
+
 	public List<Student> getAllStudents() throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement("select * from daycare.student");
@@ -106,8 +121,6 @@ public class StudentDaoImpl {
 		int updated = preparedStatement.executeUpdate();
 		System.out.println("Vaccine : " + updated);
 	}
-	
-	
 
 	public List<Vaccine> getVaccinesByStudentId(int studentId) throws Exception {
 		connection = getConnection();
@@ -116,7 +129,24 @@ public class StudentDaoImpl {
 		resultSet = preparedStatement.executeQuery();
 		return writeVaccineResultSet(resultSet);
 	}
-	
+
+	public void updateVaccineByStudentIdAndVaccineId(Vaccine vaccine) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				"update  daycare.vaccine set last_shot_date = ?, "
+				+ " upcoming_shot_date = ?,  is_vaccinated = ?, doses_taken_dates = ?, doses_taken = ? "
+				+ " where student_id = ? and vaccine_id = ?");
+		preparedStatement.setDate(1, Date.valueOf(vaccine.getLastShotDate()));
+		preparedStatement.setDate(2, Date.valueOf(vaccine.getNextShotDate()));
+		preparedStatement.setBoolean(3, vaccine.isVaccinated());
+		preparedStatement.setString(4, null); // TODO change this later
+		preparedStatement.setInt(5, vaccine.getDosestaken() + 1); // TODO change this later
+		preparedStatement.setInt(6, vaccine.getStudentId());
+		preparedStatement.setInt(7, vaccine.getId());
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  vaccine updated");
+	}
+
 	private List<Student> writeStudentResultSet(ResultSet resultSet) throws SQLException {
 		Student student = null;
 		List<Student> students = new ArrayList<>();
@@ -130,7 +160,7 @@ public class StudentDaoImpl {
 		}
 		return students;
 	}
-	
+
 	private List<Vaccine> writeVaccineResultSet(ResultSet resultSet) throws SQLException {
 		Vaccine vaccine = null;
 		List<Vaccine> vaccines = new ArrayList<>();
@@ -139,14 +169,18 @@ public class StudentDaoImpl {
 			Date upcomingShotDate = resultSet.getDate("upcoming_shot_date");
 			// TODO change this to List<LocalDate>
 			String dates = resultSet.getString("doses_taken_dates");
-			vaccine = new Vaccine(resultSet.getInt("vaccine_id"), resultSet.getString("name"), resultSet.getInt("doses_taken"),
-					resultSet.getInt("total_doses"), lastShotDate.toLocalDate(), upcomingShotDate.toLocalDate(),
-					resultSet.getInt("student_id"), resultSet.getBoolean("is_vaccinated"), null);
+			vaccine = new Vaccine(resultSet.getInt("vaccine_id"), resultSet.getString("name"),
+					resultSet.getInt("doses_taken"), resultSet.getInt("total_doses"), lastShotDate.toLocalDate(),
+					upcomingShotDate.toLocalDate(), resultSet.getInt("student_id"),
+					resultSet.getBoolean("is_vaccinated"), null);
 			vaccines.add(vaccine);
 		}
 		return vaccines;
 
 	}
 
+	// update vaccine set doses_taken = doses_taken + 1 and last_shot_date =
+	// '2021-01-12' and upcoming_shot_date = '2021-01-12' and is_vaccinated =
+	// 'true'and doses_taken_dates = null where student_id = 100 and vaccine_id = 1;
 
 }

@@ -49,3 +49,40 @@
         PRIMARY KEY (vaccine_id),
         FOREIGN KEY (student_id) REFERENCES Student(student_id)
     );
+    
+    
+       CREATE TABLE Feedback (
+        feedback_id INT NOT NULL AUTO_INCREMENT,
+        employee_id INT NOT NULL,
+        rating float NOT NULL,
+        review varchar(500) ,
+        PRIMARY KEY (feedback_id),
+        FOREIGN KEY (employee_id) REFERENCES Teacher(employee_id)
+    );
+    
+      CREATE TABLE studentGroup (
+        group_id INT NOT NULL AUTO_INCREMENT,
+		group_size INT NOT NULL,
+        students_enrolled INT ,
+        PRIMARY KEY (group_id)
+    );
+    
+    
+    CREATE TABLE classroom (
+        class_id INT NOT NULL AUTO_INCREMENT,
+		no_of_groups INT NOT NULL,
+        groups_enrolled INT ,
+        PRIMARY KEY (class_id)
+    );
+    
+      CREATE TABLE ClassroomGroupMapping (
+        class_group_id INT NOT NULL AUTO_INCREMENT,
+        classroom_id INT NOT NULL,
+        group_id INT NOT NULL,
+        student_id INT NOT NULL,
+        teacher_id INT NOT NULL,
+        PRIMARY KEY (class_group_id),
+        FOREIGN KEY (student_id) REFERENCES Student(student_id),
+        FOREIGN KEY (teacher_id) REFERENCES Teacher(employee_id)
+    );
+    
