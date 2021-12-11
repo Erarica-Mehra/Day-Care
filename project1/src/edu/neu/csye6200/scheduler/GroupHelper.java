@@ -16,8 +16,10 @@ import edu.neu.csye6200.Group;
 import edu.neu.csye6200.GroupFactory;
 import edu.neu.csye6200.Student;
 import edu.neu.csye6200.StudentFactory;
+import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.Teacher;
 import edu.neu.csye6200.TeacherFactory;
+import edu.neu.csye6200.TeacherService;
 import edu.neu.csye6200.dao.ClassGroupDaoImpl;
 import edu.neu.csye6200.util.FileUtil;
 
@@ -33,17 +35,37 @@ public class GroupHelper {
 	static List<Student> students = new ArrayList<>();
 	static List<Teacher> teachers = new ArrayList<>();
 
-	public static void groupMe() {
+	public static void groupMe() throws Exception {
 
 		students.clear();
 		teachers.clear();
+		StudentService studentService = new StudentService();
+		TeacherService teacherService = new TeacherService();
+
 		List<String> tempStudents = FileUtil.readTextFile(studentfile);
-		//tempStudents.forEach(student -> students.add(new Student(student)));
-		tempStudents.forEach(student-> students.add(StudentFactory.getInstance().getObject(student)));
-		
+		// tempStudents.forEach(student -> students.add(new Student(student)));
+		tempStudents.forEach(student -> students.add(StudentFactory.getInstance().getObject(student)));
+
+		students.forEach(student -> {
+			try {
+				studentService.registerStudent(student);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+
 		List<String> tempTeachers = FileUtil.readTextFile(teachersfile);
-		//tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
-		tempTeachers.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
+		// tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
+
+		tempTeachers.forEach(teacher -> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
+		teachers.forEach(teacher -> {
+			try {
+				int teacherId  = teacherService.registerTeacher(teacher);
+				teacher.setEmployeeId(teacherId);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 
 		List<Student> sixToTwelve = students.stream().filter(student -> student.getAge() >= 6 && student.getAge() <= 12)
 				.collect(Collectors.toList());
@@ -61,7 +83,7 @@ public class GroupHelper {
 				.filter(student -> student.getAge() >= 48 && student.getAge() <= 59).collect(Collectors.toList());
 		List<Student> sixtyAndUp = students.stream().filter(student -> student.getAge() >= 60)
 				.collect(Collectors.toList());
-		
+
 		List<List<Student>> studentAgeGroups = new ArrayList<>();
 
 		studentAgeGroups.add(sixToTwelve);
@@ -85,7 +107,7 @@ public class GroupHelper {
 
 		int flag = 0;
 		while (flag < studentAgeGroups.size()) {
-			//Hardcoding size and class size parameters from rules-ratio.
+			// Hardcoding size and class size parameters from rules-ratio.
 			if (flag == 0) {
 				System.out.println("calling 6-12");
 				parseAndAdd(studentAgeGroups.get(flag), 4, 3);
@@ -112,10 +134,10 @@ public class GroupHelper {
 
 	}
 
-	public static void parseAndAdd(List<Student> studs, int size, int classSize) {
+	public static void parseAndAdd(List<Student> studs, int size, int classSize) throws Exception {
 		System.out.println("i am  in parseaddstud");
 		System.out.println(studs);
-		System.out.println("Class Size: "+size);
+		System.out.println("Class Size: " + size);
 		int numGroups = 0;
 		if (studs.size() % size == 0) {
 			numGroups = studs.size() / size;
@@ -135,7 +157,6 @@ public class GroupHelper {
 			temp = temp + size;
 		}
 
-		
 		List<Classroom> classes = new ArrayList<>();
 		int tempC = 0;
 		int numClassrooms = 0;
@@ -145,8 +166,8 @@ public class GroupHelper {
 			numClassrooms = groups.size() / classSize + 1;
 		}
 
-		System.out.println("Number of Classrooms: "+ numClassrooms);
-		System.out.println("Group SIze: "+groups.size());
+		System.out.println("Number of Classrooms: " + numClassrooms);
+		System.out.println("Group SIze: " + groups.size());
 		for (int i = 0; i < numClassrooms; i++) {
 			classes.add(ClassroomFactory.getInstance().getObject());
 			for (int j = 0; j < classSize; j++) {
@@ -158,6 +179,7 @@ public class GroupHelper {
 		}
 
 		classes.forEach(c -> DayCare.addClassroom(c));
+		assignGroups(classes);
 	}
 
 	public static void parseAddTeacher(List<Teacher> t, List<Classroom> c) {
@@ -166,28 +188,43 @@ public class GroupHelper {
 			for (Group g : cl.getGroups()) {
 				g.assignTeacher(t.get(currTF));
 				System.out.println("In parseAddTeacher : Assigning teacher to a group");
-				//System.out.println(g.toString());
+				// System.out.println(g.toString());
 				System.out.println(t.get(currTF));
 				currTF = currTF + 1;
 				if (currTF == t.size()) {
 					currTF = 0;
 				}
-				//TODO call assignGroups here. (To be discussed)
+				// TODO call assignGroups here. (To be discussed)
 			}
 		}
 
 	}
-	
-	public void assignGroups(Student student, Teacher teacher) throws Exception {
-		ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
 
-		Group group = new Group(3,0); //TODO create group here
-		dao.createGroup(group); //ex: group size is 3 and currently student enrolled is 0
-		group.getStudents().add(student); // adding student to group
-		List<Classroom> availableClassrooms = dao.getClassRooms().stream().filter(cls -> cls.getGroupsAllowed() < cls.getGroupsEnrolled()).collect(Collectors.toList()); // get classroom. classroom should already be created. Just get the classroom
-		Classroom roomAllocated = availableClassrooms.get(0);
-		roomAllocated.getGroups().add(group);// adding group to classroom
-		dao.assignClassroom(student.getStudentId(), teacher.getEmployeeId(), roomAllocated.getClassId(), group.getGroupId());
+//	public void assignGroups(List<Classroom> classrooms) throws Exception {
+//	ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
+//
+//	Group group = new Group(3,0); //TODO create group here
+//	dao.createGroup(group); //ex: group size is 3 and currently student enrolled is 0
+//	group.getStudents().add(student); // adding student to group
+//	List<Classroom> availableClassrooms = dao.getClassRooms().stream().filter(cls -> cls.getGroupsAllowed() < cls.getGroupsEnrolled()).collect(Collectors.toList()); // get classroom. classroom should already be created. Just get the classroom
+//	Classroom roomAllocated = availableClassrooms.get(0);
+//	roomAllocated.getGroups().add(group);// adding group to classroom
+//	dao.assignClassroom(student.getStudentId(), teacher.getEmployeeId(), roomAllocated.getClassId(), group.getGroupId());
+////		
+//	}
+
+	public static void assignGroups(List<Classroom> classrooms) throws Exception {
+		ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
+		for (Classroom classroom : classrooms) {
+			int classId = dao.createClassroom(classroom);
+			List<Group> groups = classroom.getGroups();
+			for (Group group : groups) {
+				int groupId = dao.createGroup(group);
+				List<Student> students = group.getStudents();
+				for (Student student : students)
+					dao.assignClassroom(student.getStudentId(), group.getTeacher().getEmployeeId(), classId, groupId);
+			}
+		}
 	}
 
 }

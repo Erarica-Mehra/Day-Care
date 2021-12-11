@@ -86,3 +86,10 @@
         FOREIGN KEY (teacher_id) REFERENCES Teacher(employee_id)
     );
     
+    
+        alter table parent modify column phone bigint;
+        alter table student add column is_deleted boolean default 0;    
+        
+        alter table teacher add column is_deleted boolean default 0;    
+    
+    
