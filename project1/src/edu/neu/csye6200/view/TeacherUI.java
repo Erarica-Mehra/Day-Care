@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -281,6 +282,10 @@ public class TeacherUI extends javax.swing.JFrame {
                 "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
             }
         ));
+        
+        //Sorting every column
+        jTable1.setAutoCreateRowSorter(true);
+        
         jScrollPane1.setViewportView(jTable1);
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -404,6 +409,16 @@ public class TeacherUI extends javax.swing.JFrame {
         return data;
     }
     
+    public boolean isDuplicate(DefaultTableModel model, String fName, String email) {
+    	for (int i = 0; i < model.getRowCount(); i++) {
+    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 5).equals(email)) {
+        		return true;
+        	}
+            
+        }
+		return false;
+    }
+    
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
         
 //        JFileChooser chooser = new JFileChooser();
@@ -472,9 +487,16 @@ public class TeacherUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
-        model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
-            jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
-
+        
+        if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
+        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
+                    jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
+        }
+        else {
+        	System.out.println("Record already exists!");
+        	JOptionPane.showMessageDialog(null, "Record already exists with same name and email!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 
     private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
