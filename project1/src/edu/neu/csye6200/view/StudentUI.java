@@ -485,7 +485,6 @@ public class StudentUI extends javax.swing.JFrame {
         jTable1.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(searchString.toLowerCase()));
     };
-    
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
         
 //        JFileChooser chooser = new JFileChooser();

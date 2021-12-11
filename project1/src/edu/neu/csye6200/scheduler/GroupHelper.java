@@ -110,6 +110,9 @@ public class GroupHelper {
 		}
 		parseAddTeacher(teachers, DayCare.getClassroom());
 
+		//TODO call assignGroups here. (To be discussed)
+		
+		
 	}
 
 	public static void parseAndAdd(List<Student> studs, int size, int classSize) {
@@ -135,6 +138,7 @@ public class GroupHelper {
 			temp = temp + size;
 		}
 
+		
 		
 		List<Classroom> classes = new ArrayList<>();
 		int tempC = 0;
@@ -172,7 +176,7 @@ public class GroupHelper {
 				if (currTF == t.size()) {
 					currTF = 0;
 				}
-				//TODO call assignGroups here. (To be discussed)
+				
 			}
 		}
 
