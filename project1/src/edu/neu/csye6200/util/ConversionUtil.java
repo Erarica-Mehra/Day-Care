@@ -60,7 +60,7 @@ public class ConversionUtil {
 	
 	public static int getAgeFromDOB(LocalDate dob) {
 		LocalDate currentDate = LocalDate.now();
-		return (int) ChronoUnit.YEARS.between(dob, currentDate);
+		return 12 * (int) ChronoUnit.YEARS.between(dob, currentDate);   // returning months
 	}
 
 	public static String DateToString(Date d) {
