@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.event.RowSorterListener;
@@ -476,6 +477,16 @@ public class StudentUI extends javax.swing.JFrame {
     	
         return data;
     }
+    
+    public boolean isDuplicate(DefaultTableModel model, String fName, String email) {
+    	for (int i = 0; i < model.getRowCount(); i++) {
+    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 9).equals(email)) {
+        		return true;
+        	}
+            
+        }
+		return false;
+    }
 
     private void jTextFieldStudentDobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldStudentDobActionPerformed
         // TODO add your handling code here:
@@ -570,8 +581,15 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
         initialId = model.getRowCount()+1;
-        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
-        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+        
+        if(!isDuplicate(model,jTextFieldStudentFirstName.getText(),jTextFieldEmail.getText())) {
+        	model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
+        	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+        }
+        else {
+        	System.out.println("Record already exists!");
+        	JOptionPane.showMessageDialog(null, "Record already exists with same name and email!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
         
         //initialId = initialId+1;
         

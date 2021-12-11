@@ -118,7 +118,7 @@ public class GroupHelper {
 	public static void parseAndAdd(List<Student> studs, int size, int classSize) {
 		System.out.println("i am  in parseaddstud");
 		System.out.println(studs);
-		System.out.println("Class Size: "+size);
+		System.out.println("Class Size: "+classSize);
 		int numGroups = 0;
 		if (studs.size() % size == 0) {
 			numGroups = studs.size() / size;
