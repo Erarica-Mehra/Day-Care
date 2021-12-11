@@ -381,10 +381,32 @@ public class TeacherUI extends javax.swing.JFrame {
 			teacherRecords.forEach(teacher->{modelTable.addRow(fillTableFromCSV(teacher));});
 		
 		}
-		
     }//GEN-LAST:event_jButtonUploadActionPerformed
     
-    //Search in table
+//    public void searchTableContents(String searchString) {
+//        DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
+//        System.out.println("Started searching...");
+//        //To empty the table before search
+//       
+//        Vector originalTableModel = (Vector) ((DefaultTableModel) jTable1.getModel()).getDataVector().clone();
+//        currtableModel.setRowCount(0);
+//        //To search for contents from original table content
+//        for (Object rows : originalTableModel) {
+//            Vector rowVector = (Vector) rows;
+//            for (Object column : rowVector) {
+//                if (column.toString().contains(searchString)) {
+//                    //content found so adding to table
+//                    searchCounter+=1;
+//                    currtableModel.addRow(rowVector);
+//                    System.out.println(+searchCounter+ " Matches Found");
+//                    break;
+//                }
+//                
+//            }
+//
+//        }
+//    };
+    
     public void searchTableContents(String searchString) {
         DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
         
