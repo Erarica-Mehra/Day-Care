@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+import javax.swing.JOptionPane;
+
 /**
  * @author pratiknakave
  *
@@ -42,7 +44,7 @@ public class ValidationUtil {
         return s.matches(regex);
     }
 	
-	public boolean isValid(String dateStr) {
+	public static boolean isValid(String dateStr) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         try {
             LocalDate.parse(dateStr, formatter);
@@ -51,4 +53,17 @@ public class ValidationUtil {
         }
         return true;
     }
+	
+	
+	public static void showError(String s) {
+		
+		JOptionPane.showMessageDialog(null, s , "Error" ,JOptionPane.ERROR_MESSAGE);
+		
+	}
+	
+	public static void showSuccess(String s) {
+		JOptionPane.showMessageDialog(null, s , "Success" ,JOptionPane.ERROR_MESSAGE);
+
+
+	}
 }

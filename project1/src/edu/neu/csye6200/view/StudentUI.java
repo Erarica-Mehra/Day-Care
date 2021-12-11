@@ -27,11 +27,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.event.RowSorterListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 /**
  *
@@ -394,28 +396,40 @@ public class StudentUI extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         //StudentDaoImpl impl = new StudentDaoImpl();
+    	DefaultTableModel modell = (DefaultTableModel) jTable1.getModel();
+        if(modell.getRowCount() < 1 ) {
+        	ValidationUtil.showError("Add Student details first!");
+        	return;
+        }
         StudentService studentService = new StudentService();
   	//TODO add db integration by importing package/class from backend
      //   System.out.println("Date:  "+jXDatePicker1.toString());
   	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
         Student s = new Student();
         Parent p= new Parent();
+       
         if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
-        {
-                s.setFirstName(jTextFieldStudentFirstName.getText());
-                s.setLastName(jTextFieldStudentLastName.getText());
-                p.setFirstName(jTextFieldParentFirstName.getText());
-                p.setLastName(jTextFieldParentLastName.getText());
+                && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
+         {
+                 s.setFirstName(jTextFieldStudentFirstName.getText());
+                 s.setLastName(jTextFieldStudentLastName.getText());
+                 p.setFirstName(jTextFieldParentFirstName.getText());
+                 p.setLastName(jTextFieldParentLastName.getText());
+         }
 
-        }
         s.setAddress(jTextFieldAddress.getText());
-        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-            p.setEmail(jTextFieldEmail.getText());
-        }
+        p.setEmail(jTextFieldEmail.getText());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
-  	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter);  	
+  	    LocalDate dob = null;
+		LocalDate regDate = null;
+		try {
+			dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+			regDate = LocalDate.parse(jTextFieldRegDate.getText(), formatter);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Please enter correct date" , "Error Found in Date" ,JOptionPane.INFORMATION_MESSAGE);
+		}
+		
   	    s.setDob(dob);
   	    s.setRegistrationDate(regDate);
   	    p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
@@ -485,9 +499,9 @@ public class StudentUI extends javax.swing.JFrame {
         jTable1.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(searchString.toLowerCase()));
     };
-    
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
-        
+    	
+    
 //        JFileChooser chooser = new JFileChooser();
 //		chooser.setSelectedFile(new File("student.txt")); // user will see this name during download
 //		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
@@ -508,6 +522,13 @@ public class StudentUI extends javax.swing.JFrame {
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
+        
+        if(model.getRowCount() < 1 ) {
+        	ValidationUtil.showError("Add Student details first!");
+        	return;
+        }
+        
+        
 		try {
 			csv = new FileWriter(new File(pathToDownloads+"/Downloads/students.txt"));
 			System.out.println("Downloading Students Info into CSV at: "+pathToDownloads+"/Downloads/students.txt");
@@ -526,11 +547,16 @@ public class StudentUI extends javax.swing.JFrame {
 			
 			//TODO add info_dialog to show success
 			
-			System.out.println("Successfully downloaded students.txt CSV file");
+			
+			ValidationUtil.showSuccess("Successfully downloaded students.txt CSV file");
+			
+			
 		} catch (IOException e) {
 			System.out.println("Error in downloading students.txt CSV file");
 			e.printStackTrace();
 		}
+		
+		
         
     	
     }//GEN-LAST:event_jButtonDownloadMouseClicked
@@ -567,13 +593,45 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
         initialId = model.getRowCount()+1;
-        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
-        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+
+        
+        
+        if(jTextFieldStudentFirstName.getText().isBlank() || jTextFieldStudentLastName.getText().isBlank() || jTextFieldAddress.getText().isBlank()
+        		|| jTextFieldAddress.getText().isBlank() || jTextFieldRegDate.getText().isBlank() || jTextFieldStudentDob.getText().isBlank() || jTextFieldParentFirstName.getText().isBlank() || jTextFieldParentLastName.getText().isBlank()
+        		|| jTextFieldPhoneNumber.getText().isBlank() || jTextFieldEmail.getText().isBlank())
+        {
+        	String y = "Fields cannot be left empty";
+        	ValidationUtil.showError(y);	
+        }
+        
+        else if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldStudentLastName.getText()) 
+        	 && ValidationUtil.isValid(jTextFieldRegDate.getText()) && ValidationUtil.isValid(jTextFieldStudentDob.getText()) && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldParentLastName.getText())  
+        	 && ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText()) && ValidationUtil.verifyEmail(jTextFieldEmail.getText()))
+        {
+        	   model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(), jTextFieldRegDate.getText(),
+                       jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(), jTextFieldParentLastName.getText(), jTextFieldPhoneNumber.getText(), jTextFieldEmail.getText()});
+        }
+
+        else {
+            	String xx= "Check your details once again!";
+            	ValidationUtil.showError(xx);
+        }
         
         //initialId = initialId+1;
         
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
+   
+    public void removeSelectedFromTable(JTable from){
+    DefaultTableModel df1 = (DefaultTableModel) jTable1.getModel();
+    int rs[] = jTable1.getSelectedRows();
+    for (int i = rs.length-1; i >=0 ; i--) {
 
+        int k = rs[i];
+
+        df1.removeRow(k);
+        from.clearSelection();
+    }
+    }    
     private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentAdded
