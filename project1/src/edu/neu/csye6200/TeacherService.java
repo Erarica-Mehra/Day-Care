@@ -7,11 +7,10 @@ import edu.neu.csye6200.util.FileUtil;
 
 public class TeacherService {
 	
-	public Teacher registerTeacher(Teacher teacher) throws Exception {
+	public int registerTeacher(Teacher teacher) throws Exception {
 		TeacherDaoImpl impl = new TeacherDaoImpl();
 		DayCare.getTeachersList().add(teacher);
-		impl.addTeacher(teacher);
-		return teacher;
+		return impl.addTeacher(teacher);
 	}
 	
 	public void registerTeacherFromCSV() throws Exception {

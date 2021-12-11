@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,24 +30,38 @@ public class ClassGroupDaoImpl {
 		}
 	}
 
-	public void createGroup(Group group) throws Exception {
+	public int createGroup(Group group) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"insert into daycare.studentGroup(group_id, group_size, students_enrolled ) values (default, ?,? )");
+				"insert into daycare.studentGroup(group_id, group_size, students_enrolled ) values (default, ?,? )",
+				Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setInt(1, group.getGroupSize());
 		preparedStatement.setInt(2, group.getStudentsEnrolled());
 		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.getGeneratedKeys();
+		int groupId = 0;
+		while (resultSet.next()) {
+			groupId = resultSet.getInt(1);
+		}
 		System.out.println("Group created");
+		return groupId;
 	}
 
-	public void createClassroom(Classroom classroom) throws Exception {
+	public int createClassroom(Classroom classroom) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"insert into daycare.classroom(class_id, no_of_groups, groups_enrolled ) values (default, ?,? )");
+				"insert into daycare.classroom(class_id, no_of_groups, groups_enrolled ) values (default, ?,? )",
+				Statement.RETURN_GENERATED_KEYS);
 		preparedStatement.setInt(1, classroom.getGroupsAllowed());
 		preparedStatement.setInt(2, classroom.getGroupsEnrolled());
 		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.getGeneratedKeys();
+		int classId = 0;
+		while (resultSet.next()) {
+			classId = resultSet.getInt(1);
+		}
 		System.out.println("Classroom created");
+		return classId;
 	}
 
 	public List<Classroom> getClassRooms() throws Exception {
@@ -55,7 +70,7 @@ public class ClassGroupDaoImpl {
 		resultSet = preparedStatement.executeQuery();
 		return writeClassroomResultset(resultSet);
 	}
-	
+
 //	public List<Classroom> getGroupsByClassRoom(int classId) throws Exception {
 //		connection = getConnection();
 //		preparedStatement = connection.prepareStatement(" select distinct(sg.group_id) from ClassroomGroupMapping cm "
@@ -77,7 +92,7 @@ public class ClassGroupDaoImpl {
 		preparedStatement.executeUpdate();
 		System.out.println("Assigned Student to ClassRoom");
 	}
-	
+
 	private List<Classroom> writeClassroomResultset(ResultSet resultSet) throws SQLException {
 		Classroom classroom = null;
 		List<Classroom> rooms = new ArrayList<>();
@@ -88,7 +103,7 @@ public class ClassGroupDaoImpl {
 		}
 		return rooms;
 	}
-	
+
 //	private List<Group> writeGroupsResultset(ResultSet resultSet) throws SQLException {
 //		List<Group> groups = new ArrayList<>();
 //		while (resultSet.next()) {
@@ -98,8 +113,7 @@ public class ClassGroupDaoImpl {
 //		}
 //		return groups;
 //	}
-	
-	//TODO add getAllStudentMethod
 
+	// TODO add getAllStudentMethod
 
 }

@@ -82,24 +82,15 @@ public class StudentDaoImpl {
 
 	public Student getStudentById(int studentId) throws Exception {
 		connection = getConnection();
-		preparedStatement = connection.prepareStatement("select * from daycare.student where student_id= ?");
+		preparedStatement = connection.prepareStatement("select * from daycare.student where student_id= ? and is_deleted =0");
 		preparedStatement.setInt(1, studentId);
 		resultSet = preparedStatement.executeQuery();
 		return writeStudentResultSet(resultSet).get(0);
 	}
 	
-	public Student getParentById(int studentId) throws Exception {
-		connection = getConnection();
-		preparedStatement = connection.prepareStatement("select * from daycare.student where student_id= ?");
-		preparedStatement.setInt(1, studentId);
-		resultSet = preparedStatement.executeQuery();
-		return writeStudentResultSet(resultSet).get(0);
-	}
-	
-
 	public List<Student> getAllStudents() throws Exception {
 		connection = getConnection();
-		preparedStatement = connection.prepareStatement("select * from daycare.student");
+		preparedStatement = connection.prepareStatement("select * from daycare.student where is_deleted = 0");
 		resultSet = preparedStatement.executeQuery();
 		return writeStudentResultSet(resultSet);
 	}
@@ -145,6 +136,15 @@ public class StudentDaoImpl {
 		preparedStatement.setInt(7, vaccine.getId());
 		int result = preparedStatement.executeUpdate();
 		System.out.println(result + "  vaccine updated");
+	}
+	
+	public void deleteStudent(int studentId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" update daycare.student set is_deleted = 1 where student_id = ? ");
+		preparedStatement.setInt(1, studentId);
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  Student deleted");
 	}
 
 	private List<Student> writeStudentResultSet(ResultSet resultSet) throws SQLException {

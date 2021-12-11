@@ -78,6 +78,12 @@ public class StudentService {
 		return student;
 	}
 	
+	public void deleteStudent(int studentId) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.deleteStudent(studentId);
+	}
+	
+	
 	
 
 }
