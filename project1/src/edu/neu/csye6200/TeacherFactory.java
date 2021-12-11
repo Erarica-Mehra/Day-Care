@@ -9,16 +9,28 @@ package edu.neu.csye6200;
  */
 public class TeacherFactory extends AbstractPersonFactory {
 
+	private static TeacherFactory instance;
+	private TeacherFactory() {
+		instance = null;
+	}
+	public static TeacherFactory getInstance() {
+		if(instance == null) {
+			instance = new TeacherFactory();
+		}
+		
+		return instance;
+	}
+	
 	@Override
-	public Person getObject(String csvData) {
+	public Teacher getObject(String csvData) {
 		// TODO Auto-generated method stub
-		return null;
+		return new Teacher(csvData);
 	}
 
 	@Override
-	public Person getObject() {
+	public Teacher getObject() {
 		// TODO Auto-generated method stub
-		return null;
+		return new Teacher();
 	}
 
 }

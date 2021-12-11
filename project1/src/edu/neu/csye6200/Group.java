@@ -14,13 +14,19 @@ import java.util.List;
 
 
 public class Group {
-
+	
+    private int groupId;
 	private Teacher teacher;
 	private List<Student> students = new ArrayList<>();
 	private int groupSize;
-	
-	public Group() {
-		
+	private int studentsEnrolled;
+
+    public Group() {
+    	
+    }
+	public Group(int groupSize, int studentsEnrolled) {
+		this.groupSize = groupSize;
+		this.studentsEnrolled = studentsEnrolled;
 	}
 	
 	public Group(Teacher teacher, List<Student> students, int groupSize) {
@@ -28,6 +34,7 @@ public class Group {
 		this.teacher = teacher;
 		this.students = students;
 		this.groupSize = groupSize;
+		this.studentsEnrolled = students.size();
 	}
 	
 	public Teacher getTeacher() {
@@ -50,6 +57,13 @@ public class Group {
 	}
 	
 	
+	public int getStudentsEnrolled() {
+		return studentsEnrolled;
+	}
+
+	public void setStudentsEnrolled(int studentsEnrolled) {
+		this.studentsEnrolled = studentsEnrolled;
+	}
 	//Added later
 	public void addStudents(Student s) {
 		students.add(s);
@@ -57,6 +71,13 @@ public class Group {
 	
 	public void assignTeacher(Teacher t) {
 		teacher = t;
+	}
+	
+	public int getGroupId() {
+		return groupId;
+	}
+	public void setGroupId(int groupId) {
+		this.groupId = groupId;
 	}
 	
 }

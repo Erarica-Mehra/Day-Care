@@ -27,37 +27,32 @@ public class StudentService {
 			student = new Student(csvString);
 			DayCare.getStudentsList().add(student);
 			Parent parent = student.getParent();
-			impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+			int parentId = impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
 					parent.getPhone()));
-			student.setParentId(parent.getParentId());
+			student.setParentId(parentId);
 			impl.addStudent(student);
-			
 		}
-
 		return student;
 	}
 
-	public void registerTeacherFromCSV() throws Exception {
-		List<String> teacherCSVData = FileUtil.readTextFile("resources/teachers.txt");
-		Teacher teacher = null;
-		TeacherDaoImpl impl = new TeacherDaoImpl();
-		for (String csvString : teacherCSVData) {
-			teacher = new Teacher(csvString);
-			DayCare.getTeachersList().add(teacher);
-			impl.addTeacher(teacher);
-		}
-	}
-
-	public Teacher registerTeacher(Teacher teacher) throws Exception {
-		TeacherDaoImpl impl = new TeacherDaoImpl();
-		DayCare.getTeachersList().add(teacher);
-		impl.addTeacher(teacher);
-		return teacher;
-	}
-
 	// enroll Student
+	public Student registerStudent(Student newStudent)  throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		Parent parent = newStudent.getParent();
+		impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+				parent.getPhone()));
+		newStudent.setParentId(parent.getParentId());
+		impl.addStudent(newStudent);
+		return newStudent;
+	}
 
 	// update Immunization Record
+	//get these value from UI
+	//update dosesTaken by dosesTaken + 1, lastShotDate, nextShotDate, set IsVaccinated to true if all doses given
+	public void updateStudentImmunizationRecord(Vaccine vaccine) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.updateVaccineByStudentIdAndVaccineId(vaccine);
+	}
 
 	// get Student Record
 
@@ -83,10 +78,6 @@ public class StudentService {
 		return student;
 	}
 	
-	//TODO
-	public List<Vaccine> updateStudentImmunizationRecord(int studentId) throws Exception {
-		return null;
-	}
 	
 
 }
