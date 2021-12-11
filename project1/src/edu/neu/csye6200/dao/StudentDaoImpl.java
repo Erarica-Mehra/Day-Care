@@ -146,6 +146,18 @@ public class StudentDaoImpl {
 		int result = preparedStatement.executeUpdate();
 		System.out.println(result + "  Student deleted");
 	}
+	
+	public void updateStudent(Student student) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" update daycare.student set first_name = ?, last_name = ?, address = ? where student_id = ? ");
+		preparedStatement.setString(1, student.getFirstName());
+		preparedStatement.setString(2, student.getLastName());
+		preparedStatement.setString(3, student.getAddress());
+		preparedStatement.setInt(4, student.getStudentId());
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  Student updated");
+	}
 
 	private List<Student> writeStudentResultSet(ResultSet resultSet) throws SQLException {
 		Student student = null;
@@ -178,6 +190,7 @@ public class StudentDaoImpl {
 		return vaccines;
 
 	}
+
 
 	// update vaccine set doses_taken = doses_taken + 1 and last_shot_date =
 	// '2021-01-12' and upcoming_shot_date = '2021-01-12' and is_vaccinated =

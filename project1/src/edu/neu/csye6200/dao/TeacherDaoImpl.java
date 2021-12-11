@@ -35,7 +35,7 @@ public class TeacherDaoImpl {
 
 	public Teacher getTeacherById(int employeeId) throws Exception {
 		connection = getConnection();
-		preparedStatement = connection.prepareStatement("select * from daycare.teacher where employee_id= ?");
+		preparedStatement = connection.prepareStatement("select * from daycare.teacher where employee_id= ? and is_deleted =0");
 		preparedStatement.setInt(1, employeeId);
 		resultSet = preparedStatement.executeQuery();
 		return writeResultSet(resultSet).get(0);
@@ -43,7 +43,7 @@ public class TeacherDaoImpl {
 
 	public List<Teacher> getAllTeachers() throws Exception {
 		connection = getConnection();
-		preparedStatement = connection.prepareStatement("select * from daycare.teacher");
+		preparedStatement = connection.prepareStatement("select * from daycare.teacher where is_deleted =0");
 		resultSet = preparedStatement.executeQuery();
 		return writeResultSet(resultSet);
 	}
@@ -68,6 +68,28 @@ public class TeacherDaoImpl {
 		System.out.println("Teacher created");
 		return teacherId;
 	}
+	
+	public void deleteTeacher(int teacherId) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" update daycare.teacher set is_deleted = 1 where employee_id = ? ");
+		preparedStatement.setInt(1, teacherId);
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  Teacher deleted");
+	}
+	
+	public void updateTeacher(Teacher teacher) throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(
+				" update daycare.teacher set first_name = ?, last_name = ?, email = ? where employee_id = ? ");
+		preparedStatement.setString(1, teacher.getFirstName());
+		preparedStatement.setString(2, teacher.getLastName());
+		preparedStatement.setString(3, teacher.getEmailID());
+		preparedStatement.setInt(4, teacher.getEmployeeId());
+		int result = preparedStatement.executeUpdate();
+		System.out.println(result + "  Teacher updated");
+	}
+
 
 	private List<Teacher> writeResultSet(ResultSet resultSet) throws SQLException {
 		Teacher teacher = null;
