@@ -20,6 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -329,36 +330,46 @@ public class TeacherUI extends javax.swing.JFrame {
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         //StudentDaoImpl impl = new StudentDaoImpl();
+    	DefaultTableModel modelx = (DefaultTableModel) jTable1.getModel();
+        if(modelx.getRowCount() < 1 ) {
+        	ValidationUtil.showError("Add Student details first!");
+        	return;
+        }
+    	
         TeacherService teacherService = new TeacherService();
   	//TODO add db integration by importing package/class from backend
         Teacher teacher = new Teacher();
  
-        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) && ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
-        {
-            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
-            teacher.setLastName(jTextFieldTeacherLastName.getText());
-             
-        }
-   
-        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-            teacher.setEmailID(jTextFieldEmail.getText());
-        }
+      
+
+        teacher.setFirstName(jTextFieldTeacherFirstName.getText());
+        teacher.setLastName(jTextFieldTeacherLastName.getText());
+        teacher.setEmailID(jTextFieldEmail.getText());
+            
         
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-  	    LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+  	    LocalDate doj = null;
+		LocalDate revDate = null;
+		try {
+			doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+			revDate = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			JOptionPane.showMessageDialog(null, "Please enter correct date" , "Error Found in Date" ,JOptionPane.INFORMATION_MESSAGE);
+		}  
+		
             teacher.setJoiningDate(doj);
             teacher.setAnnualReviewDate(revDate);
             System.out.println(teacher.toString());
-        
+            
         try {
-           
             teacherService.registerTeacher(teacher);
             
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void jButtonUploadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUploadActionPerformed
@@ -394,6 +405,19 @@ public class TeacherUI extends javax.swing.JFrame {
         
     };
     
+    public boolean isValidTable() {
+    	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    	
+    	for (int i = 0; i < model.getRowCount(); i++) {
+            for (int j = 0; j < model.getColumnCount(); j++) {
+            	if(model.getValueAt(i, j) == null || model.getValueAt(i, j) == "") {
+            		return false;
+            	}
+            }
+        }
+    	return true;
+    }
+    
     //Used when csv is uploaded and table is loaded
     public Object[] fillTableFromCSV(String csvRecord) {
     	String[] array = csvRecord.split(",");
@@ -426,6 +450,11 @@ public class TeacherUI extends javax.swing.JFrame {
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
+        
+        if(model.getRowCount() < 1 ) {
+        	ValidationUtil.showError("Add Student details first!");
+        	return;
+        }
 		try {
 			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachers.txt"));
 			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachers.txt");
@@ -472,9 +501,27 @@ public class TeacherUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
-        model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
-            jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
 
+        if(jTextFieldTeacherFirstName.getText().isBlank() || jTextFieldTeacherLastName.getText().isBlank() 
+        		|| jTextFieldJoiningDate.getText().isBlank() || jTextFieldTeacherAnnualReviewDate.getText().isBlank() || jTextFieldEmail.getText().isBlank())
+        {
+        	String y = "Fields cannot be left empty";
+        	ValidationUtil.showError(y);	
+        }
+        
+        else if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) && ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()) 
+        	 && ValidationUtil.isValid(jTextFieldJoiningDate.getText()) && ValidationUtil.isValid(jTextFieldTeacherAnnualReviewDate.getText()) && ValidationUtil.verifyEmail(jTextFieldEmail.getText())) 
+        {
+        	   model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
+                       jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
+        }
+
+        else {
+            	String xx= "Check your details once again!";
+            	ValidationUtil.showError(xx);
+        }
+        
+         
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 
     private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
