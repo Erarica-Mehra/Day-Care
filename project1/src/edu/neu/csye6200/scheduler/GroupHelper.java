@@ -60,7 +60,7 @@ public class GroupHelper {
 		tempTeachers.forEach(teacher -> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 		teachers.forEach(teacher -> {
 			try {
-				int teacherId  = teacherService.registerTeacher(teacher);
+				int teacherId = teacherService.registerTeacher(teacher);
 				teacher.setEmployeeId(teacherId);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -131,7 +131,7 @@ public class GroupHelper {
 			flag = flag + 1;
 		}
 		parseAddTeacher(teachers, DayCare.getClassroom());
-
+		assignGroups(DayCare.getClassroom());
 	}
 
 	public static void parseAndAdd(List<Student> studs, int size, int classSize) throws Exception {
@@ -179,10 +179,9 @@ public class GroupHelper {
 		}
 
 		classes.forEach(c -> DayCare.addClassroom(c));
-		assignGroups(classes);
 	}
 
-	public static void parseAddTeacher(List<Teacher> t, List<Classroom> c) {
+	public static void parseAddTeacher(List<Teacher> t, List<Classroom> c) throws Exception {
 		int currTF = 0;
 		for (Classroom cl : c) {
 			for (Group g : cl.getGroups()) {
@@ -194,7 +193,6 @@ public class GroupHelper {
 				if (currTF == t.size()) {
 					currTF = 0;
 				}
-				// TODO call assignGroups here. (To be discussed)
 			}
 		}
 
