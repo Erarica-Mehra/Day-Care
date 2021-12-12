@@ -71,10 +71,10 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlFirstName = new javax.swing.JLabel();
         jTextFieldTeacherFirstName = new javax.swing.JTextField();
         jLabeTeacherlLastName = new javax.swing.JLabel();
-        jTextFieldTeacherAnnualReviewDate = new javax.swing.JTextField();
+        //jTextFieldTeacherAnnualReviewDate = new javax.swing.JTextField();
         jLabelJoiningDate = new javax.swing.JLabel();
         jAddTeacherButton = new javax.swing.JButton();
-        jLabelAnnualReviewDate = new javax.swing.JLabel();
+        // jLabelAnnualReviewDate = new javax.swing.JLabel();
         jLabelEmail = new javax.swing.JLabel();
         jTextFieldTeacherLastName = new javax.swing.JTextField();
         jTextFieldEmail = new javax.swing.JTextField();
@@ -214,13 +214,13 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlLastName.setText("Last Name");
         jPanel2.add(jLabeTeacherlLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 78, -1));
 
-        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
-        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
+//        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
+//        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
+//            }
+//        });
+//        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
 
         jLabelJoiningDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelJoiningDate.setText("Joining Date");
@@ -243,9 +243,9 @@ public class TeacherUI extends javax.swing.JFrame {
         });
         jPanel2.add(jAddTeacherButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 420, 166, 30));
 
-        jLabelAnnualReviewDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabelAnnualReviewDate.setText("Annual Review Date");
-        jPanel2.add(jLabelAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+        //jLabelAnnualReviewDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        //jLabelAnnualReviewDate.setText("Annual Review Date");
+        //jPanel2.add(jLabelAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabelEmail.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelEmail.setText("Email Id");
@@ -279,7 +279,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
+                "Emp Id", "FirstName", "LastName", "Joining Date", "Email Id"
             }
         ));
         
@@ -351,9 +351,9 @@ public class TeacherUI extends javax.swing.JFrame {
         
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
   	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-  	    LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+  	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
             teacher.setJoiningDate(doj);
-            teacher.setAnnualReviewDate(revDate);
+            //teacher.setAnnualReviewDate(revDate);
             System.out.println(teacher.toString());
         
         try {
@@ -489,8 +489,7 @@ public class TeacherUI extends javax.swing.JFrame {
         initialId = model.getRowCount()+1;
         
         if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
-        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
-                    jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
+        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),jTextFieldEmail.getText()});
         }
         else {
         	System.out.println("Record already exists!");
@@ -499,9 +498,9 @@ public class TeacherUI extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 
-    private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
+//    private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
+//        // TODO add your handling code here:
+//    }//GEN-LAST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
 
     private void jTextFieldTeacherFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherFirstNameActionPerformed
         // TODO add your handling code here:
@@ -566,7 +565,6 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabeTeacherlFirstName;
     private javax.swing.JLabel jLabeTeacherlLastName;
-    private javax.swing.JLabel jLabelAnnualReviewDate;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelJoiningDate;
     private javax.swing.JLabel jLabelLogo;
@@ -579,7 +577,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldJoiningDate;
     private javax.swing.JTextField jTextFieldSearch;
-    private javax.swing.JTextField jTextFieldTeacherAnnualReviewDate;
+    //private javax.swing.JTextField jTextFieldTeacherAnnualReviewDate;
     private javax.swing.JTextField jTextFieldTeacherFirstName;
     private javax.swing.JTextField jTextFieldTeacherLastName;
     // End of variables declaration//GEN-END:variables
