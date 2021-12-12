@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -28,6 +29,7 @@ import javax.swing.table.TableRowSorter;
 
 import edu.neu.csye6200.Teacher;
 import edu.neu.csye6200.TeacherService;
+import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.util.ValidationUtil;
 /**
@@ -36,7 +38,9 @@ import edu.neu.csye6200.util.ValidationUtil;
  */
 public class TeacherUI extends javax.swing.JFrame {
 
-    private long initialId=0;
+    private int initialId=0;
+    Teacher teacher;
+    List<Teacher> teacherList = new ArrayList<>();
     //static List<Teacher> teachers = new ArrayList<>();
     /**
      * Creates new form Teacher
@@ -333,30 +337,74 @@ public class TeacherUI extends javax.swing.JFrame {
         //StudentDaoImpl impl = new StudentDaoImpl();
         TeacherService teacherService = new TeacherService();
   	//TODO add db integration by importing package/class from backend
-        Teacher teacher = new Teacher();
+        
+        boolean validSave = true;
  
-        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) && ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
-        {
-            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
-            teacher.setLastName(jTextFieldTeacherLastName.getText());
-             
-        }
-   
-        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-            teacher.setEmailID(jTextFieldEmail.getText());
+//        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
+//        {
+//            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
+//            teacher.setLastName(jTextFieldTeacherLastName.getText());
+//             
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct names");
+//        	validSave = false;
+//        }
+//        
+//        if(!jTextFieldJoiningDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldJoiningDate.getText())) {
+//        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//      	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+//      	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+//            teacher.setJoiningDate(doj);
+//            //teacher.setAnnualReviewDate(revDate);
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct dates");
+//        	validSave = false;
+//        }
+//        
+//        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+//            teacher.setEmailID(jTextFieldEmail.getText());
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct email");
+//        	validSave = false;
+//        }
+//       
+//        System.out.println(teacher.toString());
+        
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+//  	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+//            teacher.setJoiningDate(doj);
+//            //teacher.setAnnualReviewDate(revDate);
+//            System.out.println(teacher.toString());
+        Teacher teacherAdd = new Teacher();
+        teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
+        teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
+        teacherAdd.setEmployeeId(initialId);
+        teacherAdd.setEmailID(jTextFieldEmail.getText());
+        if(!jTextFieldJoiningDate.getText().isBlank()) {
+        	teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
         }
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-  	    LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
-            teacher.setJoiningDate(doj);
-            teacher.setAnnualReviewDate(revDate);
-            System.out.println(teacher.toString());
+        System.out.println(teacherAdd);
+        
+        teacherList.add(teacherAdd);
         
         try {
-           
-            teacherService.registerTeacher(teacher);
-            
+        	
+        	teacherList.forEach(teacher -> {
+				try {
+					System.out.println(teacher);
+					teacherService.registerTeacher(teacher);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+        	
+            //ValidationUtil.showSuccess("Teacher saved successfully!");
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -420,12 +468,24 @@ public class TeacherUI extends javax.swing.JFrame {
     
     //Used when csv is uploaded and table is loaded
     public Object[] fillTableFromCSV(String csvRecord) {
+    	teacher = new Teacher(csvRecord);
+    	teacherList.add(teacher);
     	String[] array = csvRecord.split(",");
     	Object[] data = new Object[array.length];
         for (int i = 0; i < array.length; i++)
             data[i] = array[i];
     	
         return data;
+    }
+    
+    public boolean isDuplicate(DefaultTableModel model, String fName, String email) {
+    	for (int i = 0; i < model.getRowCount(); i++) {
+    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 4).equals(email)) {
+        		return true;
+        	}
+            
+        }
+		return false;
     }
     
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
