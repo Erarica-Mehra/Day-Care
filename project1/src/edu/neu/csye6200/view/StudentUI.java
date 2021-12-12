@@ -178,7 +178,7 @@ public class StudentUI extends javax.swing.JFrame {
             }
         });
 
-        //jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
+        jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
         jButtonDeleteSelRow.setText("Delete Selected Row");
         jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -484,11 +484,20 @@ public class StudentUI extends javax.swing.JFrame {
        studentAdd.setFirstName(jTextFieldStudentFirstName.getText());
        studentAdd.setLastName(jTextFieldStudentLastName.getText());
        studentAdd.setAddress(jTextFieldAddress.getText());
-       studentAdd.setDob(ConversionUtil.StringToLocalDate(jTextFieldStudentDob.getText()));
-       studentAdd.setRegistrationDate(ConversionUtil.StringToLocalDate(jTextFieldRegDate.getText()));
+       if(!jTextFieldStudentDob.getText().isBlank() || !jTextFieldRegDate.getText().isBlank()) {
+    	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    	   LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+    	   LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
+    	   //s.setDob(dob);
+    	   //s.setRegistrationDate(regDate);
+    	   studentAdd.setDob(dob);
+           studentAdd.setRegistrationDate(regDate);
+       }
        parent.setFirstName(jTextFieldParentFirstName.getText());
        parent.setLastName(jTextFieldParentLastName.getText());
-       parent.setPhone(BigInteger.valueOf(Long.parseLong(jTextFieldPhoneNumber.getText())));
+       if(!jTextFieldPhoneNumber.getText().isBlank()) {
+    	   parent.setPhone(BigInteger.valueOf(Long.parseLong(jTextFieldPhoneNumber.getText()))); 
+       }
        parent.setEmail(jTextFieldEmail.getText());
        //assuming studentId = parentId (since its irrelevant as we are using registerStudent())
        parent.setParentId(studentAdd.getStudentId());
@@ -542,6 +551,7 @@ public class StudentUI extends javax.swing.JFrame {
     //Used while loading table when csv is uploaded
     public Object[] fillTableFromCSV(String csvRecord) {
     	student = new Student(csvRecord);
+    	System.out.println(student.toString());
     	studentList.add(student);
     	String[] array = csvRecord.split(",");
     	Object[] data = new Object[array.length];

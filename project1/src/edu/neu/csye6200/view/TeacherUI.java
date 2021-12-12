@@ -21,7 +21,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -75,10 +74,10 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlFirstName = new javax.swing.JLabel();
         jTextFieldTeacherFirstName = new javax.swing.JTextField();
         jLabeTeacherlLastName = new javax.swing.JLabel();
-        //jTextFieldTeacherAnnualReviewDate = new javax.swing.JTextField();
+        jTextFieldTeacherAnnualReviewDate = new javax.swing.JTextField();
         jLabelJoiningDate = new javax.swing.JLabel();
         jAddTeacherButton = new javax.swing.JButton();
-        // jLabelAnnualReviewDate = new javax.swing.JLabel();
+        jLabelAnnualReviewDate = new javax.swing.JLabel();
         jLabelEmail = new javax.swing.JLabel();
         jTextFieldTeacherLastName = new javax.swing.JTextField();
         jTextFieldEmail = new javax.swing.JTextField();
@@ -218,13 +217,13 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlLastName.setText("Last Name");
         jPanel2.add(jLabeTeacherlLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 78, -1));
 
-//        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
-//        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
-//            }
-//        });
-//        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
+        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
+        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
 
         jLabelJoiningDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelJoiningDate.setText("Joining Date");
@@ -247,9 +246,9 @@ public class TeacherUI extends javax.swing.JFrame {
         });
         jPanel2.add(jAddTeacherButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 420, 166, 30));
 
-        //jLabelAnnualReviewDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        //jLabelAnnualReviewDate.setText("Annual Review Date");
-        //jPanel2.add(jLabelAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
+        jLabelAnnualReviewDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabelAnnualReviewDate.setText("Annual Review Date");
+        jPanel2.add(jLabelAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, -1, -1));
 
         jLabelEmail.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelEmail.setText("Email Id");
@@ -274,6 +273,8 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextFieldJoiningDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldJoiningDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 400, 30));
 
+        jInternalFrame1.setResizable(true);
+        jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
@@ -283,13 +284,9 @@ public class TeacherUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Emp Id", "FirstName", "LastName", "Joining Date", "Email Id"
+                "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
             }
         ));
-        
-        //Sorting every column
-        jTable1.setAutoCreateRowSorter(true);
-        
         jScrollPane1.setViewportView(jTable1);
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
@@ -337,7 +334,7 @@ public class TeacherUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-    	
+        //StudentDaoImpl impl = new StudentDaoImpl();
         TeacherService teacherService = new TeacherService();
   	//TODO add db integration by importing package/class from backend
         
@@ -387,7 +384,9 @@ public class TeacherUI extends javax.swing.JFrame {
         teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
         teacherAdd.setEmployeeId(initialId);
         teacherAdd.setEmailID(jTextFieldEmail.getText());
-        teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
+        if(!jTextFieldJoiningDate.getText().isBlank()) {
+        	teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
+        }
         
         System.out.println(teacherAdd);
         
@@ -406,7 +405,7 @@ public class TeacherUI extends javax.swing.JFrame {
 			});
         	
             //ValidationUtil.showSuccess("Teacher saved successfully!");
-            
+            // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -432,10 +431,32 @@ public class TeacherUI extends javax.swing.JFrame {
 			teacherRecords.forEach(teacher->{modelTable.addRow(fillTableFromCSV(teacher));});
 		
 		}
-		
     }//GEN-LAST:event_jButtonUploadActionPerformed
     
-    //Search in table
+//    public void searchTableContents(String searchString) {
+//        DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
+//        System.out.println("Started searching...");
+//        //To empty the table before search
+//       
+//        Vector originalTableModel = (Vector) ((DefaultTableModel) jTable1.getModel()).getDataVector().clone();
+//        currtableModel.setRowCount(0);
+//        //To search for contents from original table content
+//        for (Object rows : originalTableModel) {
+//            Vector rowVector = (Vector) rows;
+//            for (Object column : rowVector) {
+//                if (column.toString().contains(searchString)) {
+//                    //content found so adding to table
+//                    searchCounter+=1;
+//                    currtableModel.addRow(rowVector);
+//                    System.out.println(+searchCounter+ " Matches Found");
+//                    break;
+//                }
+//                
+//            }
+//
+//        }
+//    };
+    
     public void searchTableContents(String searchString) {
         DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
         
@@ -469,6 +490,23 @@ public class TeacherUI extends javax.swing.JFrame {
     
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
         
+//        JFileChooser chooser = new JFileChooser();
+//		chooser.setSelectedFile(new File("teacher.txt")); // user will see this name during download
+//		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
+//			String home = System.getProperty("user.home");
+//			File file = new File(home+"/Downloads/teachers.txt");
+//			
+//			Path originalPath = Paths.get("resources/teachers.txt");
+//		    Path copied = Paths.get(home+"/Downloads/teachers.txt");
+//		    try {
+//		    	System.out.println("Downloading CSV file to " + copied.toString());
+//				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}		
+//		}
+    	
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
@@ -487,7 +525,7 @@ public class TeacherUI extends javax.swing.JFrame {
 	            csv.write("\n");
 	        }
 			csv.close();
-			ValidationUtil.showSuccess("Successfully downloaded teachers.txt CSV file");
+			
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded teachers.txt CSV file");
@@ -518,39 +556,14 @@ public class TeacherUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
-        
-        //Validation Part
-        if(!ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldTeacherLastName.getText())){
-        	
-        	ValidationUtil.showError("Please make sure you entered correct name fields!");
-         }
-        
-        else if(!ValidationUtil.isValid(jTextFieldJoiningDate.getText()) || jTextFieldJoiningDate.getText().isBlank()) {
-        	ValidationUtil.showError("Please make sure you entered correct date field!");
-        }
-        
-        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-        	ValidationUtil.showError("Please make sure you entered correct email field!");
-        }
-        
-        else if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
-        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),jTextFieldEmail.getText()});
+        model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
+            jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
 
-        if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
-        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),
-        			jTextFieldJoiningDate.getText(),jTextFieldEmail.getText()});
-        	}
-        }
-        else {
-        	System.out.println("Record already exists!");
-        	ValidationUtil.showWarning("Record with same name and email already exists!");
-        }
-        
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 
-//    private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
-//        // TODO add your handling code here:
-//    }//GEN-LAST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
+    private void jTextFieldTeacherAnnualReviewDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
 
     private void jTextFieldTeacherFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherFirstNameActionPerformed
         // TODO add your handling code here:
@@ -615,6 +628,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabeTeacherlFirstName;
     private javax.swing.JLabel jLabeTeacherlLastName;
+    private javax.swing.JLabel jLabelAnnualReviewDate;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelJoiningDate;
     private javax.swing.JLabel jLabelLogo;
@@ -627,7 +641,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JTextField jTextFieldEmail;
     private javax.swing.JTextField jTextFieldJoiningDate;
     private javax.swing.JTextField jTextFieldSearch;
-    //private javax.swing.JTextField jTextFieldTeacherAnnualReviewDate;
+    private javax.swing.JTextField jTextFieldTeacherAnnualReviewDate;
     private javax.swing.JTextField jTextFieldTeacherFirstName;
     private javax.swing.JTextField jTextFieldTeacherLastName;
     // End of variables declaration//GEN-END:variables
