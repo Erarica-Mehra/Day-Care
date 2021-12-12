@@ -284,7 +284,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
+                "Emp Id", "FirstName", "LastName", "Joining Date", "Email Id", "Annual Review Date"
             }
         ));
         
@@ -382,10 +382,25 @@ public class TeacherUI extends javax.swing.JFrame {
 //            teacher.setJoiningDate(doj);
 //            //teacher.setAnnualReviewDate(revDate);
 //            System.out.println(teacher.toString());
-        Teacher teacherAdd = new Teacher(initialId, jTextFieldTeacherFirstName.getText(), jTextFieldTeacherLastName.getText(), jTextFieldEmail.getText(), (ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText())));
+        //Teacher teacherAdd = new Teacher(initialId, jTextFieldTeacherFirstName.getText(), jTextFieldTeacherLastName.getText(), jTextFieldEmail.getText(), (ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText())));
         
-        System.out.println(teacherAdd.getAnnualReviewDate());
+        //System.out.println(teacherAdd.getAnnualReviewDate());
         
+        //teacherList.add(teacherAdd);
+        Teacher teacherAdd = new Teacher();
+        teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
+        teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
+        teacherAdd.setEmployeeId(initialId);
+        teacherAdd.setEmailID(jTextFieldEmail.getText());
+        if(!jTextFieldJoiningDate.getText().isBlank()) {
+        	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      	   //LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+      	   LocalDate joinDate  = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);
+        	teacherAdd.setJoiningDate(joinDate);
+        	teacherAdd.setAnnualReviewDate((joinDate).plusYears(1));
+        }
+        
+        System.out.println(teacherAdd);
         teacherList.add(teacherAdd);
         
         try {
@@ -509,23 +524,29 @@ public class TeacherUI extends javax.swing.JFrame {
 		try {
 			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachersDownload.txt"));
 			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachersDownload.txt");
-			for (int i = 0; i < model.getRowCount(); i++) {
-	            for (int j = 0; j < model.getColumnCount(); j++) {
-	            	if(j == model.getColumnCount()-1) {
-	            		csv.write(model.getValueAt(i, j).toString());
-	            	}
-	            	else {
-	            		csv.write(model.getValueAt(i, j).toString() + ",");
-	            	}
-	            }
-	            csv.write("\n");
-	        }
-			csv.close();
+//			
+			Object[] data = new Object[6];
+			TeacherService tservice = new TeacherService();
+			List<Teacher> tList = tservice.getAllTeachers();
+			DefaultTableModel mTable = (DefaultTableModel) jTable1.getModel();
+			mTable.setRowCount(0);
+			for(Teacher t:tList) {
+				data[0] = t.getEmployeeId();
+				data[1] = t.getFirstName();
+				data[2] = t.getLastName();
+				data[3] = t.getJoiningDate();
+				data[4] = t.getEmailID();
+				data[5] = t.getAnnualReviewDate();
+				mTable.addRow(data);
+			}
+			
+			
+			
 			
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded teachers.txt CSV file");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			System.out.println("Error in downloading teachers.txt CSV file");
 			e.printStackTrace();
 		}
