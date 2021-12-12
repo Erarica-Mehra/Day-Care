@@ -16,10 +16,13 @@ import java.util.List;
 public class Group {
 	
     private int groupId;
-	private Teacher teacher;
-	private List<Student> students = new ArrayList<>();
+    private int teacherId;
+
+	private int classId;
 	private int groupSize;
 	private int studentsEnrolled;
+	private Teacher teacher;
+	private List<Student> students = new ArrayList<>();
 
     public Group() {
     	
@@ -78,6 +81,19 @@ public class Group {
 	}
 	public void setGroupId(int groupId) {
 		this.groupId = groupId;
+	}
+	
+	public int getTeacherId() {
+		return teacherId;
+	}
+	public void setTeacherId(int teacherId) {
+		this.teacherId = teacherId;
+	}
+	public int getClassId() {
+		return classId;
+	}
+	public void setClassId(int classId) {
+		this.classId = classId;
 	}
 	
 }

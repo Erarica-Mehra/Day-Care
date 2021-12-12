@@ -71,14 +71,7 @@ public class ClassGroupDaoImpl {
 		return writeClassroomResultset(resultSet);
 	}
 
-//	public List<Classroom> getGroupsByClassRoom(int classId) throws Exception {
-//		connection = getConnection();
-//		preparedStatement = connection.prepareStatement(" select distinct(sg.group_id) from ClassroomGroupMapping cm "
-//				+ "    join studentgroup sg on sg.group_id = cm.group_id where class_id = ?");
-//		preparedStatement.setInt(1, classId);
-//		resultSet = preparedStatement.executeQuery();
-//		return writeClassroomResultset(resultSet);
-//	}
+
 
 	public void assignClassroom(int studentId, int teacherId, int classId, int groupId) throws Exception {
 		connection = getConnection();
@@ -92,6 +85,15 @@ public class ClassGroupDaoImpl {
 		preparedStatement.executeUpdate();
 		System.out.println("Assigned Student to ClassRoom");
 	}
+	
+	public List<Group> getGroupInfo() throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(" select cls.class_id, sg.group_id, sg.group_size, sg.students_enrolled, cm.teacher_id  from ClassroomGroupMapping cm "
+				+ "    join studentgroup sg on sg.group_id = cm.group_id "
+				+ "	join classroom cls on cls.class_id = cm.classroom_id ");
+		resultSet = preparedStatement.executeQuery();
+		return writeGroupsResultset(resultSet);
+	}
 
 	private List<Classroom> writeClassroomResultset(ResultSet resultSet) throws SQLException {
 		Classroom classroom = null;
@@ -104,15 +106,19 @@ public class ClassGroupDaoImpl {
 		return rooms;
 	}
 
-//	private List<Group> writeGroupsResultset(ResultSet resultSet) throws SQLException {
-//		List<Group> groups = new ArrayList<>();
-//		while (resultSet.next()) {
-//			int groupId = resultSet.getInt("distinct(group_id)");
-//			Group group = getGroup(groupId);
-//			groups.add(group)	;	
-//		}
-//		return groups;
-//	}
+	private List<Group> writeGroupsResultset(ResultSet resultSet) throws SQLException {
+		List<Group> groups = new ArrayList<>();
+		while (resultSet.next()) {
+			Group group = new Group();
+			group.setClassId(resultSet.getInt("cls.class_id"));
+			group.setGroupId(resultSet.getInt("sg.group_id"));
+			group.setGroupSize(resultSet.getInt("group_size"));
+			group.setStudentsEnrolled(resultSet.getInt("sg.students_enrolled"));
+			group.setTeacherId(resultSet.getInt("cm.teacher_id"));
+			groups.add(group);	
+		}
+		return groups;
+	}
 
 	// TODO add getAllStudentMethod
 

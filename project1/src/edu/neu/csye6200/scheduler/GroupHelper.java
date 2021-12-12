@@ -198,19 +198,6 @@ public class GroupHelper {
 
 	}
 
-//	public void assignGroups(List<Classroom> classrooms) throws Exception {
-//	ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
-//
-//	Group group = new Group(3,0); //TODO create group here
-//	dao.createGroup(group); //ex: group size is 3 and currently student enrolled is 0
-//	group.getStudents().add(student); // adding student to group
-//	List<Classroom> availableClassrooms = dao.getClassRooms().stream().filter(cls -> cls.getGroupsAllowed() < cls.getGroupsEnrolled()).collect(Collectors.toList()); // get classroom. classroom should already be created. Just get the classroom
-//	Classroom roomAllocated = availableClassrooms.get(0);
-//	roomAllocated.getGroups().add(group);// adding group to classroom
-//	dao.assignClassroom(student.getStudentId(), teacher.getEmployeeId(), roomAllocated.getClassId(), group.getGroupId());
-////		
-//	}
-
 	public static void assignGroups(List<Classroom> classrooms) throws Exception {
 		ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
 		for (Classroom classroom : classrooms) {
@@ -223,6 +210,11 @@ public class GroupHelper {
 					dao.assignClassroom(student.getStudentId(), group.getTeacher().getEmployeeId(), classId, groupId);
 			}
 		}
+	}
+	
+	public List<Group> getClassRoomGroupInfo() throws Exception {
+		ClassGroupDaoImpl dao = new ClassGroupDaoImpl();
+		return dao.getGroupInfo();
 	}
 
 }
