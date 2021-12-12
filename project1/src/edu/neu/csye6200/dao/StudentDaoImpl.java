@@ -37,12 +37,12 @@ public class StudentDaoImpl {
 	public int addParent(Parent parent) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-		preparedStatement.setInt(1, parent.getParentId());
-		preparedStatement.setString(2, parent.getFirstName());
-		preparedStatement.setString(3, parent.getLastName());
-		preparedStatement.setString(4, parent.getEmail());
-		preparedStatement.setLong(5,parent.getPhone().longValue());
+				"insert into daycare.Parent(parent_id, first_name, last_name, email, phone ) values (default, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+		//preparedStatement.setInt(1, parent.getParentId());
+		preparedStatement.setString(1, parent.getFirstName());
+		preparedStatement.setString(2, parent.getLastName());
+		preparedStatement.setString(3, parent.getEmail());
+		preparedStatement.setLong(4,parent.getPhone().longValue());
 		int updated = preparedStatement.executeUpdate();
 		resultSet = preparedStatement.getGeneratedKeys();
 		int parentId =0;
@@ -53,31 +53,35 @@ public class StudentDaoImpl {
 		return parentId;
 	}
 
-	public void addStudent(Student student) throws Exception {
+	public int addStudent(Student student) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
-				" insert into daycare.Student(student_id, first_name, last_name, address, dob, age, registration_date,teacher_assigned, parent_id) values (?,?,?,?,?,?,?,?,?)");
-		preparedStatement.setInt(1, student.getStudentId());
-		preparedStatement.setString(2, student.getFirstName());
-		preparedStatement.setString(3, student.getLastName());
-		preparedStatement.setString(4, student.getAddress());
-		preparedStatement.setDate(5, Date.valueOf(student.getDob()));
-		preparedStatement.setInt(6, student.getAge());
-		preparedStatement.setDate(7, Date.valueOf(student.getRegistrationDate()));
-		preparedStatement.setInt(8, 0);
-		preparedStatement.setInt(9, student.getParentId());
+				" insert into daycare.Student(student_id, first_name, last_name, address, dob, age, registration_date,teacher_assigned, parent_id) values (default,?,?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
+		//preparedStatement.setInt(1, student.getStudentId());
+		preparedStatement.setString(1, student.getFirstName());
+		preparedStatement.setString(2, student.getLastName());
+		preparedStatement.setString(3, student.getAddress());
+		preparedStatement.setDate(4, Date.valueOf(student.getDob()));
+		preparedStatement.setInt(5, student.getAge());
+		preparedStatement.setDate(6, Date.valueOf(student.getRegistrationDate()));
+		preparedStatement.setInt(7, 0);
+		preparedStatement.setInt(8, student.getParentId());
 
-		int updated = preparedStatement.executeUpdate();
-		System.out.println("Student : " + updated);
-
+		preparedStatement.executeUpdate();
+		resultSet = preparedStatement.getGeneratedKeys();
+		int studentId =0;
+		while (resultSet.next()) {
+			studentId = resultSet.getInt(1); ;
+		}
 		List<Vaccine> vaccines = student.getImmunizationRecord();
-		vaccines.stream().forEach(vaccine -> {
+		for(Vaccine vaccine: vaccines)
 			try {
+				vaccine.setStudentId(studentId);
 				addStudentVaccinationRecord(vaccine);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		});
+		return studentId;
 	}
 
 	public Student getStudentById(int studentId) throws Exception {

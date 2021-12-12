@@ -2,7 +2,6 @@ package edu.neu.csye6200;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,9 +18,11 @@ public class Vaccine {
 	private List<LocalDate> vaccinationRecord = new ArrayList<>();
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-	
+	public Vaccine() {
 
-public Vaccine(int id, String name, int dosestaken, int totalDoses, LocalDate lastShotDate, LocalDate nextShotDate,
+	}
+
+	public Vaccine(int id, String name, int dosestaken, int totalDoses, LocalDate lastShotDate, LocalDate nextShotDate,
 			int studentId, boolean isVaccinated, List<LocalDate> vaccinationRecord) {
 		super();
 		this.id = id;
@@ -48,7 +49,7 @@ public Vaccine(int id, String name, int dosestaken, int totalDoses, LocalDate la
 		this.studentId = studentId;
 		this.dosestaken = vaccinationRecord.size();
 		this.lastShotDate = vaccinationRecord.get(vaccinationRecord.size() - 1);
-		
+
 	}
 
 	public boolean isVaccinationCompleted() {

@@ -8,19 +8,18 @@ package edu.neu.csye6200.view;
 import edu.neu.csye6200.Parent;
 import edu.neu.csye6200.Student;
 import edu.neu.csye6200.StudentService;
+import edu.neu.csye6200.Vaccine;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.util.ValidationUtil;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -30,7 +29,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
-import javax.swing.event.RowSorterListener;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -41,6 +39,9 @@ import javax.swing.table.TableRowSorter;
 public class StudentUI extends javax.swing.JFrame {
 
     private long initialId=0;
+    private VaccinationUI vui;
+    private Vaccine vaccine;
+    private Student student;
     /**
      * Creates new form Teacher
      */
@@ -67,8 +68,9 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldSearch = new javax.swing.JTextField();
         JLabelSearch = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
-        jButtonDownload = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
+        jButtonDownload1 = new javax.swing.JButton();
+        jButtonDeleteSelRow = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabelFirstName = new javax.swing.JLabel();
         jTextFieldStudentFirstName = new javax.swing.JTextField();
@@ -89,6 +91,7 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldEmail = new javax.swing.JTextField();
         jTextFieldPhoneNumber = new javax.swing.JTextField();
         jTextFieldRegDate = new javax.swing.JTextField();
+        jButtonAddVaccineRec = new javax.swing.JButton();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -127,10 +130,9 @@ public class StudentUI extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabelStudentTitle))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabelStudentTitle)))
         );
 
         jPanelToolBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -147,7 +149,7 @@ public class StudentUI extends javax.swing.JFrame {
         JLabelSearch.setText("Search");
 
         jButtonUpload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/upload1.png"))); // NOI18N
-        jButtonUpload.setText("Upload");
+        jButtonUpload.setText("Upload CSV");
         jButtonUpload.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonUploadMouseClicked(evt);
@@ -159,19 +161,27 @@ public class StudentUI extends javax.swing.JFrame {
             }
         });
 
-        jButtonDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/download1.png"))); // NOI18N
-        jButtonDownload.setText("Download CSV");
-        jButtonDownload.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonDownloadMouseClicked(evt);
-            }
-        });
-
         jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save1.png"))); // NOI18N
         jButtonSave.setText("Save");
         jButtonSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonSaveActionPerformed(evt);
+            }
+        });
+
+        jButtonDownload1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/download1.png"))); // NOI18N
+        jButtonDownload1.setText("Download CSV");
+        jButtonDownload1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDownload1MouseClicked(evt);
+            }
+        });
+
+        //jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
+        jButtonDeleteSelRow.setText("Delete Selected Row");
+        jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDeleteSelRowMouseClicked(evt);
             }
         });
 
@@ -184,24 +194,27 @@ public class StudentUI extends javax.swing.JFrame {
                 .addComponent(JLabelSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(54, 54, 54)
                 .addComponent(jButtonSave)
-                .addGap(56, 56, 56)
+                .addGap(39, 39, 39)
                 .addComponent(jButtonUpload)
-                .addGap(48, 48, 48)
-                .addComponent(jButtonDownload)
-                .addGap(332, 332, 332))
+                .addGap(30, 30, 30)
+                .addComponent(jButtonDownload1)
+                .addGap(41, 41, 41)
+                .addComponent(jButtonDeleteSelRow)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelToolBarLayout.setVerticalGroup(
             jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelToolBarLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonDownload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jTextFieldSearch)
                     .addComponent(JLabelSearch)
                     .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonDownload1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteSelRow))
                 .addContainerGap())
         );
 
@@ -258,7 +271,7 @@ public class StudentUI extends javax.swing.JFrame {
                 jAddStudentButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jAddStudentButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 490, 166, 30));
+        jPanel2.add(jAddStudentButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 166, 30));
 
         jLabelPhoneNumber1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelPhoneNumber1.setText("Date of Birth");
@@ -323,6 +336,17 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldRegDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldRegDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 127, 410, 30));
 
+        jButtonAddVaccineRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
+        jButtonAddVaccineRec.setText("Add Vaccination Record");
+        jButtonAddVaccineRec.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonAddVaccineRecMouseClicked(evt);
+            }
+            
+        });
+        jPanel2.add(jButtonAddVaccineRec, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, -1));
+
+        jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
@@ -398,10 +422,12 @@ public class StudentUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-
+        //StudentDaoImpl impl = new StudentDaoImpl();
         StudentService studentService = new StudentService();
   	//TODO add db integration by importing package/class from backend
-        Student s = new Student();
+     //   System.out.println("Date:  "+jXDatePicker1.toString());
+  	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
+        Student  s = new Student();
         Parent p = new Parent();
         boolean validSave = true;
         
@@ -427,8 +453,8 @@ public class StudentUI extends javax.swing.JFrame {
         	validSave = false;
         }
         
-        if(!jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
-        		!jTextFieldRegDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
+        if(!jTextFieldStudentDob.getText().isEmpty() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
+        		!jTextFieldRegDate.getText().isEmpty() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
         	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
       	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
       	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
@@ -441,7 +467,7 @@ public class StudentUI extends javax.swing.JFrame {
         	validSave = false;
         }
         
-        if(!jTextFieldPhoneNumber.getText().isBlank() || !jTextFieldAddress.getText().isBlank()) {
+        if(!jTextFieldPhoneNumber.getText().isEmpty()|| !jTextFieldAddress.getText().isEmpty()) {
         	s.setAddress(jTextFieldAddress.getText());
         	p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
         }
@@ -450,13 +476,14 @@ public class StudentUI extends javax.swing.JFrame {
         	validSave = false;
         }
         s.setParent(p);
+      
         System.out.println(s.toString());
-        
+        student=s;
         try {
         	
         	if(validSave) {
         		studentService.registerStudent(s);
-                ValidationUtil.showSuccess("Teacher saved successfully!");
+                ValidationUtil.showSuccess("Student saved successfully!");
         	}
             // TODO add your handling code here:
         } catch (Exception ex) {
@@ -479,7 +506,7 @@ public class StudentUI extends javax.swing.JFrame {
 				modelTable.setRowCount(0);
 			}
 			
-			List<String> studentRecords = FileUtil.readTextFile(selectedFile.getPath());
+			java.util.List<String> studentRecords = FileUtil.readTextFile(selectedFile.getPath());
 			//teacherRecords.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 			studentRecords.forEach(student->{modelTable.addRow(fillTableFromCSV(student));});
 			System.out.println("Successfully generated table from students CSV file");
@@ -518,7 +545,10 @@ public class StudentUI extends javax.swing.JFrame {
         jTable1.setRowSorter(tr);
         tr.setRowFilter(RowFilter.regexFilter(searchString.toLowerCase()));
     };
+    
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
+        
+
     	
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
@@ -580,9 +610,11 @@ public class StudentUI extends javax.swing.JFrame {
 
     private void jAddStudentButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddStudentButtonMouseClicked
         // TODO add your handling code here:
+        
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
         initialId = model.getRowCount()+1;
         
+
         //Validation Part
         if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
                 || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
@@ -590,15 +622,15 @@ public class StudentUI extends javax.swing.JFrame {
         	ValidationUtil.showError("Please make sure you entered correct name fields!");
          }
         
-        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isBlank() || 
-        		jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText())) {
+        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isEmpty() || 
+        		jTextFieldStudentDob.getText().isEmpty()) {
         	ValidationUtil.showError("Please make sure you entered correct date field!");
         }
         
         else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
         	ValidationUtil.showError("Please make sure you entered correct email field!");
         }
-        else if(jTextFieldAddress.getText().isBlank() || jTextFieldPhoneNumber.getText().isBlank()) {
+        else if(jTextFieldAddress.getText().isEmpty() || jTextFieldPhoneNumber.getText().isEmpty()) {
         	ValidationUtil.showError("Please make sure no feild is blank!");
         }
         
@@ -611,12 +643,43 @@ public class StudentUI extends javax.swing.JFrame {
         	ValidationUtil.showWarning("Record with same name and email already exists!");
         }
         
+
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
 
     private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentAdded
+    
+   
+    private void jButtonAddVaccineRecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddVaccineRecMouseClicked
+        try {
+            // TODO add your handling code here:
+             
+           //    student= new Student();
+               vaccine= new Vaccine();
+               System.out.println(student.getFirstName());
+               VaccinationUI vui=new VaccinationUI(student);
+               vui.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jButtonAddVaccineRecMouseClicked
 
+    private void jButtonDownload1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownload1MouseClicked
+        // TODO add your handling code here:
+        System.out.println("Downloading CSV file.");
+        
+        JFileChooser chooser = new JFileChooser();
+		chooser.setSelectedFile(new File("student.txt")); // user will see this name during download
+		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
+			String home = System.getProperty("user.home");
+			File file = new File(home+"/Downloads/students.txt"); 	
+    }//GEN-LAST:event_jButtonDownload1MouseClicked
+    }
+    private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonDeleteSelRowMouseClicked
     /**
      * @param args the command line arguments
      */
@@ -662,7 +725,9 @@ public class StudentUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JLabelSearch;
     private javax.swing.JButton jAddStudentButton;
-    private javax.swing.JButton jButtonDownload;
+    private javax.swing.JButton jButtonAddVaccineRec;
+    private javax.swing.JButton jButtonDeleteSelRow;
+    private javax.swing.JButton jButtonDownload1;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JButton jButtonUpload;
     private javax.swing.JInternalFrame jInternalFrame1;

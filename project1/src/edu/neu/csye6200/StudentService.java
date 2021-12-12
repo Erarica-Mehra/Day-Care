@@ -39,9 +39,9 @@ public class StudentService {
 	public Student registerStudent(Student newStudent) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		Parent parent = newStudent.getParent();
-		impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
+		int parentId = impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
 				parent.getPhone()));
-		newStudent.setParentId(parent.getParentId());
+		newStudent.setParentId(parentId);
 		impl.addStudent(newStudent);
 		return newStudent;
 	}
