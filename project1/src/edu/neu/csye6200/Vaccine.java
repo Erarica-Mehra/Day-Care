@@ -48,9 +48,6 @@ public Vaccine(int id, String name, int dosestaken, int totalDoses, LocalDate la
 		this.studentId = studentId;
 		this.dosestaken = vaccinationRecord.size();
 		this.lastShotDate = vaccinationRecord.get(vaccinationRecord.size() - 1);
-		// TODO for now next shot date is one month from now
-		// TODO fix this
-		this.nextShotDate = vaccinationRecord.get(vaccinationRecord.size() - 1).plus(1, ChronoUnit.MONTHS);
 		
 	}
 

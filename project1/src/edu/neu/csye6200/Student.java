@@ -5,6 +5,7 @@ package edu.neu.csye6200;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,7 @@ public class Student extends Person {
 	private LocalDate dob;
 	private Parent parent;
 	private int parentId;
-	private List<Vaccine> immunizationRecord= new ArrayList<>();
+	private List<Vaccine> immunizationRecord = new ArrayList<>();
 	private Teacher teacher_assigned;
 
 	public Student() {
@@ -43,7 +44,7 @@ public class Student extends Person {
 		this.teacher_assigned = teacher_assigned;
 	}
 
-	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, 
+	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob,
 			String address, int parentId) {
 		super(firstName, lastName);
 		this.studentId = studentId;
@@ -53,7 +54,7 @@ public class Student extends Person {
 		this.parentId = parentId;
 		this.dob = dob;
 	}
-	
+
 	public Student(int studentId, String firstName, String lastName, LocalDate registrationDate, LocalDate dob, int age,
 			String address, int parentId) {
 		super(firstName, lastName);
@@ -82,7 +83,6 @@ public class Student extends Person {
 		vaccinesList.add(field[12]);
 		this.immunizationRecord = getStudentImmunizationRecord(vaccinesList, studentId);
 		// TODO add remaining vaccines
-
 
 	}
 
@@ -164,14 +164,151 @@ public class Student extends Person {
 	}
 
 	public List<Vaccine> getStudentImmunizationRecord(List<String> vaccinesList, int studentId) {
-
 		for (String vaccineDetails : vaccinesList) {
 			if (vaccineDetails != null) {
-				immunizationRecord.add(new Vaccine(vaccineDetails, studentId));
+				Vaccine vaccine = new Vaccine(vaccineDetails, studentId);
+				checkVaccinationRules(vaccine);
+				immunizationRecord.add(vaccine);
 			}
 		}
-
 		return immunizationRecord;
 	}
 
+	public void checkVaccinationRules(Vaccine vaccine) {
+
+		if (vaccine.getName().equalsIgnoreCase("Hib")) {
+			checkHiBVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("DTaP") || (vaccine.getName().equalsIgnoreCase("tdap"))) {
+			checkDTaPVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("HepatatisB")) {
+			checkHepatatisBVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("Polio")) {
+			checkPolioVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("Varicella")) {
+			checkVaricellaVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("MMR")) {
+			checkMMRVaccinationRules(vaccine);
+		} else if (vaccine.getName().equalsIgnoreCase("Meningococcal")) {
+			checkMeningococcalVaccinationRules(vaccine);
+		}
+	}
+
+	public void checkHiBVaccinationRules(Vaccine vaccine) {
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(4);
+		} else {
+			vaccine.setTotalDoses(4);
+		}
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			vaccine.setNextShotDate(vaccine.getLastShotDate().plus(3, ChronoUnit.MONTHS));
+		}
+	}
+
+	public void checkDTaPVaccinationRules(Vaccine vaccine) {
+
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(3);
+		} else {
+			vaccine.setTotalDoses(4);
+		}
+
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			if (vaccine.getDosestaken() == 3)
+				vaccine.setNextShotDate(dob.plus(4, ChronoUnit.YEARS));
+			else
+				vaccine.setNextShotDate(vaccine.getLastShotDate().plus(2, ChronoUnit.MONTHS));
+		}
+	}
+
+	public void checkVaricellaVaccinationRules(Vaccine vaccine) {
+
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(1);
+		} else {
+			vaccine.setTotalDoses(2);
+		}
+
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			if (vaccine.getDosestaken() == 0)
+				vaccine.setNextShotDate(dob.plus(1, ChronoUnit.YEARS));
+			if (vaccine.getDosestaken() == 1)
+				vaccine.setNextShotDate(dob.plus(28, ChronoUnit.DAYS));
+		}
+
+	}
+
+	public void checkMMRVaccinationRules(Vaccine vaccine) {
+
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(1);
+		} else {
+			vaccine.setTotalDoses(2);
+		}
+
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			if (vaccine.getDosestaken() == 0)
+				vaccine.setNextShotDate(dob.plus(1, ChronoUnit.YEARS));
+			if (vaccine.getDosestaken() == 1)
+				vaccine.setNextShotDate(dob.plus(28, ChronoUnit.DAYS));
+		}
+
+	}
+
+	public void checkHepatatisBVaccinationRules(Vaccine vaccine) {
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(3);
+		} else {
+			vaccine.setTotalDoses(3);
+		}
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			vaccine.setNextShotDate(vaccine.getLastShotDate().plus(3, ChronoUnit.MONTHS));
+		}
+	}
+
+	public void checkMeningococcalVaccinationRules(Vaccine vaccine) {
+
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(0);
+		} else {
+			vaccine.setTotalDoses(2);
+		}
+
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			if (vaccine.getDosestaken() == 0)
+				vaccine.setNextShotDate(dob.plus(11, ChronoUnit.YEARS));
+			if (vaccine.getDosestaken() == 1)
+				vaccine.setNextShotDate(dob.plus(16, ChronoUnit.YEARS));
+		}
+
+	}
+
+	public void checkPolioVaccinationRules(Vaccine vaccine) {
+
+		if (age / 12 < 2) {
+			vaccine.setTotalDoses(3);
+		} else {
+			vaccine.setTotalDoses(4);
+		}
+
+		if (vaccine.getDosestaken() == vaccine.getTotalDoses()) {
+			vaccine.setVaccinated(true);
+		} else {
+			if (vaccine.getDosestaken() == 3)
+				vaccine.setNextShotDate(dob.plus(4, ChronoUnit.YEARS));
+			else
+				vaccine.setNextShotDate(vaccine.getLastShotDate().plus(2, ChronoUnit.MONTHS));
+		}
+	}
 }
