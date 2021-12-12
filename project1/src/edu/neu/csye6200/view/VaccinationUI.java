@@ -218,7 +218,7 @@ public class VaccinationUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Student Id", "Student Name", "No. Of Doses Taken", "Total Doses", "Last Shot Date", "Next Shot Date", "Vaccinated ?"
+                "Student", "Vaccine", "No. Of Doses Taken", "Total Doses", "Last Shot Date", "Next Shot Date", "Vaccinated ?"
             }
         ));
         jScrollPane1.setViewportView(jTableStudentVacc);
@@ -268,7 +268,7 @@ public class VaccinationUI extends javax.swing.JFrame {
         vaccine.setId(student.getStudentId());
         vaccine.setLastShotDate(ConversionUtil.StringToLocalDate(jTextFieldLastShotDate.getText()));
         vaccine.getNextShotDate();
-        vaccine.isVaccinationCompleted();
+        //vaccine.isVaccinationCompleted();
         student.checkVaccinationRules(vaccine);
         student.getImmunizationRecord().add(vaccine);
       
@@ -276,7 +276,8 @@ public class VaccinationUI extends javax.swing.JFrame {
         
         try {
             //  s.set(0);
-               studentService.registerStudent(student);
+             //  studentService.registerStudent(student);
+        	studentService.updateStudentImmunizationRecord(vaccine);
             //impl.addStudent(s);
             // TODO add your handling code here:
         } catch (Exception ex) {
@@ -334,6 +335,7 @@ public class VaccinationUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableStudentVacc.getModel();
+
         model.addRow(new Object[]{student.getStudentId(),jTextFieldStudentName.getText(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
             jTextFielDosesTaken.getText()+1,jTextFieldLastShotDate.getText(),vaccine.getNextShotDate(),vaccine.isVaccinated()});
 //        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText()});
