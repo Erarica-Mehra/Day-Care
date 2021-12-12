@@ -282,6 +282,8 @@ public class VaccinationUI extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        dispose();
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void jTextFielDosesTakenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFielDosesTakenActionPerformed
@@ -332,7 +334,7 @@ public class VaccinationUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableStudentVacc.getModel();
-        model.addRow(new Object[]{jTextFieldStudentName.getText(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
+        model.addRow(new Object[]{student.getStudentId(),jTextFieldStudentName.getText(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
             jTextFielDosesTaken.getText()+1,jTextFieldLastShotDate.getText(),vaccine.getNextShotDate(),vaccine.isVaccinated()});
 //        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText()});
         // jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()});
