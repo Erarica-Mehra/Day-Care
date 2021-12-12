@@ -175,7 +175,7 @@ public class StudentUI extends javax.swing.JFrame {
         jButtonDownload1.setText("Download CSV");
         jButtonDownload1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonDownload1MouseClicked(evt);
+                jButtonDownloadMouseClicked(evt);
             }
         });
 
@@ -519,7 +519,6 @@ public class StudentUI extends javax.swing.JFrame {
 				}
 			});
         		
-        		
                 //ValidationUtil.showSuccess("Teacher saved successfully!");
         	
             // TODO add your handling code here:
@@ -594,8 +593,8 @@ public class StudentUI extends javax.swing.JFrame {
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
 		try {
-			csv = new FileWriter(new File(pathToDownloads+"/Downloads/students.txt"));
-			System.out.println("Downloading Students Info into CSV at: "+pathToDownloads+"/Downloads/students.txt");
+			csv = new FileWriter(new File(pathToDownloads+"/Downloads/studentsDownload.txt"));
+			System.out.println("Downloading Students Info into CSV at: "+pathToDownloads+"/Downloads/studentsDownload.txt");
 			for (int i = 0; i < model.getRowCount(); i++) {
 	            for (int j = 0; j < model.getColumnCount(); j++) {
 	            	if(j == model.getColumnCount()-1) {
@@ -701,6 +700,10 @@ public class StudentUI extends javax.swing.JFrame {
         	StudentService ser = new StudentService();
         	try {
         		List<Vaccine> list = ser.getStudentImmunizationRecord(selId);
+        		vaccine= new Vaccine();
+                System.out.println(student.getFirstName());
+                VaccinationUI vui=new VaccinationUI(student,list);
+                vui.setVisible(true);
         		//TODO populate this list with student info in vacc window
 			} catch (Exception e) {
 				// TODO Auto-generated catch block

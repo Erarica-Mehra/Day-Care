@@ -217,13 +217,13 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlLastName.setText("Last Name");
         jPanel2.add(jLabeTeacherlLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 78, -1));
 
-        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
-        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
-            }
-        });
-        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
+//        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
+//        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
+//            public void actionPerformed(java.awt.event.ActionEvent evt) {
+//                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
+//            }
+//        });
+//        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
 
         jLabelJoiningDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelJoiningDate.setText("Joining Date");
@@ -382,16 +382,9 @@ public class TeacherUI extends javax.swing.JFrame {
 //            teacher.setJoiningDate(doj);
 //            //teacher.setAnnualReviewDate(revDate);
 //            System.out.println(teacher.toString());
-        Teacher teacherAdd = new Teacher();
-        teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
-        teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
-        teacherAdd.setEmployeeId(initialId);
-        teacherAdd.setEmailID(jTextFieldEmail.getText());
-        if(!jTextFieldJoiningDate.getText().isBlank()) {
-        	teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
-        }
+        Teacher teacherAdd = new Teacher(initialId, jTextFieldTeacherFirstName.getText(), jTextFieldTeacherLastName.getText(), jTextFieldEmail.getText(), (ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText())));
         
-        System.out.println(teacherAdd);
+        System.out.println(teacherAdd.getAnnualReviewDate());
         
         teacherList.add(teacherAdd);
         
@@ -514,8 +507,8 @@ public class TeacherUI extends javax.swing.JFrame {
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
 		try {
-			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachers.txt"));
-			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachers.txt");
+			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachersDownload.txt"));
+			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachersDownload.txt");
 			for (int i = 0; i < model.getRowCount(); i++) {
 	            for (int j = 0; j < model.getColumnCount(); j++) {
 	            	if(j == model.getColumnCount()-1) {
@@ -560,7 +553,7 @@ public class TeacherUI extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
         model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
-            jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
+            jTextFieldEmail.getText(), jTextFieldTeacherAnnualReviewDate.getText()});
 
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 

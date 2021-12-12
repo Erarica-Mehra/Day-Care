@@ -52,6 +52,8 @@ public class VaccinationUI extends javax.swing.JFrame {
         jTableStudentVacc.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableStudentVacc.setAutoCreateColumnsFromModel(true);
         this.vacc= vacc;
+        DefaultTableModel modelTable = (DefaultTableModel) jTableStudentVacc.getModel();
+        this.vacc.forEach(v-> modelTable.addRow(fillTable(v)));
      
         
     }
@@ -218,7 +220,7 @@ public class VaccinationUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Student", "Vaccine", "No. Of Doses Taken", "Total Doses", "Last Shot Date", "Next Shot Date", "Vaccinated ?"
+                "Student", "Vaccine",  "Total Doses", "Doses Taken", "Last Shot Date", "Next Shot Date", "Vaccinated ?"
             }
         ));
         jScrollPane1.setViewportView(jTableStudentVacc);
@@ -265,9 +267,10 @@ public class VaccinationUI extends javax.swing.JFrame {
         java.util.List<Vaccine> list= new ArrayList<>();
         vaccine.setName(jTextFieldVaccineName.getText());
         vaccine.setDosestaken(Integer.parseInt(jTextFielDosesTaken.getText()));
-        vaccine.setId(student.getStudentId());
+        vaccine.setStudentId(student.getStudentId());
+        System.out.println(jTextFieldLastShotDate.getText());
         vaccine.setLastShotDate(ConversionUtil.StringToLocalDate(jTextFieldLastShotDate.getText()));
-        vaccine.getNextShotDate();
+        //vaccine.getNextShotDate();
         //vaccine.isVaccinationCompleted();
         student.checkVaccinationRules(vaccine);
         student.getImmunizationRecord().add(vaccine);
@@ -277,7 +280,7 @@ public class VaccinationUI extends javax.swing.JFrame {
         try {
             //  s.set(0);
              //  studentService.registerStudent(student);
-        	studentService.updateStudentImmunizationRecord(vaccine);
+        	studentService.addStudentImmunizationRecord(vaccine);
             //impl.addStudent(s);
             // TODO add your handling code here:
         } catch (Exception ex) {
@@ -336,7 +339,7 @@ public class VaccinationUI extends javax.swing.JFrame {
         
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableStudentVacc.getModel();
 
-        model.addRow(new Object[]{student.getStudentId(),jTextFieldStudentName.getText(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
+        model.addRow(new Object[]{student.getStudentId(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
             jTextFielDosesTaken.getText()+1,jTextFieldLastShotDate.getText(),vaccine.getNextShotDate(),vaccine.isVaccinated()});
 //        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText()});
         // jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()});
@@ -387,6 +390,19 @@ public class VaccinationUI extends javax.swing.JFrame {
                 new StudentUI().setVisible(true);
             }
         });
+    }
+    
+    public Object[] fillTable(Vaccine vaccine) {
+    	System.out.println(student.toString());
+    	Object[] data = new Object[7];
+    	data[0] = student.getStudentId();
+    	data[1]= vaccine.getName();
+    	data[2] = vaccine.getTotalDoses();
+    	data[3] = vaccine.getDosestaken();
+    	data[4] = vaccine.getLastShotDate();
+    	data[5] = vaccine.getNextShotDate();
+    	data[6] = vaccine.isVaccinated();
+        return data;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

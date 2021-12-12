@@ -54,6 +54,11 @@ public class StudentService {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		impl.updateVaccineByStudentIdAndVaccineId(vaccine);
 	}
+	
+	public void addStudentImmunizationRecord(Vaccine vaccine) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.addStudentVaccinationRecord(vaccine);
+	}
 
 	// get Student Record
 
