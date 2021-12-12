@@ -30,7 +30,7 @@ public class ClassroomUI extends javax.swing.JFrame {
         jTableClassroomInfo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableClassroomInfo.setAutoCreateColumnsFromModel(true);
         try {
-			fetchShelterServices((DefaultTableModel)jTableClassroomInfo.getModel());
+        	fetchClassRoomGroupInfo((DefaultTableModel)jTableClassroomInfo.getModel());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -192,7 +192,7 @@ public class ClassroomUI extends javax.swing.JFrame {
         });
     }
     
-    private DefaultTableModel fetchShelterServices(DefaultTableModel model) throws Exception {
+    private DefaultTableModel fetchClassRoomGroupInfo(DefaultTableModel model) throws Exception {
 
         //JTableHeader th = new JTableHeader();
         

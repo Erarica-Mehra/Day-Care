@@ -6,8 +6,13 @@
 package edu.neu.csye6200.view;
 
 import edu.neu.csye6200.Feedback;
+import edu.neu.csye6200.FeedbackService;
+import edu.neu.csye6200.Group;
+import edu.neu.csye6200.scheduler.GroupHelper;
+
 import java.util.List;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -23,6 +28,11 @@ public class FeedbackUI extends javax.swing.JFrame {
         initComponents();
         jTableFeedback.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableFeedback.setAutoCreateColumnsFromModel(true);
+        try {
+        	fetchFeedbackDetails((DefaultTableModel)jTableFeedback.getModel());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
     }
     public FeedbackUI(List<Feedback> fdlist) {
         initComponents();
@@ -95,13 +105,10 @@ public class FeedbackUI extends javax.swing.JFrame {
 
         jTableFeedback.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
                 {null, null, null, null}
             },
             new String [] {
-                "Review", "Rating", "Last Feedback Date", "Next Feedback Date"
+               "Teacher", "Rating", "Last Feedback Date", "Next Feedback Date", "Reviews"
             }
         ));
         jScrollPane1.setViewportView(jTableFeedback);
@@ -163,6 +170,25 @@ public class FeedbackUI extends javax.swing.JFrame {
                 new FeedbackUI().setVisible(true);
             }
         });
+    }
+    
+    private DefaultTableModel fetchFeedbackDetails(DefaultTableModel model) throws Exception {
+
+        FeedbackService service = new FeedbackService();
+        List<Feedback>	 feebbackList = service.getAllTeacherReviews();
+        for (Feedback feedback : feebbackList) {
+
+            System.out.println("inside ");
+            Object[] row = new Object[5];
+            row[0] = feedback.getEmployeeId();
+            row[1] = feedback.getRating();
+            row[2] = feedback.getLastFeedBackDate();
+            row[3] = feedback.getNextFeedbackDate();
+            row[4] = feedback.getReview();
+            model.addRow(row);
+
+        }
+        return model;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
