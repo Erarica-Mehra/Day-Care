@@ -14,6 +14,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ import javax.swing.table.TableRowSorter;
 
 import edu.neu.csye6200.Teacher;
 import edu.neu.csye6200.TeacherService;
+import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.util.ValidationUtil;
 /**
@@ -37,7 +39,9 @@ import edu.neu.csye6200.util.ValidationUtil;
  */
 public class TeacherUI extends javax.swing.JFrame {
 
-    private long initialId=0;
+    private int initialId=0;
+    Teacher teacher;
+    List<Teacher> teacherList = new ArrayList<>();
     //static List<Teacher> teachers = new ArrayList<>();
     /**
      * Creates new form Teacher
@@ -336,55 +340,72 @@ public class TeacherUI extends javax.swing.JFrame {
     	
         TeacherService teacherService = new TeacherService();
   	//TODO add db integration by importing package/class from backend
-        Teacher teacher = new Teacher();
+        
         boolean validSave = true;
  
-        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
-        {
-            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
-            teacher.setLastName(jTextFieldTeacherLastName.getText());
-             
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered correct names");
-        	validSave = false;
-        }
+//        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
+//        {
+//            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
+//            teacher.setLastName(jTextFieldTeacherLastName.getText());
+//             
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct names");
+//        	validSave = false;
+//        }
+//        
+//        if(!jTextFieldJoiningDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldJoiningDate.getText())) {
+//        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//      	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+//      	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+//            teacher.setJoiningDate(doj);
+//            //teacher.setAnnualReviewDate(revDate);
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct dates");
+//        	validSave = false;
+//        }
+//        
+//        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+//            teacher.setEmailID(jTextFieldEmail.getText());
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct email");
+//        	validSave = false;
+//        }
+//       
+//        System.out.println(teacher.toString());
         
-        if(!jTextFieldJoiningDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldJoiningDate.getText())) {
-        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-      	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-      	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
-            teacher.setJoiningDate(doj);
-            //teacher.setAnnualReviewDate(revDate);
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered correct dates");
-        	validSave = false;
-        }
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+//  	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+//            teacher.setJoiningDate(doj);
+//            //teacher.setAnnualReviewDate(revDate);
+//            System.out.println(teacher.toString());
+        Teacher teacherAdd = new Teacher();
+        teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
+        teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
+        teacherAdd.setEmployeeId(initialId);
+        teacherAdd.setEmailID(jTextFieldEmail.getText());
+        teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
         
-        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-            teacher.setEmailID(jTextFieldEmail.getText());
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered correct email");
-        	validSave = false;
-        }
-       
-        System.out.println(teacher.toString());
+        System.out.println(teacherAdd);
         
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-  	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
-            teacher.setJoiningDate(doj);
-            //teacher.setAnnualReviewDate(revDate);
-            System.out.println(teacher.toString());
+        teacherList.add(teacherAdd);
         
         try {
         	
-        	if(validSave) {
-        		teacherService.registerTeacher(teacher);
-                ValidationUtil.showSuccess("Teacher saved successfully!");
-        	}
+        	teacherList.forEach(teacher -> {
+				try {
+					System.out.println(teacher);
+					teacherService.registerTeacher(teacher);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+        	
+            //ValidationUtil.showSuccess("Teacher saved successfully!");
             
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -426,6 +447,8 @@ public class TeacherUI extends javax.swing.JFrame {
     
     //Used when csv is uploaded and table is loaded
     public Object[] fillTableFromCSV(String csvRecord) {
+    	teacher = new Teacher(csvRecord);
+    	teacherList.add(teacher);
     	String[] array = csvRecord.split(",");
     	Object[] data = new Object[array.length];
         for (int i = 0; i < array.length; i++)
@@ -436,7 +459,7 @@ public class TeacherUI extends javax.swing.JFrame {
     
     public boolean isDuplicate(DefaultTableModel model, String fName, String email) {
     	for (int i = 0; i < model.getRowCount(); i++) {
-    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 5).equals(email)) {
+    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 4).equals(email)) {
         		return true;
         	}
             

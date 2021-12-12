@@ -38,10 +38,11 @@ import javax.swing.table.TableRowSorter;
  */
 public class StudentUI extends javax.swing.JFrame {
 
-    private long initialId=0;
     private VaccinationUI vui;
     private Vaccine vaccine;
     private Student student;
+    private int initialId=0;
+    List<Student> studentList = new ArrayList<>();
     /**
      * Creates new form Teacher
      */
@@ -422,69 +423,94 @@ public class StudentUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        //StudentDaoImpl impl = new StudentDaoImpl();
-        StudentService studentService = new StudentService();
-  	//TODO add db integration by importing package/class from backend
-     //   System.out.println("Date:  "+jXDatePicker1.toString());
-  	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
-        Student  s = new Student();
-        Parent p = new Parent();
-        boolean validSave = true;
-        
-        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
-        {
-                s.setFirstName(jTextFieldStudentFirstName.getText());
-                s.setLastName(jTextFieldStudentLastName.getText());
-                p.setFirstName(jTextFieldParentFirstName.getText());
-                p.setLastName(jTextFieldParentLastName.getText());
 
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered valid names!");
-        	validSave = false;
-        }
+       StudentService studentService = new StudentService();
+//  	//TODO add db integration by importing package/class from backend
+//        Student s = new Student();
+//        Parent p = new Parent();
+//        boolean validSave = true;
+//        
+//        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
+//               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
+//        {
+//                s.setFirstName(jTextFieldStudentFirstName.getText());
+//                s.setLastName(jTextFieldStudentLastName.getText());
+//                p.setFirstName(jTextFieldParentFirstName.getText());
+//                p.setLastName(jTextFieldParentLastName.getText());
+//
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered valid names!");
+//        	validSave = false;
+//        }
+//        
+//        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+//            p.setEmail(jTextFieldEmail.getText());
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered valid names!");
+//        	validSave = false;
+//        }
+//        
+//        if(!jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
+//        		!jTextFieldRegDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
+//        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+//      	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+//      	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
+//      	    s.setDob(dob);
+//    	    s.setRegistrationDate(regDate);
+//    	    s.setAge(ConversionUtil.getAgeFromDOB(dob));
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure you entered correct dates!");
+//        	validSave = false;
+//        }
+//        
+//        if(!jTextFieldPhoneNumber.getText().isBlank() || !jTextFieldAddress.getText().isBlank()) {
+//        	s.setAddress(jTextFieldAddress.getText());
+//        	p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
+//        }
+//        else {
+//        	ValidationUtil.showError("Please make sure no field is blank!");
+//        	validSave = false;
+//        }
+//        s.setParent(p);
+//        System.out.println(s.toString());
+       
+       Student studentAdd = new Student();
+       Parent parent = new Parent();
+       //seting studentId as row value
+       studentAdd.setStudentId(initialId);
+       studentAdd.setFirstName(jTextFieldStudentFirstName.getText());
+       studentAdd.setLastName(jTextFieldStudentLastName.getText());
+       studentAdd.setAddress(jTextFieldAddress.getText());
+       studentAdd.setDob(ConversionUtil.StringToLocalDate(jTextFieldStudentDob.getText()));
+       studentAdd.setRegistrationDate(ConversionUtil.StringToLocalDate(jTextFieldRegDate.getText()));
+       parent.setFirstName(jTextFieldParentFirstName.getText());
+       parent.setLastName(jTextFieldParentLastName.getText());
+       parent.setPhone(BigInteger.valueOf(Long.parseLong(jTextFieldPhoneNumber.getText())));
+       parent.setEmail(jTextFieldEmail.getText());
+       //assuming studentId = parentId (since its irrelevant as we are using registerStudent())
+       parent.setParentId(studentAdd.getStudentId());
+       
+       System.out.println(studentAdd);
+       
+       studentList.add(studentAdd);
         
-        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-            p.setEmail(jTextFieldEmail.getText());
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered valid names!");
-        	validSave = false;
-        }
-        
-        if(!jTextFieldStudentDob.getText().isEmpty() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
-        		!jTextFieldRegDate.getText().isEmpty() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
-        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-      	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
-      	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
-      	    s.setDob(dob);
-    	    s.setRegistrationDate(regDate);
-    	    s.setAge(ConversionUtil.getAgeFromDOB(dob));
-        }
-        else {
-        	ValidationUtil.showError("Please make sure you entered correct dates!");
-        	validSave = false;
-        }
-        
-        if(!jTextFieldPhoneNumber.getText().isEmpty()|| !jTextFieldAddress.getText().isEmpty()) {
-        	s.setAddress(jTextFieldAddress.getText());
-        	p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
-        }
-        else {
-        	ValidationUtil.showError("Please make sure no field is blank!");
-        	validSave = false;
-        }
-        s.setParent(p);
-      
-        System.out.println(s.toString());
-        student=s;
         try {
         	
-        	if(validSave) {
-        		studentService.registerStudent(s);
-                ValidationUtil.showSuccess("Student saved successfully!");
-        	}
+        	studentList.forEach(student -> {
+				try {
+					studentService.registerStudent(student);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			});
+        		
+        		
+                //ValidationUtil.showSuccess("Teacher saved successfully!");
+        	
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -515,6 +541,8 @@ public class StudentUI extends javax.swing.JFrame {
     
     //Used while loading table when csv is uploaded
     public Object[] fillTableFromCSV(String csvRecord) {
+    	student = new Student(csvRecord);
+    	studentList.add(student);
     	String[] array = csvRecord.split(",");
     	Object[] data = new Object[array.length];
         for (int i = 0; i < array.length; i++)
@@ -616,32 +644,35 @@ public class StudentUI extends javax.swing.JFrame {
         
 
         //Validation Part
-        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-                || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
-        	
-        	ValidationUtil.showError("Please make sure you entered correct name fields!");
-         }
+//        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
+//                || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
+//        	
+//        	ValidationUtil.showError("Please make sure you entered correct name fields!");
+//         }
+//        
+//        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isBlank() || 
+//        		jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText())) {
+//        	ValidationUtil.showError("Please make sure you entered correct date field!");
+//        }
+//        
+//        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+//        	ValidationUtil.showError("Please make sure you entered correct email field!");
+//        }
+//        else if(jTextFieldAddress.getText().isBlank() || jTextFieldPhoneNumber.getText().isBlank()) {
+//        	ValidationUtil.showError("Please make sure no feild is blank!");
+//        }
+//        
+//        else if(!isDuplicate(model,jTextFieldStudentFirstName.getText(),jTextFieldEmail.getText())) {
+//        	model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
+//        	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+//        }
+//        else {
+//        	System.out.println("Record already exists!");
+//        	ValidationUtil.showWarning("Record with same name and email already exists!");
+//        }
         
-        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isEmpty() || 
-        		jTextFieldStudentDob.getText().isEmpty()) {
-        	ValidationUtil.showError("Please make sure you entered correct date field!");
-        }
-        
-        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-        	ValidationUtil.showError("Please make sure you entered correct email field!");
-        }
-        else if(jTextFieldAddress.getText().isEmpty() || jTextFieldPhoneNumber.getText().isEmpty()) {
-        	ValidationUtil.showError("Please make sure no feild is blank!");
-        }
-        
-        else if(!isDuplicate(model,jTextFieldStudentFirstName.getText(),jTextFieldEmail.getText())) {
-        	model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
-        	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
-        }
-        else {
-        	System.out.println("Record already exists!");
-        	ValidationUtil.showWarning("Record with same name and email already exists!");
-        }
+        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
+    	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
         
 
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
