@@ -60,7 +60,7 @@ public class DayCare {
 		return classList;
 	}
 
-	public static void demo() {
+	public static void demo() throws Exception {
 
 		GroupHelper.groupMe();
 		// Schedular goes here

@@ -269,6 +269,8 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextFieldJoiningDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldJoiningDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 400, 30));
 
+        jInternalFrame1.setResizable(true);
+        jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);

@@ -22,7 +22,7 @@
         teacher_assigned INT,
         PRIMARY KEY (student_id),
         FOREIGN KEY (parent_id) REFERENCES Parent(parent_id),
-        FOREIGN KEY (teacher_assigned) REFERENCES Teacher(teacher_id)
+        FOREIGN KEY (teacher_assigned) REFERENCES Teacher(employee_id)
     );
     
     
@@ -85,4 +85,11 @@
         FOREIGN KEY (student_id) REFERENCES Student(student_id),
         FOREIGN KEY (teacher_id) REFERENCES Teacher(employee_id)
     );
+    
+    
+        alter table parent modify column phone bigint;
+        alter table student add column is_deleted boolean default 0;    
+        
+        alter table teacher add column is_deleted boolean default 0;    
+    
     

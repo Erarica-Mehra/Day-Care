@@ -5,6 +5,16 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.Feedback;
+import edu.neu.csye6200.FeedbackService;
+import edu.neu.csye6200.Group;
+import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.scheduler.GroupHelper;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author erruc
@@ -12,13 +22,17 @@ package edu.neu.csye6200.view;
 public class LMDLandingPage extends javax.swing.JFrame {
     private TeacherUI teacher;
     private StudentUI student;
-    private  ViewClassroomInfoUI classroom;
+    private  ClassroomUI classroom;
+    private FeedbackUI feedback;
     /**
      * Creates new form MainPage
      */
     public LMDLandingPage() {
         initComponents();
+    
     }
+
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -45,7 +59,7 @@ public class LMDLandingPage extends javax.swing.JFrame {
         jReminderLabel = new javax.swing.JLabel();
         jXTaskPaneInfrastructure = new org.jdesktop.swingx.JXTaskPane();
         jLabelClassrooms = new javax.swing.JLabel();
-        jLabelStudentGroups = new javax.swing.JLabel();
+        jLabelViewFeedback = new javax.swing.JLabel();
         jRightPanel = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -63,19 +77,24 @@ public class LMDLandingPage extends javax.swing.JFrame {
         jTopPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_menu_48px_1.png"))); // NOI18N
-        jTopPanel1.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 46, -1));
+        jTopPanel1.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 46, 60));
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/male_user_50px.png"))); // NOI18N
         jLabel4.setText("Hello, Admin");
+        jLabel4.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentShown(java.awt.event.ComponentEvent evt) {
+                jLabel4ComponentShown(evt);
+            }
+        });
         jTopPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1151, 0, 151, -1));
 
         jLabel3.setBackground(new java.awt.Color(51, 51, 51));
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd3.PNG"))); // NOI18N
-        jTopPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 0, 60, 50));
+        jTopPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 60, 40));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd11.PNG"))); // NOI18N
-        jTopPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 0, 400, 50));
+        jTopPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 390, 40));
 
         getContentPane().add(jTopPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 60));
 
@@ -154,10 +173,15 @@ public class LMDLandingPage extends javax.swing.JFrame {
         });
         jXTaskPaneInfrastructure.getContentPane().add(jLabelClassrooms);
 
-        jLabelStudentGroups.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLabelStudentGroups.setText("Student Groups");
-        jLabelStudentGroups.setPreferredSize(new java.awt.Dimension(90, 30));
-        jXTaskPaneInfrastructure.getContentPane().add(jLabelStudentGroups);
+        jLabelViewFeedback.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        jLabelViewFeedback.setText("View Feeback");
+        jLabelViewFeedback.setPreferredSize(new java.awt.Dimension(90, 30));
+        jLabelViewFeedback.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabelViewFeedbackMouseClicked(evt);
+            }
+        });
+        jXTaskPaneInfrastructure.getContentPane().add(jLabelViewFeedback);
 
         jXTaskPaneContainer1.add(jXTaskPaneInfrastructure);
 
@@ -197,10 +221,38 @@ public class LMDLandingPage extends javax.swing.JFrame {
     }//GEN-LAST:event_jLabelTeachersMouseClicked
 
     private void jLabelClassroomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClassroomsMouseClicked
-        // TODO add your handling code here:
-        classroom= new ViewClassroomInfoUI();
-        classroom.setVisible(true);
+        try {
+            // TODO add your handling code here:
+            GroupHelper helper= new GroupHelper();
+            List<Group> grouplist=helper.getClassRoomGroupInfo();
+            classroom= new ClassroomUI(grouplist);
+            classroom.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(LMDLandingPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jLabelClassroomsMouseClicked
+
+    private void jLabelViewFeedbackMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelViewFeedbackMouseClicked
+        // TODO add your handling code here:
+       
+       Feedback fd= new Feedback();
+       FeedbackService fdservice= new FeedbackService();
+       List<Feedback> fdlist= new ArrayList<Feedback>();
+        try {
+            fdlist=fdservice.getAllTeacherReviews();
+         //   fdservice.
+        } catch (Exception ex) {
+            Logger.getLogger(LMDLandingPage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+      
+       feedback= new FeedbackUI(fdlist);
+       feedback.setVisible(true);
+    }//GEN-LAST:event_jLabelViewFeedbackMouseClicked
+
+    private void jLabel4ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jLabel4ComponentShown
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jLabel4ComponentShown
 
     /**
      * @param args the command line arguments
@@ -244,9 +296,9 @@ public class LMDLandingPage extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelClassrooms;
     private javax.swing.JLabel jLabelMenu;
-    private javax.swing.JLabel jLabelStudentGroups;
     private javax.swing.JLabel jLabelStudents;
     private javax.swing.JLabel jLabelTeachers;
+    private javax.swing.JLabel jLabelViewFeedback;
     private javax.swing.JPanel jPanelLeftPane;
     private javax.swing.JLabel jReminderLabel;
     private javax.swing.JPanel jRightPanel;

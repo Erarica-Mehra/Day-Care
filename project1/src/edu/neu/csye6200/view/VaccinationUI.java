@@ -8,12 +8,14 @@ package edu.neu.csye6200.view;
 import edu.neu.csye6200.Parent;
 import edu.neu.csye6200.Student;
 import edu.neu.csye6200.StudentService;
+import edu.neu.csye6200.Vaccine;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.ValidationUtil;
 import java.io.File;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,13 +31,28 @@ import javax.swing.table.DefaultTableModel;
 public class VaccinationUI extends javax.swing.JFrame {
 
     private long initialId=0;
+    private Student student;
+    private  Vaccine vaccine= new Vaccine();
+    private List<Vaccine> vacc;
     /**
      * Creates new form Teacher
      */
-    public VaccinationUI() {
+    public VaccinationUI(Student s) {
         initComponents();
-        jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
-        jTable1.setAutoCreateColumnsFromModel(true);
+        this.student= s;
+        jTextFieldStudentName.setText(student.getFirstName()+" "+student.getLastName());
+        jTableStudentVacc.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTableStudentVacc.setAutoCreateColumnsFromModel(true);
+        
+    }
+      public VaccinationUI(Student s, List<Vaccine> vacc) {
+        initComponents();
+        this.student= s;
+        jTextFieldStudentName.setText(student.getFirstName()+" "+student.getLastName());
+        jTableStudentVacc.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
+        jTableStudentVacc.setAutoCreateColumnsFromModel(true);
+        this.vacc= vacc;
+     
         
     }
 
@@ -51,10 +68,6 @@ public class VaccinationUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jLabelStudentTitle = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPanelToolBar = new javax.swing.JPanel();
-        jTextFieldSearch = new javax.swing.JTextField();
-        JLabelSearch = new javax.swing.JLabel();
-        jButtonSave = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabelFirstName = new javax.swing.JLabel();
         jTextFieldStudentName = new javax.swing.JTextField();
@@ -67,9 +80,10 @@ public class VaccinationUI extends javax.swing.JFrame {
         jLabelVaccineName = new javax.swing.JLabel();
         jTextFieldLastShotDate = new javax.swing.JTextField();
         jTextFieldTotalDosesTaken = new javax.swing.JTextField();
+        jButtonSave = new javax.swing.JButton();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableStudentVacc = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -109,52 +123,6 @@ public class VaccinationUI extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-        );
-
-        jPanelToolBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanelToolBar.setMinimumSize(new java.awt.Dimension(827, 47));
-        jPanelToolBar.setOpaque(false);
-        jPanelToolBar.setPreferredSize(new java.awt.Dimension(100, 38));
-
-        jTextFieldSearch.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                jTextFieldSearchKeyReleased(evt);
-            }
-        });
-
-        JLabelSearch.setText("Search");
-
-        jButtonSave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save1.png"))); // NOI18N
-        jButtonSave.setText("Save");
-        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonSaveActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanelToolBarLayout = new javax.swing.GroupLayout(jPanelToolBar);
-        jPanelToolBar.setLayout(jPanelToolBarLayout);
-        jPanelToolBarLayout.setHorizontalGroup(
-            jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelToolBarLayout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(JLabelSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(109, 109, 109)
-                .addComponent(jButtonSave, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanelToolBarLayout.setVerticalGroup(
-            jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelToolBarLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextFieldSearch)
-                    .addComponent(JLabelSearch)
-                    .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
@@ -200,13 +168,16 @@ public class VaccinationUI extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jAddVacRectButtonMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jAddVacRectButtonMouseEntered(evt);
+            }
         });
         jAddVacRectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jAddVacRectButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jAddVacRectButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, 170, 30));
+        jPanel2.add(jAddVacRectButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 340, 170, 30));
 
         jLabelPhoneNumber1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelPhoneNumber1.setText("Last Shot Date");
@@ -227,11 +198,22 @@ public class VaccinationUI extends javax.swing.JFrame {
         jTextFieldTotalDosesTaken.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldTotalDosesTaken, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 118, 410, -1));
 
+        jButtonSave.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save1.png"))); // NOI18N
+        jButtonSave.setText("Save");
+        jButtonSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonSaveActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jButtonSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 340, 126, 30));
+
+        jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableStudentVacc.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -239,7 +221,7 @@ public class VaccinationUI extends javax.swing.JFrame {
                 "Student Id", "Student Name", "No. Of Doses Taken", "Total Doses", "Last Shot Date", "Next Shot Date", "Vaccinated ?"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(jTableStudentVacc);
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
@@ -252,12 +234,9 @@ public class VaccinationUI extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1473, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)))
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)
                 .addGap(75, 75, 75))
         );
         layout.setVerticalGroup(
@@ -265,11 +244,9 @@ public class VaccinationUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanelToolBar, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
+                .addGap(33, 33, 33)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)
+                    .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 665, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -277,52 +254,29 @@ public class VaccinationUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
-     	searchTableContents(jTextFieldSearch.getText());   // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldSearchKeyReleased
-
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
         //StudentDaoImpl impl = new StudentDaoImpl();
         edu.neu.csye6200.StudentService studentService = new StudentService();
   	//TODO add db integration by importing package/class from backend
-     //   System.out.println("Date:  "+jXDatePicker1.toString());
-  	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
-        Student s = new Student();
-        Parent p= new Parent();
-     //**   if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-   //            && !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && !ValidationUtil.verifyName(jTextFieldParentLastName.getName()))
-        {
-                s.setFirstName(jTextFieldStudentName.getText());
-         //       s.setLastName(jTextFieldStudentLastName.getText());
-                p.setFirstName(jTextFieldLastShotDate.getText());
-           //     p.setLastName(jTextFieldParentLastName.getText());
-
-        }
-        s.setAddress(jTextFieldVaccineName.getText());
-   //     if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-     //       p.setEmail(jTextFieldEmail.getText());*/
-      //  }**/
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate dob = LocalDate.parse(jTextFielDosesTaken.getText(), formatter);  
-  	    LocalDate regDate  = LocalDate.parse(jTextFieldTotalDosesTaken.getText(), formatter);  	
-  	    s.setDob(dob);
-  	    s.setRegistrationDate(regDate);
-  //	    p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
-        s.setParent(p);
-        s.setAge(ConversionUtil.getAgeFromDOB(dob));
-      //  if(ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText())){
-          //  p.setPhone(jTextFieldPhoneNumber.getText());
-       // }
-     //   s.setRegistrationDate(ConversionUtil.convertToLocalDateViaInstant(jXDatePicker.getDate()));
-     
-       /* if(ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText())){
-              p.setPhone(BigInteger.jTextFieldPhoneNumber.getText()));
-        }*/
-        System.out.println(s.toString());
+   
+      //  Student student = new Student();
+        // vaccine= new Vaccine();
+        jTextFieldStudentName.setText(student.getFirstName() +" "+student.getLastName());
+        java.util.List<Vaccine> list= new ArrayList<>();
+        vaccine.setName(jTextFieldVaccineName.getText());
+        vaccine.setDosestaken(Integer.parseInt(jTextFielDosesTaken.getText()));
+        vaccine.setId(student.getStudentId());
+        vaccine.setLastShotDate(ConversionUtil.StringToLocalDate(jTextFieldLastShotDate.getText()));
+        vaccine.getNextShotDate();
+        vaccine.isVaccinationCompleted();
+        student.checkVaccinationRules(vaccine);
+        student.getImmunizationRecord().add(vaccine);
+      
+        System.out.println(vaccine.getName());
         
         try {
             //  s.set(0);
-            studentService.registerStudent(s);
+               studentService.registerStudent(student);
             //impl.addStudent(s);
             // TODO add your handling code here:
         } catch (Exception ex) {
@@ -335,10 +289,10 @@ public class VaccinationUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jTextFielDosesTakenActionPerformed
     
     public void searchTableContents(String searchString) {
-        DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel currtableModel = (DefaultTableModel) jTableStudentVacc.getModel();
         System.out.println("Started seearching...");
         //To empty the table before search
-        Vector originalTableModel = (Vector) ((DefaultTableModel) jTable1.getModel()).getDataVector().clone();
+        Vector originalTableModel = (Vector) ((DefaultTableModel) jTableStudentVacc.getModel()).getDataVector().clone();
         currtableModel.setRowCount(0);
         //To search for contents from original table content
         for (Object rows : originalTableModel) {
@@ -371,16 +325,23 @@ public class VaccinationUI extends javax.swing.JFrame {
 
     private void jAddVacRectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jAddVacRectButtonActionPerformed
         // TODO add your handling code here:
+        
     }//GEN-LAST:event_jAddVacRectButtonActionPerformed
 
     private void jAddVacRectButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddVacRectButtonMouseClicked
         // TODO add your handling code here:
-        initialId+=1;
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
+        
+        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableStudentVacc.getModel();
+        model.addRow(new Object[]{jTextFieldStudentName.getText(),jTextFieldVaccineName.getText(),jTextFieldTotalDosesTaken.getText(),
+            jTextFielDosesTaken.getText()+1,jTextFieldLastShotDate.getText(),vaccine.getNextShotDate(),vaccine.isVaccinated()});
 //        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText()});
         // jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()});
 
     }//GEN-LAST:event_jAddVacRectButtonMouseClicked
+
+    private void jAddVacRectButtonMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddVacRectButtonMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jAddVacRectButtonMouseEntered
 
     /**
      * @param args the command line arguments
@@ -425,7 +386,6 @@ public class VaccinationUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JLabelSearch;
     private javax.swing.JButton jAddVacRectButton;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JInternalFrame jInternalFrame1;
@@ -438,12 +398,10 @@ public class VaccinationUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelVaccineName;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanelToolBar;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTableStudentVacc;
     private javax.swing.JTextField jTextFielDosesTaken;
     private javax.swing.JTextField jTextFieldLastShotDate;
-    private javax.swing.JTextField jTextFieldSearch;
     private javax.swing.JTextField jTextFieldStudentName;
     private javax.swing.JTextField jTextFieldTotalDosesTaken;
     private javax.swing.JTextField jTextFieldVaccineName;

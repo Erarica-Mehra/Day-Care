@@ -19,11 +19,14 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
@@ -38,7 +41,7 @@ public class StudentUI extends javax.swing.JFrame {
     private long initialId=0;
     private VaccinationUI vui;
     private Vaccine vaccine;
-    private Student s = new Student();;
+    private Student student;
     /**
      * Creates new form Teacher
      */
@@ -66,7 +69,6 @@ public class StudentUI extends javax.swing.JFrame {
         JLabelSearch = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
-        jButtonAddVaccineRec = new javax.swing.JButton();
         jButtonDownload1 = new javax.swing.JButton();
         jButtonDeleteSelRow = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -89,6 +91,7 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldEmail = new javax.swing.JTextField();
         jTextFieldPhoneNumber = new javax.swing.JTextField();
         jTextFieldRegDate = new javax.swing.JTextField();
+        jButtonAddVaccineRec = new javax.swing.JButton();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -166,14 +169,6 @@ public class StudentUI extends javax.swing.JFrame {
             }
         });
 
-        jButtonAddVaccineRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
-        jButtonAddVaccineRec.setText("Add Vaccination Record");
-        jButtonAddVaccineRec.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonAddVaccineRecMouseClicked(evt);
-            }
-        });
-
         jButtonDownload1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/download1.png"))); // NOI18N
         jButtonDownload1.setText("Download CSV");
         jButtonDownload1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -207,8 +202,6 @@ public class StudentUI extends javax.swing.JFrame {
                 .addComponent(jButtonDownload1)
                 .addGap(41, 41, 41)
                 .addComponent(jButtonDeleteSelRow)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonAddVaccineRec)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelToolBarLayout.setVerticalGroup(
@@ -220,7 +213,6 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(JLabelSearch)
                     .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonAddVaccineRec)
                     .addComponent(jButtonDownload1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonDeleteSelRow))
                 .addContainerGap())
@@ -279,7 +271,7 @@ public class StudentUI extends javax.swing.JFrame {
                 jAddStudentButtonActionPerformed(evt);
             }
         });
-        jPanel2.add(jAddStudentButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 490, 166, 30));
+        jPanel2.add(jAddStudentButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 480, 166, 30));
 
         jLabelPhoneNumber1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelPhoneNumber1.setText("Date of Birth");
@@ -344,6 +336,17 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldRegDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldRegDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 127, 410, 30));
 
+        jButtonAddVaccineRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
+        jButtonAddVaccineRec.setText("Add Vaccination Record");
+        jButtonAddVaccineRec.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonAddVaccineRecMouseClicked(evt);
+            }
+            
+        });
+        jPanel2.add(jButtonAddVaccineRec, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, -1));
+
+        jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
@@ -356,6 +359,10 @@ public class StudentUI extends javax.swing.JFrame {
                 "Student Id", "FirstName", "LastName", "Address", "Reg. Date", "Student Dob", "Parent FName", "Parent LName", "PhoneNumber", "Email Id"
             }
         ));
+        
+        //Sorting every column
+        jTable1.setAutoCreateRowSorter(true);
+        
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setHeaderValue("Student Id");
@@ -420,10 +427,12 @@ public class StudentUI extends javax.swing.JFrame {
   	//TODO add db integration by importing package/class from backend
      //   System.out.println("Date:  "+jXDatePicker1.toString());
   	//edu.neu.csye6200.Student s = new edu.neu.csye6200.Student();
-        Student s = new Student();
-        Parent p= new Parent();
-        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) && ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
+        Student  s = new Student();
+        Parent p = new Parent();
+        boolean validSave = true;
+        
+        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
+               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
         {
                 s.setFirstName(jTextFieldStudentFirstName.getText());
                 s.setLastName(jTextFieldStudentLastName.getText());
@@ -431,32 +440,51 @@ public class StudentUI extends javax.swing.JFrame {
                 p.setLastName(jTextFieldParentLastName.getText());
 
         }
-        s.setAddress(jTextFieldAddress.getText());
+        else {
+        	ValidationUtil.showError("Please make sure you entered valid names!");
+        	validSave = false;
+        }
+        
         if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
             p.setEmail(jTextFieldEmail.getText());
         }
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-  	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
-  	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter);  	
-  	    s.setDob(dob);
-  	    s.setRegistrationDate(regDate);
-  	    p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
-        s.setParent(p);
-        s.setAge(ConversionUtil.getAgeFromDOB(dob));
-      //  if(ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText())){
-          //  p.setPhone(jTextFieldPhoneNumber.getText());
-       // }
-     //   s.setRegistrationDate(ConversionUtil.convertToLocalDateViaInstant(jXDatePicker.getDate()));
-     
-       /* if(ValidationUtil.isValidPhoneNumber(jTextFieldPhoneNumber.getText())){
-              p.setPhone(BigInteger.jTextFieldPhoneNumber.getText()));
-        }*/
-        System.out.println(s.toString());
+        else {
+        	ValidationUtil.showError("Please make sure you entered valid names!");
+        	validSave = false;
+        }
         
+        if(!jTextFieldStudentDob.getText().isEmpty() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
+        		!jTextFieldRegDate.getText().isEmpty() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
+      	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
+      	    s.setDob(dob);
+    	    s.setRegistrationDate(regDate);
+    	    s.setAge(ConversionUtil.getAgeFromDOB(dob));
+        }
+        else {
+        	ValidationUtil.showError("Please make sure you entered correct dates!");
+        	validSave = false;
+        }
+        
+        if(!jTextFieldPhoneNumber.getText().isEmpty()|| !jTextFieldAddress.getText().isEmpty()) {
+        	s.setAddress(jTextFieldAddress.getText());
+        	p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
+        }
+        else {
+        	ValidationUtil.showError("Please make sure no field is blank!");
+        	validSave = false;
+        }
+        s.setParent(p);
+      
+        System.out.println(s.toString());
+        student=s;
         try {
-            //  s.set(0);
-            studentService.registerStudent(s);
-            //impl.addStudent(s);
+        	
+        	if(validSave) {
+        		studentService.registerStudent(s);
+                ValidationUtil.showSuccess("Student saved successfully!");
+        	}
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -494,6 +522,16 @@ public class StudentUI extends javax.swing.JFrame {
     	
         return data;
     }
+    
+    public boolean isDuplicate(DefaultTableModel model, String fName, String email) {
+    	for (int i = 0; i < model.getRowCount(); i++) {
+    		if(model.getValueAt(i, 1).equals(fName) && model.getValueAt(i, 9).equals(email)) {
+        		return true;
+        	}
+            
+        }
+		return false;
+    }
 
     private void jTextFieldStudentDobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldStudentDobActionPerformed
         // TODO add your handling code here:
@@ -510,22 +548,7 @@ public class StudentUI extends javax.swing.JFrame {
     
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
         
-//        JFileChooser chooser = new JFileChooser();
-//		chooser.setSelectedFile(new File("student.txt")); // user will see this name during download
-//		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
-//			String home = System.getProperty("user.home");
-//			File file = new File(home+"/Downloads/students.txt");
-//			
-//			Path originalPath = Paths.get("resources/students.txt");
-//		    Path copied = Paths.get(home+"/Downloads/students.txt");
-//		    try {
-//		    	System.out.println("Downloading CSV file to " + copied.toString());
-//				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}			
-//		}
+
     	
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
@@ -545,7 +568,7 @@ public class StudentUI extends javax.swing.JFrame {
 	            csv.write("\n");
 	        }
 			csv.close();
-			
+			ValidationUtil.showSuccess("Successfully downloaded students.txt CSV file");
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded students.txt CSV file");
@@ -587,29 +610,60 @@ public class StudentUI extends javax.swing.JFrame {
 
     private void jAddStudentButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jAddStudentButtonMouseClicked
         // TODO add your handling code here:
+        
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
         initialId = model.getRowCount()+1;
-        model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
-        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
         
+
+        //Validation Part
+        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
+                || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
+        	
+        	ValidationUtil.showError("Please make sure you entered correct name fields!");
+         }
+        
+        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isEmpty() || 
+        		jTextFieldStudentDob.getText().isEmpty()) {
+        	ValidationUtil.showError("Please make sure you entered correct date field!");
+        }
+        
+        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+        	ValidationUtil.showError("Please make sure you entered correct email field!");
+        }
+        else if(jTextFieldAddress.getText().isEmpty() || jTextFieldPhoneNumber.getText().isEmpty()) {
+        	ValidationUtil.showError("Please make sure no feild is blank!");
+        }
+        
+        else if(!isDuplicate(model,jTextFieldStudentFirstName.getText(),jTextFieldEmail.getText())) {
+        	model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
+        	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+        }
+        else {
+        	System.out.println("Record already exists!");
+        	ValidationUtil.showWarning("Record with same name and email already exists!");
+        }
+        
+
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
 
     private void formComponentAdded(java.awt.event.ContainerEvent evt) {//GEN-FIRST:event_formComponentAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentAdded
     
-    public void AddVaccineData(Student s){
-          
-         
-        
-    }
+   
     private void jButtonAddVaccineRecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddVaccineRecMouseClicked
-        // TODO add your handling code here:
-   //     this.dispose();
-        StudentUI s= new StudentUI();
-        VaccinationUI vui=new VaccinationUI();
-        vui.setVisible(true);
-       // s.     jTextFieldStudentFirstName.getText();
+        try {
+            // TODO add your handling code here:
+             
+           //    student= new Student();
+               vaccine= new Vaccine();
+               System.out.println(student.getFirstName());
+               VaccinationUI vui=new VaccinationUI(student);
+               vui.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }//GEN-LAST:event_jButtonAddVaccineRecMouseClicked
 
     private void jButtonDownload1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownload1MouseClicked
@@ -626,7 +680,6 @@ public class StudentUI extends javax.swing.JFrame {
     private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jButtonDeleteSelRowMouseClicked
-   
     /**
      * @param args the command line arguments
      */
