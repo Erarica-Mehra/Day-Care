@@ -287,6 +287,9 @@ public class TeacherUI extends javax.swing.JFrame {
                 "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
             }
         ));
+        
+        jTable1.setAutoCreateRowSorter(true);
+        
         jScrollPane1.setViewportView(jTable1);
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);

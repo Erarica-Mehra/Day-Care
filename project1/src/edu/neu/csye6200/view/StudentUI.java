@@ -31,6 +31,7 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 /**
  *
@@ -480,7 +481,7 @@ public class StudentUI extends javax.swing.JFrame {
        Student studentAdd = new Student();
        Parent parent = new Parent();
        //seting studentId as row value
-       studentAdd.setStudentId(initialId);
+       studentAdd.setStudentId(studentList.size()+1);
        studentAdd.setFirstName(jTextFieldStudentFirstName.getText());
        studentAdd.setLastName(jTextFieldStudentLastName.getText());
        studentAdd.setAddress(jTextFieldAddress.getText());
@@ -501,9 +502,10 @@ public class StudentUI extends javax.swing.JFrame {
        parent.setEmail(jTextFieldEmail.getText());
        //assuming studentId = parentId (since its irrelevant as we are using registerStudent())
        parent.setParentId(studentAdd.getStudentId());
-       
+       studentAdd.setParent(parent);
+       studentAdd.setParentId(parent.getParentId());
        System.out.println(studentAdd);
-       
+       student = studentAdd;
        studentList.add(studentAdd);
         
         try {
@@ -693,17 +695,31 @@ public class StudentUI extends javax.swing.JFrame {
     
    
     private void jButtonAddVaccineRecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddVaccineRecMouseClicked
-        try {
-            // TODO add your handling code here:
-             
-           //    student= new Student();
-               vaccine= new Vaccine();
-               System.out.println(student.getFirstName());
-               VaccinationUI vui=new VaccinationUI(student);
-               vui.setVisible(true);
-        } catch (Exception ex) {
-            Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
+    	if(jTable1.getSelectedRow() > -1) {
+    		int selId = jTable1.getSelectedRow()+1;
+    		System.out.println("Fetching vaccine details for student with Id: "+selId);
+        	StudentService ser = new StudentService();
+        	try {
+        		List<Vaccine> list = ser.getStudentImmunizationRecord(selId);
+        		//TODO populate this list with student info in vacc window
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
         }
+    	else {
+    		try {
+                // TODO add your handling code here:
+    			System.out.println("Setting vaccine details for new student with Id: "+initialId);
+               //    student= new Student();
+                   vaccine= new Vaccine();
+                   System.out.println(student.getFirstName());
+                   VaccinationUI vui=new VaccinationUI(student);
+                   vui.setVisible(true);
+            } catch (Exception ex) {
+                Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+    	}
         
     }//GEN-LAST:event_jButtonAddVaccineRecMouseClicked
 
@@ -720,6 +736,18 @@ public class StudentUI extends javax.swing.JFrame {
     }
     private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
         // TODO add your handling code here:
+    	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    	int delId = jTable1.getSelectedRow()+1;
+    	StudentService service = new StudentService();
+    	try {
+    		System.out.println("Deleting student record with id: "+delId);
+    		model.removeRow(jTable1.getSelectedRow());
+			service.deleteStudent(delId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	
     }//GEN-LAST:event_jButtonDeleteSelRowMouseClicked
     /**
      * @param args the command line arguments
