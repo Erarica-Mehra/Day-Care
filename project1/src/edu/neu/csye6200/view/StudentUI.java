@@ -177,7 +177,7 @@ public class StudentUI extends javax.swing.JFrame {
             }
         });
 
-        //jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
+        jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
         jButtonDeleteSelRow.setText("Delete Selected Row");
         jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
