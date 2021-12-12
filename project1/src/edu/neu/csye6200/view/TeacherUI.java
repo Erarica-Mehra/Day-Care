@@ -333,21 +333,44 @@ public class TeacherUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
-        //StudentDaoImpl impl = new StudentDaoImpl();
+    	
         TeacherService teacherService = new TeacherService();
   	//TODO add db integration by importing package/class from backend
         Teacher teacher = new Teacher();
+        boolean validSave = true;
  
-        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) && ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
+        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
         {
             teacher.setFirstName(jTextFieldTeacherFirstName.getText());
             teacher.setLastName(jTextFieldTeacherLastName.getText());
              
         }
-   
+        else {
+        	ValidationUtil.showError("Please make sure you entered correct names");
+        	validSave = false;
+        }
+        
+        if(!jTextFieldJoiningDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldJoiningDate.getText())) {
+        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+      	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
+      	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
+            teacher.setJoiningDate(doj);
+            //teacher.setAnnualReviewDate(revDate);
+        }
+        else {
+        	ValidationUtil.showError("Please make sure you entered correct dates");
+        	validSave = false;
+        }
+        
         if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
             teacher.setEmailID(jTextFieldEmail.getText());
         }
+        else {
+        	ValidationUtil.showError("Please make sure you entered correct email");
+        	validSave = false;
+        }
+       
+        System.out.println(teacher.toString());
         
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
   	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
@@ -357,10 +380,12 @@ public class TeacherUI extends javax.swing.JFrame {
             System.out.println(teacher.toString());
         
         try {
-           
-            teacherService.registerTeacher(teacher);
+        	
+        	if(validSave) {
+        		teacherService.registerTeacher(teacher);
+                ValidationUtil.showSuccess("Teacher saved successfully!");
+        	}
             
-            // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -421,23 +446,6 @@ public class TeacherUI extends javax.swing.JFrame {
     
     private void jButtonDownloadMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDownloadMouseClicked
         
-//        JFileChooser chooser = new JFileChooser();
-//		chooser.setSelectedFile(new File("teacher.txt")); // user will see this name during download
-//		if (JFileChooser.APPROVE_OPTION == chooser.showSaveDialog(null)) {
-//			String home = System.getProperty("user.home");
-//			File file = new File(home+"/Downloads/teachers.txt");
-//			
-//			Path originalPath = Paths.get("resources/teachers.txt");
-//		    Path copied = Paths.get(home+"/Downloads/teachers.txt");
-//		    try {
-//		    	System.out.println("Downloading CSV file to " + copied.toString());
-//				Files.copy(originalPath, copied, StandardCopyOption.REPLACE_EXISTING);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}		
-//		}
-    	
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
@@ -456,7 +464,7 @@ public class TeacherUI extends javax.swing.JFrame {
 	            csv.write("\n");
 	        }
 			csv.close();
-			
+			ValidationUtil.showSuccess("Successfully downloaded teachers.txt CSV file");
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded teachers.txt CSV file");
@@ -488,12 +496,31 @@ public class TeacherUI extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
         
-        if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
+        //Validation Part
+        if(!ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldTeacherLastName.getText())){
+        	
+        	ValidationUtil.showError("Please make sure you entered correct name fields!");
+         }
+        
+        else if(!ValidationUtil.isValid(jTextFieldJoiningDate.getText()) || jTextFieldJoiningDate.getText().isBlank()) {
+        	ValidationUtil.showError("Please make sure you entered correct date field!");
+        }
+        
+        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
+        	ValidationUtil.showError("Please make sure you entered correct email field!");
+        }
+        
+        else if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
         	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),jTextFieldEmail.getText()});
+
+        if(!isDuplicate(model, jTextFieldTeacherFirstName.getText(), jTextFieldEmail.getText())) {
+        	model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),
+        			jTextFieldJoiningDate.getText(),jTextFieldEmail.getText()});
+        	}
         }
         else {
         	System.out.println("Record already exists!");
-        	JOptionPane.showMessageDialog(null, "Record already exists with same name and email!", "Warning", JOptionPane.WARNING_MESSAGE);
+        	ValidationUtil.showWarning("Record with same name and email already exists!");
         }
         
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
