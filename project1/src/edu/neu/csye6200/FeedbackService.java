@@ -17,11 +17,11 @@ public class FeedbackService {
 		return feedbackDao.getAllReviewsOfTeacher(teacher.getEmployeeId());
 	}
 
-//	
-//	public double getAverageRatingOfTeacher(Teacher teacher) throws Exception {
-//		
-//	}
-//
+	public List<Feedback> getAllTeacherReviews() throws Exception {
+		FeedbackDaoImpl feedbackDao = new FeedbackDaoImpl();
+		return feedbackDao.getAllReviews();
+	}
+
 	public LocalDate trackNextReviewdate(Teacher teacher) throws Exception {
 		FeedbackDaoImpl feedbackDao = new FeedbackDaoImpl();
 		return feedbackDao.trackNextReviewdate(teacher.getEmployeeId());

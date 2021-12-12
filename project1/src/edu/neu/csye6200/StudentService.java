@@ -27,8 +27,8 @@ public class StudentService {
 			student = new Student(csvString);
 			DayCare.getStudentsList().add(student);
 			Parent parent = student.getParent();
-			int parentId = impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
-					parent.getPhone()));
+			int parentId = impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(),
+					parent.getEmail(), parent.getPhone()));
 			student.setParentId(parentId);
 			impl.addStudent(student);
 		}
@@ -36,7 +36,7 @@ public class StudentService {
 	}
 
 	// enroll Student
-	public Student registerStudent(Student newStudent)  throws Exception {
+	public Student registerStudent(Student newStudent) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		Parent parent = newStudent.getParent();
 		impl.addParent(new Parent(parent.getParentId(), parent.getFirstName(), parent.getLastName(), parent.getEmail(),
@@ -47,8 +47,9 @@ public class StudentService {
 	}
 
 	// update Immunization Record
-	//get these value from UI
-	//update dosesTaken by dosesTaken + 1, lastShotDate, nextShotDate, set IsVaccinated to true if all doses given
+	// get these value from UI
+	// update dosesTaken by dosesTaken + 1, lastShotDate, nextShotDate, set
+	// IsVaccinated to true if all doses given
 	public void updateStudentImmunizationRecord(Vaccine vaccine) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		impl.updateVaccineByStudentIdAndVaccineId(vaccine);
@@ -59,25 +60,33 @@ public class StudentService {
 	// add ratio rules from csv
 
 	// get ratio rules
-	
+
 	public List<Vaccine> getStudentImmunizationRecord(int studentId) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		List<Vaccine> vaccines = impl.getVaccinesByStudentId(studentId);
 		return vaccines;
 	}
-	
+
 	public List<Student> getAllStudents() throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		List<Student> students = impl.getAllStudents();
 		return students;
 	}
-	
+
 	public Student getStudentById(int studentId) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		Student student = impl.getStudentById(studentId);
 		return student;
 	}
-	
-	
+
+	public void deleteStudent(int studentId) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.deleteStudent(studentId);
+	}
+
+	public void updateStudent(Student student) throws Exception {
+		StudentDaoImpl impl = new StudentDaoImpl();
+		impl.updateStudent(student);
+	}
 
 }

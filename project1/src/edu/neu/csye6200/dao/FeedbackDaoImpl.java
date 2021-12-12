@@ -51,6 +51,13 @@ public class FeedbackDaoImpl {
 		return writeResultSet(resultSet);
 	}
 	
+	public List<Feedback> getAllReviews() throws Exception {
+		connection = getConnection();
+		preparedStatement = connection.prepareStatement(" select * from daycare.Feedback ");
+		resultSet = preparedStatement.executeQuery();
+		return writeResultSet(resultSet);
+	}
+	
 	public LocalDate trackNextReviewdate(int teacherId) throws Exception {
 		connection = getConnection();
 		preparedStatement = connection.prepareStatement(
@@ -73,5 +80,6 @@ public class FeedbackDaoImpl {
 		}
 		return feedbackList;
 	}
+	
 
 }
