@@ -32,7 +32,7 @@ public class VaccinationUI extends javax.swing.JFrame {
 
     private long initialId=0;
     private Student student;
-    private  Vaccine vaccine= new Vaccine();
+    private  Vaccine vaccine;
     private List<Vaccine> vacc;
     /**
      * Creates new form Teacher
@@ -260,7 +260,7 @@ public class VaccinationUI extends javax.swing.JFrame {
   	//TODO add db integration by importing package/class from backend
    
       //  Student student = new Student();
-        // vaccine= new Vaccine();
+        vaccine= new Vaccine();
         jTextFieldStudentName.setText(student.getFirstName() +" "+student.getLastName());
         java.util.List<Vaccine> list= new ArrayList<>();
         vaccine.setName(jTextFieldVaccineName.getText());
