@@ -5,10 +5,8 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.Feedback;
-import edu.neu.csye6200.FeedbackService;
-import edu.neu.csye6200.Group;
-import edu.neu.csye6200.scheduler.GroupHelper;
+import edu.neu.csye6200.controller.FeedbackService;
+import edu.neu.csye6200.model.Feedback;
 
 import java.util.List;
 import javax.swing.JTable;

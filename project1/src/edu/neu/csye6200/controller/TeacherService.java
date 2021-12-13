@@ -1,10 +1,15 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.controller;
 
 import java.util.List;
 
 import edu.neu.csye6200.dao.TeacherDaoImpl;
+import edu.neu.csye6200.model.DayCare;
+import edu.neu.csye6200.model.Teacher;
 import edu.neu.csye6200.util.FileUtil;
-
+/**
+ * @author eraricamehra
+ *
+ */
 public class TeacherService {
 	
 	public int registerTeacher(Teacher teacher) throws Exception {

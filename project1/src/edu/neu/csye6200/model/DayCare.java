@@ -1,4 +1,4 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 /**
  * 
@@ -7,7 +7,7 @@ package edu.neu.csye6200;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.csye6200.scheduler.GroupHelper;
+import edu.neu.csye6200.controller.GroupHelper;
 
 
 /**
@@ -62,8 +62,7 @@ public class DayCare {
 
 	public static void demo() throws Exception {
 
-		GroupHelper.groupMe();
-		// Schedular goes here
+		
 	}
 }
 

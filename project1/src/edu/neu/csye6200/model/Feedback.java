@@ -1,7 +1,11 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.time.LocalDate;
 
+/**
+ * @author eraricamehra
+ *
+ */
 public class Feedback {
 
 	private int employeeId;
@@ -62,6 +66,12 @@ public class Feedback {
 
 	public void setNextFeedbackDate(LocalDate nextFeedbackDate) {
 		this.nextFeedbackDate = nextFeedbackDate;
+	}
+
+	@Override
+	public String toString() {
+		return "Feedback [employeeId=" + employeeId + ", review=" + review + ", rating=" + rating
+				+ ", lastFeedBackDate=" + lastFeedBackDate + ", nextFeedbackDate=" + nextFeedbackDate + "]";
 	}
 
 }

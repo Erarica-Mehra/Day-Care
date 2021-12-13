@@ -1,4 +1,4 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.scheduler;
 
 import java.util.List;
 import java.util.Properties;
@@ -14,11 +14,12 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+/**
+ * @author eraricamehra
+ *
+ */
 public class SendEmail {
-// steps::
-	// setup server
-	// draft an email
-	// send email
+
 	Session session = null;
 	MimeMessage mimeMessage = null;
 
@@ -52,8 +53,8 @@ public class SendEmail {
 	}
 
 	public MimeMessage createEmail(List<String> emailIds) {
-		String subject = "Testing";
-		String body = "This is my email body";
+		String subject = "Reminder: Daycare";
+		String body = "Dear Parent/Gaurdian, \n Your ward is due for their annual registration renewal. \n Sincerely, \n Daycare ";
 
 		try {
 			mimeMessage = new MimeMessage(session);
@@ -61,11 +62,6 @@ public class SendEmail {
 				mimeMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(e));
 			mimeMessage.setSubject(subject);
 			mimeMessage.setText(body);
-//			MimeBodyPart bodyPart = new MimeBodyPart();
-//			 bodyPart.setContent(body,"html/text");
-//			 MimeMultipart multiPart = new MimeMultipart();
-//			 multiPart.addBodyPart(bodyPart);
-//			 mimeMessage.setContent(multiPart);
 			return mimeMessage;
 		} catch (AddressException e) {
 			e.printStackTrace();

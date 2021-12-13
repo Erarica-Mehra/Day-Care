@@ -1,6 +1,5 @@
 package edu.neu.csye6200.dao;
 
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
@@ -11,10 +10,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.csye6200.Parent;
-import edu.neu.csye6200.Student;
-import edu.neu.csye6200.Vaccine;
+import edu.neu.csye6200.model.Parent;
+import edu.neu.csye6200.model.Student;
+import edu.neu.csye6200.model.Vaccine;
 
+/**
+ * @author eraricamehra
+ *
+ */
 public class StudentDaoImpl {
 
 	private Connection connection = null;

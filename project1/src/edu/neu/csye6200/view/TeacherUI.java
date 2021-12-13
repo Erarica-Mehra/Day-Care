@@ -27,10 +27,10 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
-import edu.neu.csye6200.StudentService;
-import edu.neu.csye6200.Teacher;
-import edu.neu.csye6200.TeacherFactory;
-import edu.neu.csye6200.TeacherService;
+import edu.neu.csye6200.controller.StudentService;
+import edu.neu.csye6200.controller.TeacherService;
+import edu.neu.csye6200.factory.TeacherFactory;
+import edu.neu.csye6200.model.Teacher;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.util.ValidationUtil;
@@ -356,50 +356,6 @@ public class TeacherUI extends javax.swing.JFrame {
         
         boolean validSave = true;
  
-//        if(ValidationUtil.verifyName(jTextFieldTeacherFirstName.getText()) || ValidationUtil.verifyName(jTextFieldTeacherLastName.getText()))
-//        {
-//            teacher.setFirstName(jTextFieldTeacherFirstName.getText());
-//            teacher.setLastName(jTextFieldTeacherLastName.getText());
-//             
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered correct names");
-//        	validSave = false;
-//        }
-//        
-//        if(!jTextFieldJoiningDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldJoiningDate.getText())) {
-//        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//      	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-//      	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
-//            teacher.setJoiningDate(doj);
-//            //teacher.setAnnualReviewDate(revDate);
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered correct dates");
-//        	validSave = false;
-//        }
-//        
-//        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-//            teacher.setEmailID(jTextFieldEmail.getText());
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered correct email");
-//        	validSave = false;
-//        }
-//       
-//        System.out.println(teacher.toString());
-        
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//  	    LocalDate doj = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);  
-//  	    //LocalDate revDate  = LocalDate.parse(jTextFieldTeacherAnnualReviewDate.getText(), formatter);  
-//            teacher.setJoiningDate(doj);
-//            //teacher.setAnnualReviewDate(revDate);
-//            System.out.println(teacher.toString());
-        //Teacher teacherAdd = new Teacher(initialId, jTextFieldTeacherFirstName.getText(), jTextFieldTeacherLastName.getText(), jTextFieldEmail.getText(), (ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText())));
-        
-        //System.out.println(teacherAdd.getAnnualReviewDate());
-        
-        //teacherList.add(teacherAdd);
         Teacher teacherAdd = TeacherFactory.getInstance().getObject();
         teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
         teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
@@ -417,7 +373,7 @@ public class TeacherUI extends javax.swing.JFrame {
         teacherList.add(teacherAdd);
         
         try {
-        	
+        	System.out.println("Regestering teacher into Day care system");
         	teacherList.forEach(teacher -> {
 				try {
 					System.out.println(teacher);
@@ -428,7 +384,7 @@ public class TeacherUI extends javax.swing.JFrame {
 				}
 			});
         	
-            //ValidationUtil.showSuccess("Teacher saved successfully!");
+            ValidationUtil.showSuccess("Teachers saved successfully!");
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(TeacherUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -453,33 +409,12 @@ public class TeacherUI extends javax.swing.JFrame {
 			List<String> teacherRecords = FileUtil.readTextFile(selectedFile.getPath());
 			//teacherRecords.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 			teacherRecords.forEach(teacher->{modelTable.addRow(fillTableFromCSV(teacher));});
-		
+			System.out.println("Successfully created table from teachers CSV file");
+			ValidationUtil.showSuccess("File uploaded successfully!");
 		}
     }//GEN-LAST:event_jButtonUploadActionPerformed
     
-//    public void searchTableContents(String searchString) {
-//        DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
-//        System.out.println("Started searching...");
-//        //To empty the table before search
-//       
-//        Vector originalTableModel = (Vector) ((DefaultTableModel) jTable1.getModel()).getDataVector().clone();
-//        currtableModel.setRowCount(0);
-//        //To search for contents from original table content
-//        for (Object rows : originalTableModel) {
-//            Vector rowVector = (Vector) rows;
-//            for (Object column : rowVector) {
-//                if (column.toString().contains(searchString)) {
-//                    //content found so adding to table
-//                    searchCounter+=1;
-//                    currtableModel.addRow(rowVector);
-//                    System.out.println(+searchCounter+ " Matches Found");
-//                    break;
-//                }
-//                
-//            }
-//
-//        }
-//    };
+
     
     public void searchTableContents(String searchString) {
         DefaultTableModel currtableModel = (DefaultTableModel) jTable1.getModel();
@@ -553,14 +488,14 @@ public class TeacherUI extends javax.swing.JFrame {
 				mTable.addRow(data);
 			}
 			
-			
+			ValidationUtil.showSuccess("Successfully downloaded teachersDownload.txt CSV file");
 			
 			
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded teachers.txt CSV file");
 		} catch (Exception e) {
-			System.out.println("Error in downloading teachers.txt CSV file");
+			//System.out.println("Error in downloading teachers.txt CSV file");
 			e.printStackTrace();
 		}
 		
@@ -600,9 +535,10 @@ public class TeacherUI extends javax.swing.JFrame {
     	int delId = jTable1.getSelectedRow()+1;
     	TeacherService service = new TeacherService();
     	try {
-    		System.out.println("Deleting student record with id: "+delId);
+    		System.out.println("Deleting teacher record with id: "+delId);
     		model.removeRow(jTable1.getSelectedRow());
 			service.deleteTeacher(delId);
+			ValidationUtil.showSuccess("Successfully deleted teacher record!");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

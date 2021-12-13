@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import java.util.List;
 public class Classroom {
 
 	private int classId;
-	private List<Group> groups = new ArrayList<>();
 	private int groupsAllowed;
 	private int groupsEnrolled;
+	List<Group> groups = new ArrayList<>();
 	static int id = 0;
 	private int idC = 0;
 	
@@ -97,10 +97,6 @@ public class Classroom {
 	
 	@Override
 	public String toString() {
-		String temp="";
-		for(int i=0;i<groups.size();i++) {
-			temp = temp + " " +  groups.get(i).getTeacher().getFirstName();
-		}	
-		return temp;
+		return "Classroom [classId=" + classId + ", groups=" + groups +"]";
 	}
 }

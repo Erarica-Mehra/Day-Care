@@ -10,8 +10,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.csye6200.Classroom;
-import edu.neu.csye6200.Group;
+import edu.neu.csye6200.model.Classroom;
+import edu.neu.csye6200.model.Group;
 
 public class ClassGroupDaoImpl {
 	private Connection connection = null;
@@ -120,6 +120,5 @@ public class ClassGroupDaoImpl {
 		return groups;
 	}
 
-	// TODO add getAllStudentMethod
 
 }

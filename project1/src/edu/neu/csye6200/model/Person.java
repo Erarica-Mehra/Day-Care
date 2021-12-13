@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.time.LocalDate;
 import java.util.Date;
@@ -37,4 +37,10 @@ public abstract class Person {
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
+
+	@Override
+	public String toString() {
+		return "Person [firstName=" + firstName + ", lastName=" + lastName + "]";
+	}
+	
 }

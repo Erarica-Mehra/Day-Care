@@ -1,9 +1,10 @@
 /**
  * 
  */
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.time.LocalDate;
+
 import edu.neu.csye6200.util.ConversionUtil;
 
 /**

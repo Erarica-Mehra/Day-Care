@@ -5,12 +5,13 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.Classroom;
-import edu.neu.csye6200.Feedback;
-import edu.neu.csye6200.FeedbackService;
-import edu.neu.csye6200.Group;
-import edu.neu.csye6200.Teacher;
-import edu.neu.csye6200.scheduler.GroupHelper;
+import edu.neu.csye6200.controller.FeedbackService;
+import edu.neu.csye6200.controller.GroupHelper;
+import edu.neu.csye6200.model.Classroom;
+import edu.neu.csye6200.model.Feedback;
+import edu.neu.csye6200.model.Group;
+import edu.neu.csye6200.model.Teacher;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -232,8 +233,10 @@ public class LMDLandingPage extends javax.swing.JFrame {
         	}
             GroupHelper helper= new GroupHelper();
            List<Group> grouplist=helper.getClassRoomGroupInfo();
-           ClassroomUI classUI= new ClassroomUI(grouplist);
-           classUI.setVisible(true);
+           //ClassroomUI classUI= new ClassroomUI(grouplist);
+           classroom = new ClassroomUI(grouplist);
+           //classUI.setVisible(true);
+           classroom.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(LMDLandingPage.class.getName()).log(Level.SEVERE, null, ex);
         }

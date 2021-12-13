@@ -1,4 +1,4 @@
-package edu.neu.csye6200.scheduler;
+package edu.neu.csye6200.controller;
 
 /**
  * 
@@ -9,18 +9,16 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.stream.Collectors;
 
-import edu.neu.csye6200.Classroom;
-import edu.neu.csye6200.ClassroomFactory;
-import edu.neu.csye6200.DayCare;
-import edu.neu.csye6200.Group;
-import edu.neu.csye6200.GroupFactory;
-import edu.neu.csye6200.Student;
-import edu.neu.csye6200.StudentFactory;
-import edu.neu.csye6200.StudentService;
-import edu.neu.csye6200.Teacher;
-import edu.neu.csye6200.TeacherFactory;
-import edu.neu.csye6200.TeacherService;
 import edu.neu.csye6200.dao.ClassGroupDaoImpl;
+import edu.neu.csye6200.factory.ClassroomFactory;
+import edu.neu.csye6200.factory.GroupFactory;
+import edu.neu.csye6200.factory.StudentFactory;
+import edu.neu.csye6200.factory.TeacherFactory;
+import edu.neu.csye6200.model.Classroom;
+import edu.neu.csye6200.model.DayCare;
+import edu.neu.csye6200.model.Group;
+import edu.neu.csye6200.model.Student;
+import edu.neu.csye6200.model.Teacher;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.view.StudentUI;
 import edu.neu.csye6200.view.TeacherUI;

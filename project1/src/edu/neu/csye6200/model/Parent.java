@@ -1,15 +1,20 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.math.BigInteger;
 
+
+/**
+ * @author eraricamehra
+ *
+ */
 public class Parent  extends Person {
 	
 	private int parentId;
 	private String email;
 	private BigInteger phone;
+	
 	public Parent() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Parent(int parentId, String firstName, String lastName,String email, BigInteger phone) {
@@ -37,6 +42,11 @@ public class Parent  extends Person {
 	}
 	public void setPhone(BigInteger phone) {
 		this.phone = phone;
+	}
+
+	@Override
+	public String toString() {
+		return "Parent [parentId=" + parentId + ", email=" + email + ", phone=" + phone + "]";
 	}
 
 }

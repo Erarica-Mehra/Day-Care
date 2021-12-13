@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.math.BigInteger;
 import java.time.LocalDate;
@@ -82,7 +82,6 @@ public class Student extends Person {
 		vaccinesList.add(field[11]);
 		vaccinesList.add(field[12]);
 		this.immunizationRecord = getStudentImmunizationRecord(vaccinesList, studentId);
-		// TODO add remaining vaccines
 
 	}
 
@@ -158,10 +157,6 @@ public class Student extends Person {
 		this.parentId = parentId;
 	}
 
-	@Override
-	public String toString() {
-		return this.firstName + " " + this.lastName;
-	}
 
 	public List<Vaccine> getStudentImmunizationRecord(List<String> vaccinesList, int studentId) {
 		for (String vaccineDetails : vaccinesList) {
@@ -310,5 +305,12 @@ public class Student extends Person {
 			else
 				vaccine.setNextShotDate(vaccine.getLastShotDate().plus(2, ChronoUnit.MONTHS));
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "Student [studentId=" + studentId + ", registrationDate=" + registrationDate + ", address=" + address
+				+ ", age=" + age + ", dob=" + dob + ", parent=" + parent + ", parentId=" + parentId
+				+ ", immunizationRecord=" + immunizationRecord +  "]";
 	}
 }

@@ -5,15 +5,13 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.Parent;
-import edu.neu.csye6200.Student;
-import edu.neu.csye6200.StudentFactory;
-import edu.neu.csye6200.StudentService;
-import edu.neu.csye6200.Vaccine;
-import edu.neu.csye6200.util.ConversionUtil;
+import edu.neu.csye6200.controller.StudentService;
+import edu.neu.csye6200.factory.StudentFactory;
+import edu.neu.csye6200.model.Parent;
+import edu.neu.csye6200.model.Student;
+import edu.neu.csye6200.model.Vaccine;
 import edu.neu.csye6200.util.FileUtil;
 import edu.neu.csye6200.util.ValidationUtil;
-import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,17 +20,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 /**
  *
@@ -427,58 +421,7 @@ public class StudentUI extends javax.swing.JFrame {
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
 
        StudentService studentService = new StudentService();
-//  	//TODO add db integration by importing package/class from backend
-//        Student s = new Student();
-//        Parent p = new Parent();
-//        boolean validSave = true;
-//        
-//        if(ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-//               && ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || ValidationUtil.verifyName(jTextFieldParentLastName.getText()))
-//        {
-//                s.setFirstName(jTextFieldStudentFirstName.getText());
-//                s.setLastName(jTextFieldStudentLastName.getText());
-//                p.setFirstName(jTextFieldParentFirstName.getText());
-//                p.setLastName(jTextFieldParentLastName.getText());
-//
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered valid names!");
-//        	validSave = false;
-//        }
-//        
-//        if(ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-//            p.setEmail(jTextFieldEmail.getText());
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered valid names!");
-//        	validSave = false;
-//        }
-//        
-//        if(!jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText()) ||
-//        		!jTextFieldRegDate.getText().isBlank() || ValidationUtil.isValid(jTextFieldRegDate.getText())) {
-//        	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-//      	    LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
-//      	    LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
-//      	    s.setDob(dob);
-//    	    s.setRegistrationDate(regDate);
-//    	    s.setAge(ConversionUtil.getAgeFromDOB(dob));
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure you entered correct dates!");
-//        	validSave = false;
-//        }
-//        
-//        if(!jTextFieldPhoneNumber.getText().isBlank() || !jTextFieldAddress.getText().isBlank()) {
-//        	s.setAddress(jTextFieldAddress.getText());
-//        	p.setPhone(new BigInteger(jTextFieldPhoneNumber.getText()));
-//        }
-//        else {
-//        	ValidationUtil.showError("Please make sure no field is blank!");
-//        	validSave = false;
-//        }
-//        s.setParent(p);
-//        System.out.println(s.toString());
-       
+
        Student studentAdd = StudentFactory.getInstance().getObject();
        Parent parent = new Parent();
        //seting studentId as row value
@@ -510,7 +453,7 @@ public class StudentUI extends javax.swing.JFrame {
        studentList.add(studentAdd);
         
         try {
-        	
+        	System.out.println("Regestering student into Day care system");
         	studentList.forEach(student -> {
 				try {
 					studentService.registerStudent(student);
@@ -520,7 +463,7 @@ public class StudentUI extends javax.swing.JFrame {
 				}
 			});
         		
-                //ValidationUtil.showSuccess("Teacher saved successfully!");
+         ValidationUtil.showSuccess("Students saved successfully!");
         	
             // TODO add your handling code here:
         } catch (Exception ex) {
@@ -536,8 +479,8 @@ public class StudentUI extends javax.swing.JFrame {
 		// int returnValue = jfc.showSaveDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = jfc.getSelectedFile();
-			System.out.println("Uploading CSV file from: " + selectedFile.getPath());
-			System.out.println("Uploading Students CSV file...");
+			System.out.println("Uploading Students CSV file from: " + selectedFile.getPath());
+			//System.out.println("Uploading Students CSV file...");
 			if(modelTable.getRowCount() > 0) {
 				System.out.println("Recreating Student Info table by overriding data");
 				modelTable.setRowCount(0);
@@ -546,7 +489,8 @@ public class StudentUI extends javax.swing.JFrame {
 			java.util.List<String> studentRecords = FileUtil.readTextFile(selectedFile.getPath());
 			//teacherRecords.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 			studentRecords.forEach(student->{modelTable.addRow(fillTableFromCSV(student));});
-			System.out.println("Successfully generated table from students CSV file");
+			System.out.println("Successfully created table from students CSV file");
+			ValidationUtil.showSuccess("File uploaded successfully!");
 		}
     }//GEN-LAST:event_jButtonUploadActionPerformed
     
@@ -608,12 +552,12 @@ public class StudentUI extends javax.swing.JFrame {
 	            csv.write("\n");
 	        }
 			csv.close();
-			ValidationUtil.showSuccess("Successfully downloaded students.txt CSV file");
+			ValidationUtil.showSuccess("Successfully downloaded studentsDownload.txt CSV file");
 			//TODO add info_dialog to show success
 			
-			System.out.println("Successfully downloaded students.txt CSV file");
+			System.out.println("Successfully downloaded studentsDownload.txt CSV file");
 		} catch (IOException e) {
-			System.out.println("Error in downloading students.txt CSV file");
+			//System.out.println("Error in downloading studentsDownload.txt CSV file");
 			e.printStackTrace();
 		}
         
@@ -653,36 +597,7 @@ public class StudentUI extends javax.swing.JFrame {
         
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel(); 
         initialId = model.getRowCount()+1;
-        
 
-        //Validation Part
-//        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
-//                || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
-//        	
-//        	ValidationUtil.showError("Please make sure you entered correct name fields!");
-//         }
-//        
-//        else if(!ValidationUtil.isValid(jTextFieldRegDate.getText()) || jTextFieldRegDate.getText().isBlank() || 
-//        		jTextFieldStudentDob.getText().isBlank() || ValidationUtil.isValid(jTextFieldStudentDob.getText())) {
-//        	ValidationUtil.showError("Please make sure you entered correct date field!");
-//        }
-//        
-//        else if(!ValidationUtil.verifyEmail(jTextFieldEmail.getText())){
-//        	ValidationUtil.showError("Please make sure you entered correct email field!");
-//        }
-//        else if(jTextFieldAddress.getText().isBlank() || jTextFieldPhoneNumber.getText().isBlank()) {
-//        	ValidationUtil.showError("Please make sure no feild is blank!");
-//        }
-//        
-//        else if(!isDuplicate(model,jTextFieldStudentFirstName.getText(),jTextFieldEmail.getText())) {
-//        	model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
-//        	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
-//        }
-//        else {
-//        	System.out.println("Record already exists!");
-//        	ValidationUtil.showWarning("Record with same name and email already exists!");
-//        }
-        
         model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
     	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
         
@@ -714,7 +629,7 @@ public class StudentUI extends javax.swing.JFrame {
     	else {
     		try {
                 // TODO add your handling code here:
-    			System.out.println("Setting vaccine details for new student with Id: "+initialId);
+    			System.out.println("Setting vaccine details for student with Id: "+initialId);
                //    student= new Student();
                    vaccine= new Vaccine();
                    System.out.println(student.getFirstName());
@@ -747,6 +662,7 @@ public class StudentUI extends javax.swing.JFrame {
     		System.out.println("Deleting student record with id: "+delId);
     		model.removeRow(jTable1.getSelectedRow());
 			service.deleteStudent(delId);
+			ValidationUtil.showSuccess("Successfully deleted student record!");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

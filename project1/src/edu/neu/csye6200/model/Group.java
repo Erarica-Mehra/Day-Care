@@ -1,7 +1,7 @@
 /**
  * 
  */
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,6 @@ public class Group {
 	
     private int groupId;
     private int teacherId;
-
 	private int classId;
 	private int groupSize;
 	private int studentsEnrolled;
@@ -67,7 +66,7 @@ public class Group {
 	public void setStudentsEnrolled(int studentsEnrolled) {
 		this.studentsEnrolled = studentsEnrolled;
 	}
-	//Added later
+	
 	public void addStudents(Student s) {
 		students.add(s);
 	}
@@ -94,6 +93,12 @@ public class Group {
 	}
 	public void setClassId(int classId) {
 		this.classId = classId;
+	}
+	@Override
+	public String toString() {
+		return "Group [groupId=" + groupId + ", teacherId=" + teacherId + ", classId=" + classId + ", groupSize="
+				+ groupSize + ", studentsEnrolled=" + studentsEnrolled + ", teacher=" + teacher + ", students="
+				+ students + "]";
 	}
 	
 }

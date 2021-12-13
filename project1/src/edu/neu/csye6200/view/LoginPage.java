@@ -7,6 +7,9 @@ package edu.neu.csye6200.view;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.JTextField;
 
 /**
@@ -18,6 +21,13 @@ public class LoginPage extends javax.swing.JFrame {
     /**
      * Creates new form Auth
      */
+	
+	public static Map<String,String> credentialsMap;
+	static {
+		credentialsMap = new HashMap<>();
+		credentialsMap.put("admin", "admin");
+	}
+	
     public LoginPage() {
         initComponents();
     }
@@ -164,9 +174,23 @@ public class LoginPage extends javax.swing.JFrame {
 
     private void jButton1_SubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_SubmitActionPerformed
         // TODO add your handling code here:
-      jLabel1Response.setText("Welcome "+jTextField1EmailAddress.getText()+"!"+" Login Successfull");
-       LMDLandingPage lmd= new LMDLandingPage();
-       lmd.setVisible(true);
+    	if(!jTextField1EmailAddress.getText().isBlank() && credentialsMap.containsKey(jTextField1EmailAddress.getText())) {
+    		if(!String.valueOf(jPasswordField.getPassword()).isBlank() && 
+    				String.valueOf(jPasswordField.getPassword()).equals(credentialsMap.get(jTextField1EmailAddress.getText()))) {
+    			jLabel1Response.setText("Welcome "+jTextField1EmailAddress.getText()+"!"+" Login Successfull");
+     	       LMDLandingPage lmd= new LMDLandingPage();
+     	       lmd.setVisible(true);
+    		}
+    		else {
+    			jLabel1Response.setText("Please verify password");
+    		}
+    		
+    	}
+    	else {
+    		System.out.println("Admin login successfull!");
+    		jLabel1Response.setText("Oops "+jTextField1EmailAddress.getText()+"!"+" Incorrect user name");
+    	}
+      
     }//GEN-LAST:event_jButton1_SubmitActionPerformed
 
     private void jTextField1EmailAddressActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1EmailAddressActionPerformed

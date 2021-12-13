@@ -1,6 +1,7 @@
 package edu.neu.csye6200.dao;
 
 import java.sql.Connection;
+
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -10,8 +11,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.model.Teacher;
 
+/**
+ * @author eraricamehra
+ *
+ */
 public class TeacherDaoImpl {
 
 	private Connection connection = null;

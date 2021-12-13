@@ -10,7 +10,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.neu.csye6200.Feedback;
+import edu.neu.csye6200.model.Feedback;
+
+/**
+ * @author eraricamehra
+ *
+ */
 
 public class FeedbackDaoImpl {
 	private Connection connection = null;

@@ -3,6 +3,8 @@ package edu.neu.csye6200;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.neu.csye6200.model.Vaccine;
+
 public class ImmunizationRecord {
 	
 	private List<Vaccine> immunizationRecord = new ArrayList<>();

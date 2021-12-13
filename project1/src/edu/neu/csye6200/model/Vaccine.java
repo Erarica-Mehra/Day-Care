@@ -1,10 +1,15 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * @author eraricamehra
+ *
+ */
 public class Vaccine {
 
 	private int id;
@@ -134,6 +139,13 @@ public class Vaccine {
 
 	public void setDosestaken(int dosestaken) {
 		this.dosestaken = dosestaken;
+	}
+
+	@Override
+	public String toString() {
+		return "Vaccine [id=" + id + ", name=" + name + ", dosestaken=" + dosestaken + ", totalDoses=" + totalDoses
+				+ ", lastShotDate=" + lastShotDate + ", nextShotDate=" + nextShotDate + ", studentId=" + studentId
+				+ ", isVaccinated=" + isVaccinated + ", vaccinationRecord=" + vaccinationRecord + "]";
 	}
 
 }

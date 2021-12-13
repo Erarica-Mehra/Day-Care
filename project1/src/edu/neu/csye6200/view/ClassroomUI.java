@@ -5,14 +5,12 @@
  */
 package edu.neu.csye6200.view;
 
-import edu.neu.csye6200.Group;
-import edu.neu.csye6200.scheduler.GroupHelper;
+import edu.neu.csye6200.controller.GroupHelper;
+import edu.neu.csye6200.model.Group;
 
 import java.util.List;
-import javax.swing.JFileChooser;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 
 /**
  *
@@ -30,6 +28,7 @@ public class ClassroomUI extends javax.swing.JFrame {
         jTableClassroomInfo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableClassroomInfo.setAutoCreateColumnsFromModel(true);
         try {
+        	System.out.println("Showing Class romm and group info:");
         	fetchClassRoomGroupInfo((DefaultTableModel)jTableClassroomInfo.getModel())
         	.addRow(new Object[]{classroomId,groupId,groupCount,studentCount,teacherAssigned});
 		} catch (Exception e) {
@@ -40,18 +39,9 @@ public class ClassroomUI extends javax.swing.JFrame {
         initComponents();
         jTableClassroomInfo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableClassroomInfo.setAutoCreateColumnsFromModel(true);
-//        this.grouplist= grouplist;
-//        for(Group list:grouplist){
-//           classroomId=String.valueOf(list.getClassId());
-//           groupId=  String.valueOf(list.getGroupId());
-//           //groupCount= String.valueOf(list.getGroupSize());
-//           studentCount=String.valueOf(list.getStudents().size());
-//           teacherAssigned= String.valueOf(list.getTeacher());
-//           DefaultTableModel model = (DefaultTableModel)jTableClassroomInfo.getModel(); 
-//           model.addRow(new Object[]{groupId, classroomId, teacherAssigned, studentCount});
-//        }
-        DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableClassroomInfo.getModel(); 
 
+        DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableClassroomInfo.getModel(); 
+        System.out.println("Showing Class romm and group info:");
         try {
         	fetchClassRoomGroupInfo(model);
 		} catch (Exception e) {
@@ -124,12 +114,6 @@ public class ClassroomUI extends javax.swing.JFrame {
         jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
-//        try {
-//			jTableClassroomInfo.setModel(fetchShelterServices(new javax.swing.table.DefaultTableModel()));
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
         jTableClassroomInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null}

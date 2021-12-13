@@ -1,24 +1,31 @@
-package edu.neu.csye6200;
+package edu.neu.csye6200.controller;
 
 import java.time.LocalDate;
+
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import edu.neu.csye6200.dao.StudentDaoImpl;
-import edu.neu.csye6200.dao.TeacherDaoImpl;
+import edu.neu.csye6200.model.DayCare;
+import edu.neu.csye6200.model.Parent;
+import edu.neu.csye6200.model.Student;
+import edu.neu.csye6200.model.Vaccine;
 import edu.neu.csye6200.util.FileUtil;
 
+/**
+ * @author eraricamehra
+ *
+ */
 public class StudentService {
 
 	// gives number of days for the next renewal ex: 40 days for the next renewal
 	// call this method to check how many days left for annual registration renewal
 	public long trackAnnualRegistrationRenewal(Student student) {
-		LocalDate currentDate = LocalDate.now();
+		LocalDate currentDate = student.getRegistrationDate().plusYears(1);
 		long difference = ChronoUnit.DAYS.between(student.getRegistrationDate(), currentDate);
 		return difference;
 	}
 
-	// register using csv
 	public Student enrollStudentsFromCSV() throws Exception {
 		List<String> studentCSVData = FileUtil.readTextFile("resources/students.txt");
 		StudentDaoImpl impl = new StudentDaoImpl();
@@ -46,10 +53,6 @@ public class StudentService {
 		return newStudent;
 	}
 
-	// update Immunization Record
-	// get these value from UI
-	// update dosesTaken by dosesTaken + 1, lastShotDate, nextShotDate, set
-	// IsVaccinated to true if all doses given
 	public void updateStudentImmunizationRecord(Vaccine vaccine) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		impl.updateVaccineByStudentIdAndVaccineId(vaccine);
@@ -59,12 +62,6 @@ public class StudentService {
 		StudentDaoImpl impl = new StudentDaoImpl();
 		impl.addStudentVaccinationRecord(vaccine);
 	}
-
-	// get Student Record
-
-	// add ratio rules from csv
-
-	// get ratio rules
 
 	public List<Vaccine> getStudentImmunizationRecord(int studentId) throws Exception {
 		StudentDaoImpl impl = new StudentDaoImpl();
