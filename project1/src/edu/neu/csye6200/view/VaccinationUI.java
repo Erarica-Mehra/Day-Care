@@ -5,6 +5,7 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.backview.StudentUI;
 import edu.neu.csye6200.Parent;
 import edu.neu.csye6200.Student;
 import edu.neu.csye6200.StudentService;

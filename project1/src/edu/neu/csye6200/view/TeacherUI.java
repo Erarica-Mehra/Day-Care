@@ -36,7 +36,7 @@ import edu.neu.csye6200.util.ValidationUtil;
  *
  * @author erruc
  */
-public class TeacherUI extends javax.swing.JFrame {
+public class TeacherUI extends javax.swing.JPanel {
 
     private int initialId=0;
     Teacher teacher;
@@ -63,13 +63,13 @@ public class TeacherUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelTeacherTitle = new javax.swing.JLabel();
-        jLabelLogo = new javax.swing.JLabel();
         jPanelToolBar = new javax.swing.JPanel();
         jTextFieldSearch = new javax.swing.JTextField();
         JLabelSearch = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
         jButtonDownload = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
+        jButtonDeleteSelRow = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabeTeacherlFirstName = new javax.swing.JLabel();
         jTextFieldTeacherFirstName = new javax.swing.JTextField();
@@ -86,7 +86,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(178, 255, 176));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -102,28 +102,20 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabelTeacherTitle.setText("Teacher Info");
         jLabelTeacherTitle.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jLabelLogo.setBackground(new java.awt.Color(51, 51, 51));
-        jLabelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmdic1.PNG"))); // NOI18N
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelLogo)
-                .addGap(392, 392, 392)
+                .addGap(459, 459, 459)
                 .addComponent(jLabelTeacherTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(654, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jLabelTeacherTitle))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
         );
 
         jPanelToolBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -168,6 +160,14 @@ public class TeacherUI extends javax.swing.JFrame {
             }
         });
 
+        jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
+        jButtonDeleteSelRow.setText("Delete Selected Row");
+        jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDeleteSelRowMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelToolBarLayout = new javax.swing.GroupLayout(jPanelToolBar);
         jPanelToolBar.setLayout(jPanelToolBarLayout);
         jPanelToolBarLayout.setHorizontalGroup(
@@ -177,13 +177,15 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addComponent(JLabelSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
                 .addComponent(jTextFieldSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 403, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 150, Short.MAX_VALUE)
                 .addComponent(jButtonSave)
                 .addGap(56, 56, 56)
                 .addComponent(jButtonUpload)
                 .addGap(48, 48, 48)
                 .addComponent(jButtonDownload)
-                .addGap(332, 332, 332))
+                .addGap(39, 39, 39)
+                .addComponent(jButtonDeleteSelRow)
+                .addGap(124, 124, 124))
         );
         jPanelToolBarLayout.setVerticalGroup(
             jPanelToolBarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -194,11 +196,13 @@ public class TeacherUI extends javax.swing.JFrame {
                     .addComponent(jTextFieldSearch)
                     .addComponent(JLabelSearch)
                     .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteSelRow))
                 .addContainerGap())
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setBackground(new java.awt.Color(178, 255, 176));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabeTeacherlFirstName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -217,13 +221,13 @@ public class TeacherUI extends javax.swing.JFrame {
         jLabeTeacherlLastName.setText("Last Name");
         jPanel2.add(jLabeTeacherlLastName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 78, -1));
 
-//        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
-//        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
-//            public void actionPerformed(java.awt.event.ActionEvent evt) {
-//                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
-//            }
-//        });
-//        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
+        jTextFieldTeacherAnnualReviewDate.setToolTipText("Enter Text");
+        jTextFieldTeacherAnnualReviewDate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldTeacherAnnualReviewDateActionPerformed(evt);
+            }
+        });
+        jPanel2.add(jTextFieldTeacherAnnualReviewDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 232, 400, 30));
 
         jLabelJoiningDate.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabelJoiningDate.setText("Joining Date");
@@ -273,29 +277,28 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextFieldJoiningDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldJoiningDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 170, 400, 30));
 
+        jInternalFrame1.setBackground(new java.awt.Color(178, 255, 176));
         jInternalFrame1.setResizable(true);
         jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
 
+        jTable1.setBackground(new java.awt.Color(178, 255, 176));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Emp Id", "FirstName", "LastName", "Joining Date", "Email Id", "Annual Review Date"
+                "Emp Id", "FirstName", "LastName", "Joining Date", "Annual Review Date", "Email Id"
             }
         ));
-        
-        jTable1.setAutoCreateRowSorter(true);
-        
         jScrollPane1.setViewportView(jTable1);
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -306,8 +309,8 @@ public class TeacherUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanelToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1473, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 589, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)))
                 .addGap(75, 75, 75))
         );
@@ -324,8 +327,6 @@ public class TeacherUI extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
@@ -382,25 +383,17 @@ public class TeacherUI extends javax.swing.JFrame {
 //            teacher.setJoiningDate(doj);
 //            //teacher.setAnnualReviewDate(revDate);
 //            System.out.println(teacher.toString());
-        //Teacher teacherAdd = new Teacher(initialId, jTextFieldTeacherFirstName.getText(), jTextFieldTeacherLastName.getText(), jTextFieldEmail.getText(), (ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText())));
-        
-        //System.out.println(teacherAdd.getAnnualReviewDate());
-        
-        //teacherList.add(teacherAdd);
         Teacher teacherAdd = new Teacher();
         teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
         teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
         teacherAdd.setEmployeeId(initialId);
         teacherAdd.setEmailID(jTextFieldEmail.getText());
-        if(!jTextFieldJoiningDate.getText().isBlank()) {
-        	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-      	   //LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
-      	   LocalDate joinDate  = LocalDate.parse(jTextFieldJoiningDate.getText(), formatter);
-        	teacherAdd.setJoiningDate(joinDate);
-        	teacherAdd.setAnnualReviewDate((joinDate).plusYears(1));
+        if(!jTextFieldJoiningDate.getText().isEmpty()) {
+        	teacherAdd.setJoiningDate(ConversionUtil.StringToLocalDate(jTextFieldJoiningDate.getText()));
         }
         
         System.out.println(teacherAdd);
+        
         teacherList.add(teacherAdd);
         
         try {
@@ -522,31 +515,25 @@ public class TeacherUI extends javax.swing.JFrame {
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
 		try {
-			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachersDownload.txt"));
-			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachersDownload.txt");
-//			
-			Object[] data = new Object[6];
-			TeacherService tservice = new TeacherService();
-			List<Teacher> tList = tservice.getAllTeachers();
-			DefaultTableModel mTable = (DefaultTableModel) jTable1.getModel();
-			mTable.setRowCount(0);
-			for(Teacher t:tList) {
-				data[0] = t.getEmployeeId();
-				data[1] = t.getFirstName();
-				data[2] = t.getLastName();
-				data[3] = t.getJoiningDate();
-				data[4] = t.getEmailID();
-				data[5] = t.getAnnualReviewDate();
-				mTable.addRow(data);
-			}
-			
-			
-			
+			csv = new FileWriter(new File(pathToDownloads+"/Downloads/teachers.txt"));
+			System.out.println("Downloading Teachers Info into CSV at: "+pathToDownloads+"/Downloads/teachers.txt");
+			for (int i = 0; i < model.getRowCount(); i++) {
+	            for (int j = 0; j < model.getColumnCount(); j++) {
+	            	if(j == model.getColumnCount()-1) {
+	            		csv.write(model.getValueAt(i, j).toString());
+	            	}
+	            	else {
+	            		csv.write(model.getValueAt(i, j).toString() + ",");
+	            	}
+	            }
+	            csv.write("\n");
+	        }
+			csv.close();
 			
 			//TODO add info_dialog to show success
 			
 			System.out.println("Successfully downloaded teachers.txt CSV file");
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.out.println("Error in downloading teachers.txt CSV file");
 			e.printStackTrace();
 		}
@@ -574,7 +561,7 @@ public class TeacherUI extends javax.swing.JFrame {
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         initialId = model.getRowCount()+1;
         model.addRow(new Object[]{initialId,jTextFieldTeacherFirstName.getText(),jTextFieldTeacherLastName.getText(),jTextFieldJoiningDate.getText(),
-            jTextFieldEmail.getText(), jTextFieldTeacherAnnualReviewDate.getText()});
+            jTextFieldTeacherAnnualReviewDate.getText(),jTextFieldEmail.getText()});
 
     }//GEN-LAST:event_jAddTeacherButtonMouseClicked
 
@@ -585,6 +572,10 @@ public class TeacherUI extends javax.swing.JFrame {
     private void jTextFieldTeacherFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherFirstNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTeacherFirstNameActionPerformed
+
+    private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonDeleteSelRowMouseClicked
 
     /**
      * @param args the command line arguments
@@ -627,6 +618,118 @@ public class TeacherUI extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -639,6 +742,7 @@ public class TeacherUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel JLabelSearch;
     private javax.swing.JButton jAddTeacherButton;
+    private javax.swing.JButton jButtonDeleteSelRow;
     private javax.swing.JButton jButtonDownload;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JButton jButtonUpload;
@@ -648,7 +752,6 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelAnnualReviewDate;
     private javax.swing.JLabel jLabelEmail;
     private javax.swing.JLabel jLabelJoiningDate;
-    private javax.swing.JLabel jLabelLogo;
     private javax.swing.JLabel jLabelTeacherTitle;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

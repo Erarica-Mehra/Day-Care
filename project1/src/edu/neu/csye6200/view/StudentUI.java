@@ -37,12 +37,12 @@ import javax.swing.table.TableRowSorter;
  *
  * @author erruc
  */
-public class StudentUI extends javax.swing.JFrame {
+public class StudentUI extends javax.swing.JPanel {
 
+    private long initialId=0;
     private VaccinationUI vui;
     private Vaccine vaccine;
     private Student student;
-    private int initialId=0;
     List<Student> studentList = new ArrayList<>();
     /**
      * Creates new form Teacher
@@ -65,7 +65,6 @@ public class StudentUI extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabelStudentTitle = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
         jPanelToolBar = new javax.swing.JPanel();
         jTextFieldSearch = new javax.swing.JTextField();
         JLabelSearch = new javax.swing.JLabel();
@@ -73,6 +72,7 @@ public class StudentUI extends javax.swing.JFrame {
         jButtonSave = new javax.swing.JButton();
         jButtonDownload1 = new javax.swing.JButton();
         jButtonDeleteSelRow = new javax.swing.JButton();
+        jButtonViewStudentVacc = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabelFirstName = new javax.swing.JLabel();
         jTextFieldStudentFirstName = new javax.swing.JTextField();
@@ -98,7 +98,7 @@ public class StudentUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setBackground(new java.awt.Color(178, 255, 176));
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
@@ -114,27 +114,20 @@ public class StudentUI extends javax.swing.JFrame {
         jLabelStudentTitle.setText("Students Info");
         jLabelStudentTitle.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
 
-        jLabel3.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmdic1.PNG"))); // NOI18N
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel3)
-                .addGap(392, 392, 392)
+                .addGap(459, 459, 459)
                 .addComponent(jLabelStudentTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 435, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(826, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jLabelStudentTitle)))
+                .addComponent(jLabelStudentTitle))
         );
 
         jPanelToolBar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -175,7 +168,7 @@ public class StudentUI extends javax.swing.JFrame {
         jButtonDownload1.setText("Download CSV");
         jButtonDownload1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jButtonDownloadMouseClicked(evt);
+                jButtonDownload1MouseClicked(evt);
             }
         });
 
@@ -184,6 +177,19 @@ public class StudentUI extends javax.swing.JFrame {
         jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonDeleteSelRowMouseClicked(evt);
+            }
+        });
+
+        jButtonViewStudentVacc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
+        jButtonViewStudentVacc.setText("View  Student Vaccination");
+        jButtonViewStudentVacc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonViewStudentVaccMouseClicked(evt);
+            }
+        });
+        jButtonViewStudentVacc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonViewStudentVaccActionPerformed(evt);
             }
         });
 
@@ -200,9 +206,11 @@ public class StudentUI extends javax.swing.JFrame {
                 .addComponent(jButtonSave)
                 .addGap(39, 39, 39)
                 .addComponent(jButtonUpload)
-                .addGap(30, 30, 30)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonDownload1)
-                .addGap(41, 41, 41)
+                .addGap(26, 26, 26)
+                .addComponent(jButtonViewStudentVacc)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonDeleteSelRow)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -216,11 +224,13 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jButtonSave, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonUpload, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonDownload1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonDeleteSelRow))
+                    .addComponent(jButtonDeleteSelRow)
+                    .addComponent(jButtonViewStudentVacc))
                 .addContainerGap())
         );
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
+        jPanel2.setBackground(new java.awt.Color(178, 255, 176));
+        jPanel2.setBorder(new javax.swing.border.MatteBorder(null));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabelFirstName.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -338,21 +348,25 @@ public class StudentUI extends javax.swing.JFrame {
         jTextFieldRegDate.setToolTipText("Enter Text");
         jPanel2.add(jTextFieldRegDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(138, 127, 410, 30));
 
+        jButtonAddVaccineRec.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jButtonAddVaccineRec.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/vaccine11.png"))); // NOI18N
         jButtonAddVaccineRec.setText("Add Vaccination Record");
         jButtonAddVaccineRec.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonAddVaccineRecMouseClicked(evt);
             }
-            
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jButtonAddVaccineRecMouseEntered(evt);
+            }
         });
-        jPanel2.add(jButtonAddVaccineRec, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, -1));
+        jPanel2.add(jButtonAddVaccineRec, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 480, -1, 30));
 
         jInternalFrame1.setFrameIcon(null);
         jInternalFrame1.setVisible(true);
 
         jScrollPane1.setAutoscrolls(true);
 
+        jTable1.setBackground(new java.awt.Color(178, 255, 176));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -361,10 +375,6 @@ public class StudentUI extends javax.swing.JFrame {
                 "Student Id", "FirstName", "LastName", "Address", "Reg. Date", "Student Dob", "Parent FName", "Parent LName", "PhoneNumber", "Email Id"
             }
         ));
-        
-        //Sorting every column
-        jTable1.setAutoCreateRowSorter(true);
-        
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setHeaderValue("Student Id");
@@ -381,8 +391,8 @@ public class StudentUI extends javax.swing.JFrame {
 
         jInternalFrame1.getContentPane().add(jScrollPane1, java.awt.BorderLayout.CENTER);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -391,11 +401,11 @@ public class StudentUI extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanelToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1473, Short.MAX_VALUE)
+                    .addComponent(jPanelToolBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1645, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 594, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jInternalFrame1, javax.swing.GroupLayout.DEFAULT_SIZE, 872, Short.MAX_VALUE)))
+                        .addComponent(jInternalFrame1)))
                 .addGap(75, 75, 75))
         );
         layout.setVerticalGroup(
@@ -411,8 +421,6 @@ public class StudentUI extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTextFieldSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchKeyReleased
@@ -424,6 +432,7 @@ public class StudentUI extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUploadMouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerformed
+
 
        StudentService studentService = new StudentService();
 //  	//TODO add db integration by importing package/class from backend
@@ -485,7 +494,7 @@ public class StudentUI extends javax.swing.JFrame {
        studentAdd.setFirstName(jTextFieldStudentFirstName.getText());
        studentAdd.setLastName(jTextFieldStudentLastName.getText());
        studentAdd.setAddress(jTextFieldAddress.getText());
-       if(!jTextFieldStudentDob.getText().isBlank() || !jTextFieldRegDate.getText().isBlank()) {
+       if(!jTextFieldStudentDob.getText().isEmpty()|| !jTextFieldRegDate.getText().isEmpty()) {
     	   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     	   LocalDate dob = LocalDate.parse(jTextFieldStudentDob.getText(), formatter);  
     	   LocalDate regDate  = LocalDate.parse(jTextFieldRegDate.getText(), formatter); 
@@ -496,7 +505,7 @@ public class StudentUI extends javax.swing.JFrame {
        }
        parent.setFirstName(jTextFieldParentFirstName.getText());
        parent.setLastName(jTextFieldParentLastName.getText());
-       if(!jTextFieldPhoneNumber.getText().isBlank()) {
+       if(!jTextFieldPhoneNumber.getText().isEmpty()) {
     	   parent.setPhone(BigInteger.valueOf(Long.parseLong(jTextFieldPhoneNumber.getText()))); 
        }
        parent.setEmail(jTextFieldEmail.getText());
@@ -519,8 +528,9 @@ public class StudentUI extends javax.swing.JFrame {
 				}
 			});
         		
+        		
                 //ValidationUtil.showSuccess("Teacher saved successfully!");
-        	
+
             // TODO add your handling code here:
         } catch (Exception ex) {
             Logger.getLogger(StudentUI.class.getName()).log(Level.SEVERE, null, ex);
@@ -542,7 +552,7 @@ public class StudentUI extends javax.swing.JFrame {
 				modelTable.setRowCount(0);
 			}
 			
-			java.util.List<String> studentRecords = FileUtil.readTextFile(selectedFile.getPath());
+			List<String> studentRecords = FileUtil.readTextFile(selectedFile.getPath());
 			//teacherRecords.forEach(teacher-> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
 			studentRecords.forEach(student->{modelTable.addRow(fillTableFromCSV(student));});
 			System.out.println("Successfully generated table from students CSV file");
@@ -593,8 +603,8 @@ public class StudentUI extends javax.swing.JFrame {
     	String pathToDownloads = System.getProperty("user.home");
         FileWriter csv;
 		try {
-			csv = new FileWriter(new File(pathToDownloads+"/Downloads/studentsDownload.txt"));
-			System.out.println("Downloading Students Info into CSV at: "+pathToDownloads+"/Downloads/studentsDownload.txt");
+			csv = new FileWriter(new File(pathToDownloads+"/Downloads/students.txt"));
+			System.out.println("Downloading Students Info into CSV at: "+pathToDownloads+"/Downloads/students.txt");
 			for (int i = 0; i < model.getRowCount(); i++) {
 	            for (int j = 0; j < model.getColumnCount(); j++) {
 	            	if(j == model.getColumnCount()-1) {
@@ -655,6 +665,7 @@ public class StudentUI extends javax.swing.JFrame {
         
 
         //Validation Part
+
 //        if(!ValidationUtil.verifyName(jTextFieldStudentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldStudentLastName.getText())
 //                || !ValidationUtil.verifyName(jTextFieldParentFirstName.getText()) || !ValidationUtil.verifyName(jTextFieldParentLastName.getText())){
 //        	
@@ -684,6 +695,7 @@ public class StudentUI extends javax.swing.JFrame {
         
         model.addRow(new Object[]{initialId,jTextFieldStudentFirstName.getText(),jTextFieldStudentLastName.getText(),jTextFieldAddress.getText(),jTextFieldRegDate.getText(),
     	        jTextFieldStudentDob.getText(),jTextFieldParentFirstName.getText(),jTextFieldParentLastName.getText(),jTextFieldPhoneNumber.getText(),jTextFieldEmail.getText()}); 
+
         
 
     }//GEN-LAST:event_jAddStudentButtonMouseClicked
@@ -692,18 +704,26 @@ public class StudentUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_formComponentAdded
     
-   
+    private void jButtonViewStudentVaccMouseClicked(java.awt.event.MouseEvent evt) {                                                  
+
+   }
+    
+    private void jButtonViewStudentVaccActionPerformed(java.awt.event.ActionEvent evt){
+        
+    }
+    
+    private void jButtonAddVaccineRecMouseEntered(java.awt.event.MouseEvent evt){
+        
+    }
     private void jButtonAddVaccineRecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonAddVaccineRecMouseClicked
+
+
     	if(jTable1.getSelectedRow() > -1) {
     		int selId = jTable1.getSelectedRow()+1;
     		System.out.println("Fetching vaccine details for student with Id: "+selId);
         	StudentService ser = new StudentService();
         	try {
         		List<Vaccine> list = ser.getStudentImmunizationRecord(selId);
-        		vaccine= new Vaccine();
-                System.out.println(student.getFirstName());
-                VaccinationUI vui=new VaccinationUI(student,list);
-                vui.setVisible(true);
         		//TODO populate this list with student info in vacc window
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -739,6 +759,7 @@ public class StudentUI extends javax.swing.JFrame {
     }
     private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
         // TODO add your handling code here:
+
     	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
     	int delId = jTable1.getSelectedRow()+1;
     	StudentService service = new StudentService();
@@ -751,6 +772,7 @@ public class StudentUI extends javax.swing.JFrame {
 			e.printStackTrace();
 		}
     	
+
     }//GEN-LAST:event_jButtonDeleteSelRowMouseClicked
     /**
      * @param args the command line arguments
@@ -785,6 +807,62 @@ public class StudentUI extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -802,8 +880,8 @@ public class StudentUI extends javax.swing.JFrame {
     private javax.swing.JButton jButtonDownload1;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JButton jButtonUpload;
+    private javax.swing.JButton jButtonViewStudentVacc;
     private javax.swing.JInternalFrame jInternalFrame1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelAddress;
     private javax.swing.JLabel jLabelFirstName;
     private javax.swing.JLabel jLabelLastName;

@@ -10,10 +10,14 @@ import edu.neu.csye6200.FeedbackService;
 import edu.neu.csye6200.Group;
 import edu.neu.csye6200.Teacher;
 import edu.neu.csye6200.scheduler.GroupHelper;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -24,11 +28,14 @@ public class LMDLandingPage extends javax.swing.JFrame {
     private StudentUI student;
     private  ClassroomUI classroom;
     private FeedbackUI feedback;
+    private Dimension d;
     /**
      * Creates new form MainPage
      */
     public LMDLandingPage() {
         initComponents();
+        d= jSplitPane1.getSize();
+        jPanel1.setSize(d);
     
     }
 
@@ -44,10 +51,9 @@ public class LMDLandingPage extends javax.swing.JFrame {
     private void initComponents() {
 
         jTopPanel1 = new javax.swing.JPanel();
-        jLabelMenu = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        jLabelLogo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jSplitPanel = new javax.swing.JPanel();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanelLeftPane = new javax.swing.JPanel();
@@ -60,7 +66,7 @@ public class LMDLandingPage extends javax.swing.JFrame {
         jXTaskPaneInfrastructure = new org.jdesktop.swingx.JXTaskPane();
         jLabelClassrooms = new javax.swing.JLabel();
         jLabelViewFeedback = new javax.swing.JLabel();
-        jRightPanel = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addContainerListener(new java.awt.event.ContainerAdapter() {
@@ -74,31 +80,51 @@ public class LMDLandingPage extends javax.swing.JFrame {
         jTopPanel1.setMaximumSize(new java.awt.Dimension(200, 80));
         jTopPanel1.setMinimumSize(new java.awt.Dimension(200, 80));
         jTopPanel1.setPreferredSize(new java.awt.Dimension(200, 80));
-        jTopPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jLabelMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/icons8_menu_48px_1.png"))); // NOI18N
-        jTopPanel1.add(jLabelMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 46, 60));
+        jLabelLogo.setBackground(new java.awt.Color(51, 51, 51));
+        jLabelLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabelLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd3.PNG"))); // NOI18N
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd11.PNG"))); // NOI18N
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 2, 14)); // NOI18N
         jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/male_user_50px.png"))); // NOI18N
-        jLabel4.setText("Hello, Admin");
+        jLabel4.setText("Hello, admin");
         jLabel4.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentShown(java.awt.event.ComponentEvent evt) {
                 jLabel4ComponentShown(evt);
             }
         });
-        jTopPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1151, 0, 151, -1));
 
-        jLabel3.setBackground(new java.awt.Color(51, 51, 51));
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd3.PNG"))); // NOI18N
-        jTopPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 10, 60, 40));
+        javax.swing.GroupLayout jTopPanel1Layout = new javax.swing.GroupLayout(jTopPanel1);
+        jTopPanel1.setLayout(jTopPanel1Layout);
+        jTopPanel1Layout.setHorizontalGroup(
+            jTopPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jTopPanel1Layout.createSequentialGroup()
+                .addComponent(jLabelLogo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1257, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jTopPanel1Layout.setVerticalGroup(
+            jTopPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jTopPanel1Layout.createSequentialGroup()
+                .addGroup(jTopPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabelLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jTopPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel4)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(20, 20, 20))
+        );
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/lmd11.PNG"))); // NOI18N
-        jTopPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 10, 390, 40));
+        getContentPane().add(jTopPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1870, 60));
 
-        getContentPane().add(jTopPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 1320, 60));
+        jSplitPanel.setPreferredSize(new java.awt.Dimension(2000, 900));
 
-        jSplitPanel.setLayout(new java.awt.BorderLayout());
+        jSplitPane1.setMinimumSize(new java.awt.Dimension(1400, 497));
+        jSplitPane1.setOneTouchExpandable(true);
+        jSplitPane1.setPreferredSize(new java.awt.Dimension(1400, 497));
 
         jPanelLeftPane.setMaximumSize(new java.awt.Dimension(300, 495));
         jPanelLeftPane.setMinimumSize(new java.awt.Dimension(300, 495));
@@ -189,12 +215,23 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(jPanelLeftPane);
 
-        jRightPanel.setLayout(new java.awt.BorderLayout());
-        jSplitPane1.setRightComponent(jRightPanel);
+        jPanel1.setLayout(null);
+        jSplitPane1.setRightComponent(jPanel1);
 
-        jSplitPanel.add(jSplitPane1, java.awt.BorderLayout.CENTER);
+        javax.swing.GroupLayout jSplitPanelLayout = new javax.swing.GroupLayout(jSplitPanel);
+        jSplitPanel.setLayout(jSplitPanelLayout);
+        jSplitPanelLayout.setHorizontalGroup(
+            jSplitPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jSplitPanelLayout.createSequentialGroup()
+                .addComponent(jSplitPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 1868, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jSplitPanelLayout.setVerticalGroup(
+            jSplitPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jSplitPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 990, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
-        getContentPane().add(jSplitPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1320, 990));
+        getContentPane().add(jSplitPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 1880, 990));
 
         pack();
         setLocationRelativeTo(null);
@@ -202,10 +239,18 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
     private void jLabelStudentsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelStudentsMouseClicked
         // TODO add your handling code here:
+       
+       setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
        student= new StudentUI();
-       student.setVisible(true);
-     
-     //  jRightPanel.setRightComponent(student);
+       student.setSize(jPanel1.getSize());
+       jSplitPane1.setRightComponent(student);
+       
+       //  Container cp= student.getContentPane();
+      
+       // jPanel1.add(cp).setVisible(true);
+     //   student.setVisible(true);
+
+      //  jRightPanel.add(student).setVisible(true);
 
        
     }//GEN-LAST:event_jLabelStudentsMouseClicked
@@ -216,8 +261,14 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
     private void jLabelTeachersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelTeachersMouseClicked
         // TODO add your handling code here:
-        teacher= new TeacherUI();
-        teacher.setVisible(true);
+      // setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       teacher= new TeacherUI();
+       teacher.setSize(jPanel1.getSize());
+       jSplitPane1.setRightComponent(teacher);
+       teacher.setVisible(true);
+     //  Container cp= teacher.getContentPane();
+     //  jPanel1.add(cp).setVisible(true);
+      
     }//GEN-LAST:event_jLabelTeachersMouseClicked
 
     private void jLabelClassroomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClassroomsMouseClicked
@@ -226,6 +277,7 @@ public class LMDLandingPage extends javax.swing.JFrame {
             GroupHelper helper= new GroupHelper();
             List<Group> grouplist=helper.getClassRoomGroupInfo();
             classroom= new ClassroomUI(grouplist);
+            jSplitPane1.setRightComponent(classroom);
             classroom.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(LMDLandingPage.class.getName()).log(Level.SEVERE, null, ex);
@@ -246,6 +298,7 @@ public class LMDLandingPage extends javax.swing.JFrame {
         }
       
        feedback= new FeedbackUI(fdlist);
+       jSplitPane1.setRightComponent(feedback);
        feedback.setVisible(true);
     }//GEN-LAST:event_jLabelViewFeedbackMouseClicked
 
@@ -281,6 +334,8 @@ public class LMDLandingPage extends javax.swing.JFrame {
         }
         //</editor-fold>
         //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -292,16 +347,15 @@ public class LMDLandingPage extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabelClassrooms;
-    private javax.swing.JLabel jLabelMenu;
+    private javax.swing.JLabel jLabelLogo;
     private javax.swing.JLabel jLabelStudents;
     private javax.swing.JLabel jLabelTeachers;
     private javax.swing.JLabel jLabelViewFeedback;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelLeftPane;
     private javax.swing.JLabel jReminderLabel;
-    private javax.swing.JPanel jRightPanel;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JPanel jSplitPanel;
     private javax.swing.JPanel jTopPanel1;
