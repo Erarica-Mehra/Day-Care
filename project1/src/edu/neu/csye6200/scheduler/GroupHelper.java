@@ -22,6 +22,8 @@ import edu.neu.csye6200.TeacherFactory;
 import edu.neu.csye6200.TeacherService;
 import edu.neu.csye6200.dao.ClassGroupDaoImpl;
 import edu.neu.csye6200.util.FileUtil;
+import edu.neu.csye6200.view.StudentUI;
+import edu.neu.csye6200.view.TeacherUI;
 
 /**
  * @author pratiknakave
@@ -32,40 +34,46 @@ public class GroupHelper {
 	static int currentTeacherIndexFlag = 0;
 	static String studentfile = "students.txt";
 	static String teachersfile = "teachers.txt";
-	static List<Student> students = new ArrayList<>();
-	static List<Teacher> teachers = new ArrayList<>();
+	private static List<Student> students = new ArrayList<>();
+	private static List<Teacher> teachers = new ArrayList<>();
 
 	public static void groupMe() throws Exception {
 
-		students.clear();
-		teachers.clear();
 		StudentService studentService = new StudentService();
 		TeacherService teacherService = new TeacherService();
 
-		List<String> tempStudents = FileUtil.readTextFile(studentfile);
+		//List<String> tempStudents = FileUtil.readTextFile(studentfile);
 		// tempStudents.forEach(student -> students.add(new Student(student)));
-		tempStudents.forEach(student -> students.add(StudentFactory.getInstance().getObject(student)));
+		try {
+			students = studentService.getAllStudents();
+			teachers = teacherService.getAllTeachers();
 
-		students.forEach(student -> {
-			try {
-				studentService.registerStudent(student);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
-
-		List<String> tempTeachers = FileUtil.readTextFile(teachersfile);
-		// tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
-
-		tempTeachers.forEach(teacher -> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
-		teachers.forEach(teacher -> {
-			try {
-				int teacherId = teacherService.registerTeacher(teacher);
-				teacher.setEmployeeId(teacherId);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		tempStudents.forEach(student -> students.add(StudentFactory.getInstance().getObject(student)));
+//
+//		students.forEach(student -> {
+//			try {
+//				studentService.registerStudent(student);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
+//
+//		List<String> tempTeachers = FileUtil.readTextFile(teachersfile);
+//		// tempTeachers.forEach(teacher -> teachers.add(new Teacher(teacher)));
+//
+//		tempTeachers.forEach(teacher -> teachers.add(TeacherFactory.getInstance().getObject(teacher)));
+//		teachers.forEach(teacher -> {
+//			try {
+//				int teacherId = teacherService.registerTeacher(teacher);
+//				teacher.setEmployeeId(teacherId);
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		});
 
 		List<Student> sixToTwelve = students.stream().filter(student -> student.getAge() >= 6 && student.getAge() <= 12)
 				.collect(Collectors.toList());
@@ -153,6 +161,7 @@ public class GroupHelper {
 				if ((temp + j) < studs.size()) {
 					groups.get(i).addStudents(studs.get(temp + j));
 				}
+				groups.get(i).setStudentsEnrolled(groups.get(i).getStudents().size());
 			}
 			temp = temp + size;
 		}
@@ -175,6 +184,7 @@ public class GroupHelper {
 					classes.get(i).setGroups(groups.get(tempC + j));
 				}
 			}
+			classes.get(i).setGroupsEnrolled(groups.size());
 			tempC = tempC + classSize;
 		}
 

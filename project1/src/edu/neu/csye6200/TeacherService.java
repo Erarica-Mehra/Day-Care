@@ -2,7 +2,6 @@ package edu.neu.csye6200;
 
 import java.util.List;
 
-import edu.neu.csye6200.dao.StudentDaoImpl;
 import edu.neu.csye6200.dao.TeacherDaoImpl;
 import edu.neu.csye6200.util.FileUtil;
 
@@ -25,9 +24,9 @@ public class TeacherService {
 		}
 	}
 	
-	public void deleteTeacher(Teacher teacher) throws Exception {
+	public void deleteTeacher(int teacherId) throws Exception {
 		TeacherDaoImpl impl = new TeacherDaoImpl();
-		impl.deleteTeacher(teacher.getEmployeeId());
+		impl.deleteTeacher(teacherId);
 	}
 	
 	public void updateTeacher(Teacher teacher) throws Exception {

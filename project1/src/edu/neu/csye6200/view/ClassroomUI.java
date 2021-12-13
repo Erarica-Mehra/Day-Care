@@ -30,7 +30,8 @@ public class ClassroomUI extends javax.swing.JFrame {
         jTableClassroomInfo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableClassroomInfo.setAutoCreateColumnsFromModel(true);
         try {
-        	fetchClassRoomGroupInfo((DefaultTableModel)jTableClassroomInfo.getModel());
+        	fetchClassRoomGroupInfo((DefaultTableModel)jTableClassroomInfo.getModel())
+        	.addRow(new Object[]{classroomId,groupId,groupCount,studentCount,teacherAssigned});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -39,16 +40,25 @@ public class ClassroomUI extends javax.swing.JFrame {
         initComponents();
         jTableClassroomInfo.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableClassroomInfo.setAutoCreateColumnsFromModel(true);
-        this.grouplist= grouplist;
-        for(Group list:grouplist){
-           classroomId=String.valueOf(list.getClassId());
-           groupId=  String.valueOf(list.getGroupId());
-           groupCount= String.valueOf(list.getGroupSize());
-           studentCount=String.valueOf(list.getStudents().size());
-           teacherAssigned= String.valueOf(list.getTeacher());
-        }
-        DefaultTableModel model = (DefaultTableModel)jTableClassroomInfo.getModel(); 
-        model.addRow(new Object[]{classroomId,groupId,groupCount,studentCount,teacherAssigned});
+//        this.grouplist= grouplist;
+//        for(Group list:grouplist){
+//           classroomId=String.valueOf(list.getClassId());
+//           groupId=  String.valueOf(list.getGroupId());
+//           //groupCount= String.valueOf(list.getGroupSize());
+//           studentCount=String.valueOf(list.getStudents().size());
+//           teacherAssigned= String.valueOf(list.getTeacher());
+//           DefaultTableModel model = (DefaultTableModel)jTableClassroomInfo.getModel(); 
+//           model.addRow(new Object[]{groupId, classroomId, teacherAssigned, studentCount});
+//        }
+        DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableClassroomInfo.getModel(); 
+
+        try {
+        	fetchClassRoomGroupInfo(model);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        model.addRow(new Object[]{groupId, classroomId, teacherAssigned, studentCount});
+
     }
 
     /**
@@ -122,13 +132,10 @@ public class ClassroomUI extends javax.swing.JFrame {
 //		}
         jTableClassroomInfo.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
-                "Classroom Id ", "Group Id", "Group Count", "No. of  Students ", "Teacher Assigned"
+                 "Group Id", "Classroom Id ", "No. of  Students ", "Teacher Assigned"
             }
         ));
         jTableClassroomInfo.setPreferredSize(new java.awt.Dimension(468, 442));
@@ -200,14 +207,12 @@ public class ClassroomUI extends javax.swing.JFrame {
         GroupHelper helper = new GroupHelper();
         List<Group>	 groups = helper.getClassRoomGroupInfo();
         for (Group group : groups) {
-
-            System.out.println("inside ");
-            Object[] row = new Object[5];
-            row[0] = group.getClassId();
-            row[1] = group.getGroupId();
-            row[2] = group.getGroupSize();
-            row[3] = group.getStudentsEnrolled();
-            row[4] = group.getTeacherId();
+            System.out.println(group.getGroupId());
+            Object[] row = new Object[4];
+            row[0] = group.getGroupId();
+            row[1] = group.getClassId();
+            row[3] = group.getTeacherId();
+            row[2] = group.getStudentsEnrolled();
             model.addRow(row);
 
         }

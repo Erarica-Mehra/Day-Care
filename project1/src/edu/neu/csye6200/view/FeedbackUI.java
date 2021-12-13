@@ -37,16 +37,15 @@ public class FeedbackUI extends javax.swing.JFrame {
     public FeedbackUI(List<Feedback> fdlist) {
         initComponents();
      
-       for(Feedback list:fdlist){
-           rating=String.valueOf(list.getRating());
-           System.out.println(rating);
-           review=String.valueOf(list.getReview());
-           lastFeedBackDate=String.valueOf(list.getLastFeedBackDate());
-           nextFeedbackDate= String.valueOf(list.getNextFeedbackDate());
-       }
+        DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableFeedback.getModel(); 
+
+        try {
+        	fetchFeedbackDetails(model);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
         jTableFeedback.setAutoResizeMode(JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTableFeedback.setAutoCreateColumnsFromModel(true);
-        javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTableFeedback.getModel(); 
         model.addRow(new Object[]{rating,review,lastFeedBackDate,nextFeedbackDate});
         
     }
@@ -173,11 +172,9 @@ public class FeedbackUI extends javax.swing.JFrame {
     }
     
     private DefaultTableModel fetchFeedbackDetails(DefaultTableModel model) throws Exception {
-
         FeedbackService service = new FeedbackService();
         List<Feedback>	 feebbackList = service.getAllTeacherReviews();
         for (Feedback feedback : feebbackList) {
-
             System.out.println("inside ");
             Object[] row = new Object[5];
             row[0] = feedback.getEmployeeId();
@@ -186,7 +183,6 @@ public class FeedbackUI extends javax.swing.JFrame {
             row[3] = feedback.getNextFeedbackDate();
             row[4] = feedback.getReview();
             model.addRow(row);
-
         }
         return model;
     }

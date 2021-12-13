@@ -88,9 +88,10 @@ public class ClassGroupDaoImpl {
 	
 	public List<Group> getGroupInfo() throws Exception {
 		connection = getConnection();
-		preparedStatement = connection.prepareStatement(" select cls.class_id, sg.group_id, sg.group_size, sg.students_enrolled, cm.teacher_id  from ClassroomGroupMapping cm "
+		preparedStatement = connection.prepareStatement(" select sg.group_id, cls.class_id,  cm.teacher_id, sg.students_enrolled  from ClassroomGroupMapping cm "
 				+ "    join studentgroup sg on sg.group_id = cm.group_id "
-				+ "	join classroom cls on cls.class_id = cm.classroom_id ");
+				+ "	join classroom cls on cls.class_id = cm.classroom_id "
+				+ "    group by sg.group_id, cls.class_id,  cm.teacher_id, sg.students_enrolled ");
 		resultSet = preparedStatement.executeQuery();
 		return writeGroupsResultset(resultSet);
 	}
@@ -110,11 +111,10 @@ public class ClassGroupDaoImpl {
 		List<Group> groups = new ArrayList<>();
 		while (resultSet.next()) {
 			Group group = new Group();
-			group.setClassId(resultSet.getInt("cls.class_id"));
 			group.setGroupId(resultSet.getInt("sg.group_id"));
-			group.setGroupSize(resultSet.getInt("group_size"));
-			group.setStudentsEnrolled(resultSet.getInt("sg.students_enrolled"));
+			group.setClassId(resultSet.getInt("cls.class_id"));
 			group.setTeacherId(resultSet.getInt("cm.teacher_id"));
+			group.setStudentsEnrolled(resultSet.getInt("sg.students_enrolled"));
 			groups.add(group);	
 		}
 		return groups;

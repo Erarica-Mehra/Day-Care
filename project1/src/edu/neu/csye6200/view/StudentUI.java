@@ -7,6 +7,7 @@ package edu.neu.csye6200.view;
 
 import edu.neu.csye6200.Parent;
 import edu.neu.csye6200.Student;
+import edu.neu.csye6200.StudentFactory;
 import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.Vaccine;
 import edu.neu.csye6200.util.ConversionUtil;
@@ -43,7 +44,7 @@ public class StudentUI extends javax.swing.JFrame {
     private Vaccine vaccine;
     private Student student;
     private int initialId=0;
-    List<Student> studentList = new ArrayList<>();
+    public static List<Student> studentList = new ArrayList<>();
     /**
      * Creates new form Teacher
      */
@@ -478,7 +479,7 @@ public class StudentUI extends javax.swing.JFrame {
 //        s.setParent(p);
 //        System.out.println(s.toString());
        
-       Student studentAdd = new Student();
+       Student studentAdd = StudentFactory.getInstance().getObject();
        Parent parent = new Parent();
        //seting studentId as row value
        studentAdd.setStudentId(studentList.size()+1);

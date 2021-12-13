@@ -5,6 +5,7 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.Classroom;
 import edu.neu.csye6200.Feedback;
 import edu.neu.csye6200.FeedbackService;
 import edu.neu.csye6200.Group;
@@ -223,10 +224,16 @@ public class LMDLandingPage extends javax.swing.JFrame {
     private void jLabelClassroomsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelClassroomsMouseClicked
         try {
             // TODO add your handling code here:
+        	try {
+        		System.out.println("Calling to create groups and classroom");
+        		GroupHelper.groupMe();
+        	} catch (Exception e) {
+        		e.printStackTrace();
+        	}
             GroupHelper helper= new GroupHelper();
-            List<Group> grouplist=helper.getClassRoomGroupInfo();
-            classroom= new ClassroomUI(grouplist);
-            classroom.setVisible(true);
+           List<Group> grouplist=helper.getClassRoomGroupInfo();
+           ClassroomUI classUI= new ClassroomUI(grouplist);
+           classUI.setVisible(true);
         } catch (Exception ex) {
             Logger.getLogger(LMDLandingPage.class.getName()).log(Level.SEVERE, null, ex);
         }
