@@ -27,7 +27,9 @@ import javax.swing.filechooser.FileSystemView;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import edu.neu.csye6200.StudentService;
 import edu.neu.csye6200.Teacher;
+import edu.neu.csye6200.TeacherFactory;
 import edu.neu.csye6200.TeacherService;
 import edu.neu.csye6200.util.ConversionUtil;
 import edu.neu.csye6200.util.FileUtil;
@@ -40,7 +42,7 @@ public class TeacherUI extends javax.swing.JFrame {
 
     private int initialId=0;
     Teacher teacher;
-    List<Teacher> teacherList = new ArrayList<>();
+    public static List<Teacher> teacherList = new ArrayList<>();
     //static List<Teacher> teachers = new ArrayList<>();
     /**
      * Creates new form Teacher
@@ -68,6 +70,7 @@ public class TeacherUI extends javax.swing.JFrame {
         jTextFieldSearch = new javax.swing.JTextField();
         JLabelSearch = new javax.swing.JLabel();
         jButtonUpload = new javax.swing.JButton();
+        jButtonDeleteSelRow = new javax.swing.JButton();
         jButtonDownload = new javax.swing.JButton();
         jButtonSave = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
@@ -159,6 +162,16 @@ public class TeacherUI extends javax.swing.JFrame {
                 jButtonDownloadMouseClicked(evt);
             }
         });
+        
+        
+        jButtonDeleteSelRow.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/del1.PNG"))); // NOI18N
+        jButtonDeleteSelRow.setText("Delete Selected Row");
+        jButtonDeleteSelRow.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonDeleteSelRowMouseClicked(evt);
+            }
+        });
+
 
         jButtonSave.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/save1.png"))); // NOI18N
         jButtonSave.setText("Save");
@@ -387,7 +400,7 @@ public class TeacherUI extends javax.swing.JFrame {
         //System.out.println(teacherAdd.getAnnualReviewDate());
         
         //teacherList.add(teacherAdd);
-        Teacher teacherAdd = new Teacher();
+        Teacher teacherAdd = TeacherFactory.getInstance().getObject();
         teacherAdd.setFirstName(jTextFieldTeacherFirstName.getText());
         teacherAdd.setLastName(jTextFieldTeacherLastName.getText());
         teacherAdd.setEmployeeId(initialId);
@@ -582,6 +595,19 @@ public class TeacherUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTeacherAnnualReviewDateActionPerformed
 
+    private void jButtonDeleteSelRowMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonDeleteSelRowMouseClicked
+    	DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+    	int delId = jTable1.getSelectedRow()+1;
+    	TeacherService service = new TeacherService();
+    	try {
+    		System.out.println("Deleting student record with id: "+delId);
+    		model.removeRow(jTable1.getSelectedRow());
+			service.deleteTeacher(delId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+    
     private void jTextFieldTeacherFirstNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldTeacherFirstNameActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextFieldTeacherFirstNameActionPerformed
@@ -642,6 +668,7 @@ public class TeacherUI extends javax.swing.JFrame {
     private javax.swing.JButton jButtonDownload;
     private javax.swing.JButton jButtonSave;
     private javax.swing.JButton jButtonUpload;
+    private javax.swing.JButton jButtonDeleteSelRow;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JLabel jLabeTeacherlFirstName;
     private javax.swing.JLabel jLabeTeacherlLastName;
